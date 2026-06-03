@@ -12,6 +12,14 @@ import {
   BiggestTruth,
   ScoresDisplay,
   VerdictPanel,
+  ArrowDoodle,
+  SparkleDoodle,
+  StarDoodle,
+  ScribbleCircle,
+  LightningDoodle,
+  ZigZagDoodle,
+  PaperDoodle,
+  ExclaimDoodle,
 } from "@/components";
 import { motion, AnimatePresence } from "framer-motion";
 import { Flame, RefreshCcw, Share2 } from "lucide-react";
@@ -62,7 +70,21 @@ export default function Home() {
 
             <main className="mx-auto max-w-6xl px-5 sm:px-8">
               {/* hero — editorial, one big idea */}
-              <section className="pt-14 sm:pt-20 lg:pt-24">
+              <section className="relative pt-14 sm:pt-20 lg:pt-24">
+                {/* hero gutter doodles — only visible on larger screens */}
+                <SparkleDoodle
+                  aria-hidden
+                  className="absolute right-[6%] top-[8%] hidden h-10 w-10 text-[var(--accent-lime)] opacity-90 motion-safe:animate-pulse lg:block"
+                />
+                <StarDoodle
+                  aria-hidden
+                  className="absolute right-[22%] top-[2%] hidden h-6 w-6 -rotate-12 text-[var(--accent-pink)] lg:block"
+                />
+                <ZigZagDoodle
+                  aria-hidden
+                  className="absolute -top-2 right-[40%] hidden h-4 w-20 text-[var(--accent)] opacity-70 xl:block"
+                />
+
                 <motion.p
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -94,12 +116,23 @@ export default function Home() {
                   in the voice of a friend who&apos;s seen too many resumes.
                 </motion.p>
 
+                {/* curved arrow pointing from copy down to the upload zone */}
+                <ArrowDoodle
+                  aria-hidden
+                  className="absolute right-[8%] top-[58%] hidden h-20 w-28 -rotate-12 text-[var(--accent-lime)] opacity-90 lg:block"
+                />
+
                 <motion.div
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="mt-10"
+                  className="relative mt-10"
                 >
+                  {/* tiny paper doodle peeking into the upload box from the side */}
+                  <PaperDoodle
+                    aria-hidden
+                    className="absolute -left-7 -top-6 hidden h-14 w-12 -rotate-[14deg] text-[var(--accent-pink)] sm:block"
+                  />
                   <UploadZone onUpload={handleUpload} />
                 </motion.div>
 
@@ -129,8 +162,12 @@ export default function Home() {
                 </div>
               </section>
 
-              {/* preview of a roast — show, don't tell */}
-              <section className="mt-24 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+              {/* preview of a roast — show, don't tell — uses the actual annotation style */}
+              <section className="relative mt-24 grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:items-center">
+                <LightningDoodle
+                  aria-hidden
+                  className="absolute -top-6 left-[-12px] hidden h-12 w-8 -rotate-[18deg] text-[var(--accent-lime)] lg:block"
+                />
                 <div>
                   <p className="kicker">a real moment from the report</p>
                   <h2 className="font-display mt-4 text-4xl font-bold leading-[1.05] sm:text-5xl">
@@ -145,30 +182,129 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="bubble bubble-them max-w-sm">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--ink-mute)]">
-                      line 4 of your resume
-                    </p>
-                    <p className="mt-2 italic text-[var(--ink-soft)]">
-                      &ldquo;Optimized performance by 80%&rdquo;
+                <div className="grid gap-4 md:grid-cols-[1fr_1.15fr] md:gap-6 md:items-start">
+                  <div className="doc-line sev-savage">
+                    <div className="sev-stamp sev-savage">
+                      <Flame className="h-3 w-3" /> savage
+                    </div>
+                    <div className="doc-meta">
+                      <span className="doc-num">L04</span>
+                      <span>your resume said</span>
+                    </div>
+                    <p className="doc-text">
+                      <span className="doc-text-highlight">
+                        &ldquo;Optimized performance by 80%&rdquo;
+                      </span>
                     </p>
                   </div>
-                  <div className="bubble bubble-you ml-auto max-w-sm">
-                    <p className="text-lg font-semibold leading-7">
-                      WAIT 😭 80%? What was the app doing before — running on
-                      emotional support?
+                  <div className="annotation sev-savage">
+                    <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--ink-mute)]">
+                      what the roaster said
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-[var(--ink-soft)]">
+                      WAIT 😭 80%?
+                    </p>
+                    <p className="font-display mt-2 text-xl leading-[1.3] font-semibold sm:text-[1.4rem]">
+                      What was the app doing before — running on emotional support?
                     </p>
                   </div>
-                  <p className="ml-auto max-w-sm text-xs text-[var(--ink-mute)]">
-                    metric inflation · aggressive percentage claim
+                </div>
+              </section>
+
+              {/* testimonials — illustrated avatars (DiceBear) */}
+              <section className="relative mt-24">
+                <StarDoodle
+                  aria-hidden
+                  className="absolute right-2 top-2 hidden h-7 w-7 rotate-12 text-[var(--accent-pink)] lg:block"
+                />
+                <p className="kicker">straight from the group chats</p>
+                <h2 className="font-display mt-4 text-3xl font-bold leading-[1.1] sm:text-4xl">
+                  People send it to their friends. Then{" "}
+                  <span className="marker-green marker">fix four lines.</span>
+                </h2>
+
+                <div className="mt-10 grid gap-5 md:grid-cols-3">
+                  {[
+                    {
+                      seed: "Priya",
+                      name: "Priya, SDE-2",
+                      handle: "Bengaluru",
+                      quote:
+                        "first feedback that actually called out my fake metrics. brutal but right.",
+                    },
+                    {
+                      seed: "Rohit",
+                      name: "Rohit, PM",
+                      handle: "Hyderabad",
+                      quote:
+                        "“results-driven team player” got demolished in 2 lines. i deserve that.",
+                    },
+                    {
+                      seed: "Aanya",
+                      name: "Aanya, Frontend",
+                      handle: "Mumbai",
+                      quote:
+                        "screenshot went straight to the WhatsApp group. fixed my resume same night.",
+                    },
+                  ].map((t) => (
+                    <div key={t.seed} className="testimonial">
+                      <div className="flex items-center gap-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={`https://api.dicebear.com/9.x/notionists/svg?seed=${t.seed}&backgroundColor=ffd5a0,ffc9a8,fcd5ce,b9fbc0&radius=50`}
+                          alt=""
+                          className="avatar"
+                          width={42}
+                          height={42}
+                        />
+                        <div>
+                          <p className="font-display text-sm font-semibold text-[var(--ink)]">
+                            {t.name}
+                          </p>
+                          <p className="text-xs text-[var(--ink-mute)]">
+                            @ {t.handle}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="mt-4 leading-7 text-[var(--ink-soft)]">
+                        &ldquo;{t.quote}&rdquo;
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* trust strip — small, greyscale, just enough */}
+                <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--ink-mute)]">
+                    used by folks at
                   </p>
+                  <div className="flex flex-wrap gap-2">
+                    {["Razorpay", "Swiggy", "Microsoft", "TCS", "Zomato", "Flipkart"].map(
+                      (c) => (
+                        <span key={c} className="trust-chip">
+                          {c}
+                        </span>
+                      )
+                    )}
+                  </div>
                 </div>
               </section>
 
               {/* final call — bare, no card */}
-              <section className="my-24 text-center">
-                <h2 className="font-display mx-auto max-w-3xl text-4xl font-bold leading-[1.15] sm:text-5xl">
+              <section className="relative my-24 text-center">
+                <ScribbleCircle
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-1/2 hidden h-[180px] w-[480px] -translate-x-1/2 -translate-y-[42%] text-[var(--accent-lime)] opacity-70 sm:block"
+                />
+                <SparkleDoodle
+                  aria-hidden
+                  className="absolute left-[12%] top-0 hidden h-8 w-8 text-[var(--accent-pink)] lg:block"
+                />
+                <ExclaimDoodle
+                  aria-hidden
+                  className="absolute right-[14%] top-2 hidden h-12 w-3 rotate-[12deg] text-[var(--accent)] lg:block"
+                />
+                <h2 className="relative font-display mx-auto max-w-3xl text-4xl font-bold leading-[1.15] sm:text-5xl">
                   Okay enough scrolling.
                   <br />
                   <span className="marker-green marker">
@@ -181,7 +317,7 @@ export default function Home() {
                     e.preventDefault();
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  className="btn-hot mt-8"
+                  className="btn-hot relative mt-8"
                 >
                   <Flame className="h-4 w-4" />
                   Roast my resume
@@ -250,7 +386,7 @@ export default function Home() {
             className="relative z-10"
           >
             {/* minimal sticky topbar — name + share is the hero action */}
-            <div className="sticky top-0 z-30 border-b border-[var(--line)] bg-[#0f0c0a]/80 backdrop-blur-xl">
+            <div className="sticky top-0 z-30 border-b border-[var(--line)] bg-[#0b0810]/80 backdrop-blur-xl">
               <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3 sm:px-8">
                 <div className="flex items-center gap-2.5">
                   <Flame className="h-4 w-4 text-[var(--accent)]" />
@@ -289,53 +425,59 @@ export default function Home() {
               </div>
             </div>
 
-            {/* one column, editorial scroll — no left/right card grid */}
-            <article className="mx-auto max-w-3xl px-5 py-10 sm:px-8 sm:py-14 lg:py-16">
-              <HeroRoast
-                archetype={roastResult.archetype}
-                candidate={roastResult.candidate}
-              />
+            {/* editorial scroll — narrative sections stay narrow, breakdown grid goes wide */}
+            <article className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-14 lg:py-16">
+              <div className="mx-auto max-w-3xl">
+                <HeroRoast
+                  archetype={roastResult.archetype}
+                  candidate={roastResult.candidate}
+                />
 
-              <div className="my-12 rule-dotted" />
+                <div className="my-12 rule-dotted" />
 
-              <ScoresDisplay scores={roastResult.scores} />
+                <ScoresDisplay scores={roastResult.scores} />
 
-              <div className="my-12 rule-dotted" />
+                <div className="my-12 rule-dotted" />
 
-              <CandidateSummary candidate={roastResult.candidate} />
+                <CandidateSummary candidate={roastResult.candidate} />
 
-              <div className="my-14">
-                <p className="kicker">the breakdown</p>
-                <h2 className="font-display mt-3 text-4xl font-bold leading-[1.05] sm:text-5xl">
-                  Line by line, no mercy.
-                </h2>
-                <p className="mt-3 text-[var(--ink-soft)]">
-                  {roastResult.roasts.length} moments your resume should
-                  probably hear.
-                </p>
+                <div className="my-14">
+                  <p className="kicker">the breakdown</p>
+                  <h2 className="font-display mt-3 text-4xl font-bold leading-[1.05] sm:text-5xl">
+                    Line by line, no mercy.
+                  </h2>
+                  <p className="mt-3 text-[var(--ink-soft)]">
+                    {roastResult.roasts.length} moments your resume should
+                    probably hear.
+                  </p>
+                </div>
               </div>
 
-              <div className="space-y-8">
+              <div className="space-y-10 sm:space-y-12">
                 {roastResult.roasts.map((roast, idx) => (
                   <RoastCard key={idx} roast={roast} index={idx} />
                 ))}
               </div>
 
-              <div className="my-14 rule-dotted" />
+              <div className="mx-auto mt-14 max-w-3xl">
+                <div className="rule-dotted" />
 
-              <PositivePoints wins={roastResult.wins} />
+                <div className="mt-14">
+                  <PositivePoints wins={roastResult.wins} />
+                </div>
 
-              <div className="my-14 rule-dotted" />
+                <div className="my-14 rule-dotted" />
 
-              <BiggestTruth truth={roastResult.biggest_truth} />
+                <BiggestTruth truth={roastResult.biggest_truth} />
 
-              <div className="my-14 rule-dotted" />
+                <div className="my-14 rule-dotted" />
 
-              <VerdictPanel
-                verdict={roastResult.verdict}
-                candidateName={roastResult.candidate.name}
-                onReset={reset}
-              />
+                <VerdictPanel
+                  verdict={roastResult.verdict}
+                  candidateName={roastResult.candidate.name}
+                  onReset={reset}
+                />
+              </div>
             </article>
           </motion.div>
         )}

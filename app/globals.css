@@ -1,19 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --bg-base: #0f0c0a;
-  --bg-warm: #1a1310;
+  /* ink */
+  --bg-base: #0b0810;
+  --bg-warm: #14101a;
   --ink: #fff5e6;
-  --ink-soft: #f1d8b8;
-  --ink-mute: #a08a76;
-  --accent: #fb923c;
-  --accent-hot: #f97316;
-  --accent-soft: rgba(251, 146, 60, 0.14);
+  --ink-soft: #e9d9c4;
+  --ink-mute: #9c8b9a;
+
+  /* genz palette — warm orange + acid lime + hot pink + lilac */
+  --accent: #ff7a2f;
+  --accent-hot: #ff5a1f;
+  --accent-soft: rgba(255, 122, 47, 0.14);
+  --accent-lime: #c8ff3e;
+  --accent-pink: #ff4d8d;
+  --accent-lilac: #b39dff;
+  --accent-cyan: #5eead4;
+
+  /* highlighters */
   --hl-yellow: #ffd566;
   --hl-pink: #ff8aa8;
-  --hl-green: #7be3a8;
-  --line: rgba(255, 240, 220, 0.12);
-  --line-soft: rgba(255, 240, 220, 0.06);
+  --hl-green: #c8ff3e;
+  --hl-lilac: #d6c9ff;
+
+  --line: rgba(255, 240, 220, 0.10);
+  --line-soft: rgba(255, 240, 220, 0.05);
+  --line-strong: rgba(255, 240, 220, 0.22);
+
+  /* hard sticker shadow — that brutalist genz vibe */
+  --shadow-sticker: 4px 4px 0 0 rgba(0, 0, 0, 0.6);
+  --shadow-sticker-sm: 3px 3px 0 0 rgba(0, 0, 0, 0.55);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -23,34 +39,47 @@ body {
   position: relative;
   min-height: 100vh;
   background:
-    radial-gradient(900px 600px at 8% -10%, rgba(251, 146, 60, 0.18), transparent 60%),
-    radial-gradient(700px 500px at 100% 10%, rgba(239, 68, 68, 0.12), transparent 60%),
-    radial-gradient(800px 600px at 50% 120%, rgba(245, 158, 11, 0.10), transparent 60%),
-    linear-gradient(180deg, #120e0b 0%, #08060a 100%);
+    radial-gradient(1100px 700px at 8% -10%, rgba(255, 122, 47, 0.22), transparent 60%),
+    radial-gradient(800px 600px at 100% 5%, rgba(255, 77, 141, 0.18), transparent 60%),
+    radial-gradient(900px 700px at 50% 110%, rgba(179, 157, 255, 0.16), transparent 60%),
+    radial-gradient(700px 500px at 0% 60%, rgba(200, 255, 62, 0.08), transparent 60%),
+    linear-gradient(180deg, #100b16 0%, #07050b 100%);
   color: var(--ink);
   overflow-x: hidden;
-  font-family: var(--font-body), sans-serif;
-  letter-spacing: -0.005em;
+  font-family: var(--font-body), system-ui, sans-serif;
+  letter-spacing: -0.011em;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* film grain overlay — adds the analog/zine feel */
+body::before {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+  opacity: 0.08;
+  mix-blend-mode: overlay;
 }
 
 body::after {
   content: "";
   position: fixed; inset: 0; pointer-events: none; z-index: -1;
-  background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
   background-size: 3px 3px;
-  opacity: 0.35;
+  opacity: 0.3;
   mix-blend-mode: overlay;
 }
 
 h1, h2, h3, .font-display {
-  font-family: var(--font-display), sans-serif;
-  letter-spacing: -0.025em;
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: -0.035em;
+  font-weight: 700;
 }
+.font-mono { font-family: var(--font-mono), ui-monospace, monospace; }
 
 a, button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
 
-::selection { background: var(--hl-yellow); color: #120f0d; }
+::selection { background: var(--accent-lime); color: #0b0810; }
 
 /* highlighter marker over text — handles multi-line wrapping cleanly */
 .marker {
@@ -67,34 +96,39 @@ button { cursor: pointer; }
   border-radius: 3px;
 }
 .marker-pink {
-  background-image: linear-gradient(180deg, #ffa8be, #ff8aa8);
-  color: #2a0a14;
+  background-image: linear-gradient(180deg, #ff9bc0, #ff4d8d);
+  color: #2a0612;
 }
 .marker-green {
-  background-image: linear-gradient(180deg, #9af0bd, #7be3a8);
-  color: #07270f;
+  background-image: linear-gradient(180deg, #d6ff7a, #c8ff3e);
+  color: #0c1b00;
+}
+.marker-lilac {
+  background-image: linear-gradient(180deg, #d6c9ff, #b39dff);
+  color: #160a3a;
 }
 
 .underline-wavy {
-  text-decoration: underline wavy var(--accent);
+  text-decoration: underline wavy var(--accent-lime);
   text-decoration-thickness: 2px;
   text-underline-offset: 6px;
 }
 
 .rule-dotted {
   height: 1px;
-  background-image: linear-gradient(90deg, var(--line) 50%, transparent 50%);
+  background-image: linear-gradient(90deg, var(--line-strong) 50%, transparent 50%);
   background-size: 8px 1px;
 }
 
 .kicker {
   display: inline-flex; align-items: center; gap: 0.5rem;
-  font-size: 0.7rem; font-weight: 700;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent-lime);
 }
 .kicker::before {
-  content: ""; width: 18px; height: 2px; background: var(--accent); border-radius: 2px;
+  content: ""; width: 22px; height: 2px; background: var(--accent-lime); border-radius: 2px;
 }
 
 /* chat bubbles for the roast feed */
@@ -111,8 +145,8 @@ button { cursor: pointer; }
   border-top-left-radius: 6px;
 }
 .bubble-you {
-  background: linear-gradient(180deg, rgba(251, 146, 60, 0.18), rgba(251, 146, 60, 0.08));
-  border: 1px solid rgba(251, 146, 60, 0.28);
+  background: linear-gradient(180deg, rgba(255, 122, 47, 0.18), rgba(255, 122, 47, 0.08));
+  border: 1px solid rgba(255, 122, 47, 0.32);
   border-top-right-radius: 6px;
   color: #fff5e6;
 }
@@ -121,19 +155,19 @@ button { cursor: pointer; }
 .sticky-note {
   background: linear-gradient(180deg, #ffe27a, #ffd255);
   color: #2a1d05;
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 1rem 1.1rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 -2px 0 rgba(0,0,0,0.06);
-  transform: rotate(-1.2deg);
+  box-shadow: var(--shadow-sticker), inset 0 -2px 0 rgba(0,0,0,0.06);
+  transform: rotate(-1.4deg);
 }
-.sticky-note.alt { background: linear-gradient(180deg, #b6f3cf, #8de8b1); transform: rotate(0.8deg); }
-.sticky-note.alt2 { background: linear-gradient(180deg, #ffc1d0, #ff97b0); transform: rotate(-0.6deg); color: #2a0a14; }
+.sticky-note.alt { background: linear-gradient(180deg, #d6ff7a, #c8ff3e); transform: rotate(1deg); color: #0c1b00; }
+.sticky-note.alt2 { background: linear-gradient(180deg, #ffc1d0, #ff8aa8); transform: rotate(-0.6deg); color: #2a0a14; }
 
 .pull-quote {
   font-family: var(--font-display), serif;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
 }
 
 .ticker {
@@ -146,29 +180,47 @@ button { cursor: pointer; }
   to { transform: translateX(-50%); }
 }
 
+/* sticker-style primary button — chunky, hard shadow, slight tilt on hover */
 .btn-hot {
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  background: linear-gradient(180deg, #fdba74, #f97316);
-  color: #1a0d04;
-  font-weight: 700;
-  padding: 0.85rem 1.25rem;
-  border-radius: 999px;
-  box-shadow: 0 12px 30px -8px rgba(249, 115, 22, 0.55), inset 0 -2px 0 rgba(0,0,0,0.12);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: linear-gradient(180deg, #ff9357, #ff5a1f);
+  color: #1a0904;
+  font-weight: 800;
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  padding: 0.9rem 1.4rem;
+  border-radius: 14px;
+  border: 1.5px solid #1a0904;
+  box-shadow: var(--shadow-sticker);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
-.btn-hot:hover { transform: translateY(-1px); }
+.btn-hot:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 0.6);
+}
+.btn-hot:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.6);
+}
 
 .btn-ghost {
   display: inline-flex; align-items: center; gap: 0.5rem;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,0.02);
+  border: 1.5px solid var(--line-strong);
+  background: rgba(255,255,255,0.025);
   color: var(--ink-soft);
-  font-weight: 600;
-  padding: 0.75rem 1.1rem;
-  border-radius: 999px;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  font-weight: 700;
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+  padding: 0.8rem 1.2rem;
+  border-radius: 14px;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
 }
-.btn-ghost:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.18); }
+.btn-ghost:hover {
+  background: rgba(200, 255, 62, 0.06);
+  border-color: var(--accent-lime);
+  color: var(--ink);
+  transform: translateY(-1px);
+}
 
 .score-chip {
   display: inline-flex; align-items: baseline; gap: 0.25rem;
@@ -180,21 +232,202 @@ button { cursor: pointer; }
 
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
-  padding: 0.25rem 0.6rem;
+  padding: 0.28rem 0.65rem;
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
   font-weight: 600;
+  letter-spacing: 0.04em;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--line);
   color: var(--ink-soft);
 }
-.tag.hot { background: rgba(251,146,60,0.12); border-color: rgba(251,146,60,0.3); color: #fed7aa; }
-.tag.good { background: rgba(123,227,168,0.10); border-color: rgba(123,227,168,0.28); color: #bbf2d2; }
+.tag.hot { background: rgba(255,122,47,0.14); border-color: rgba(255,122,47,0.36); color: #ffd1b3; }
+.tag.good { background: rgba(200, 255, 62, 0.12); border-color: rgba(200, 255, 62, 0.36); color: #e9ffa5; }
+.tag.lilac { background: rgba(179, 157, 255, 0.12); border-color: rgba(179, 157, 255, 0.36); color: #d6c9ff; }
 
 .lift { transition: transform 0.2s ease; }
 .lift:hover { transform: translateY(-2px); }
 
-::-webkit-scrollbar { width: 6px; }
+/* — line-by-line annotation system — */
+
+/* the "document" rendering of a resume line — quoted, with a colored gutter */
+.doc-line {
+  position: relative;
+  padding: 0.95rem 1.1rem 0.95rem 1.4rem;
+  background: linear-gradient(180deg, rgba(255, 245, 230, 0.035), rgba(255, 245, 230, 0.01));
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  border-left: 3px solid var(--accent);
+}
+.doc-line .doc-meta {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.doc-line .doc-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 1.75rem; height: 1.3rem; padding: 0 0.45rem;
+  border-radius: 5px;
+  background: rgba(200, 255, 62, 0.10);
+  color: var(--accent-lime);
+  font-family: var(--font-mono);
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.doc-line .doc-text {
+  margin-top: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* severity color drives the gutter + stamp */
+.doc-line.sev-mild { border-left-color: var(--hl-yellow); }
+.doc-line.sev-medium { border-left-color: var(--accent); }
+.doc-line.sev-savage { border-left-color: var(--accent-pink); }
+.doc-line.sev-good { border-left-color: var(--accent-lime); }
+
+/* the corner stamp on the doc line — sticker style */
+.sev-stamp {
+  position: absolute; top: -12px; right: 10px;
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border: 1.5px solid #0b0810;
+  background: #1a1310;
+  box-shadow: var(--shadow-sticker-sm);
+  transform: rotate(2deg);
+}
+.sev-stamp.sev-mild { color: #2a1d05; background: var(--hl-yellow); }
+.sev-stamp.sev-medium { color: #1a0904; background: var(--accent); }
+.sev-stamp.sev-savage { color: #fff5e6; background: var(--accent-pink); }
+.sev-stamp.sev-good { color: #0c1b00; background: var(--accent-lime); }
+
+/* the annotation card on the right (or below on mobile) — feels handwritten */
+.annotation {
+  position: relative;
+  padding: 1.15rem 1.3rem;
+  background: linear-gradient(180deg, rgba(255, 122, 47, 0.12), rgba(255, 122, 47, 0.03));
+  border: 1.5px solid rgba(255, 122, 47, 0.32);
+  border-radius: 16px;
+}
+.annotation.sev-mild {
+  background: linear-gradient(180deg, rgba(255, 213, 102, 0.10), rgba(255, 213, 102, 0.03));
+  border-color: rgba(255, 213, 102, 0.32);
+}
+.annotation.sev-savage {
+  background: linear-gradient(180deg, rgba(255, 77, 141, 0.12), rgba(255, 77, 141, 0.03));
+  border-color: rgba(255, 77, 141, 0.36);
+}
+.annotation.sev-good {
+  background: linear-gradient(180deg, rgba(200, 255, 62, 0.12), rgba(200, 255, 62, 0.03));
+  border-color: rgba(200, 255, 62, 0.36);
+}
+
+/* connector caret — only on desktop, points left at the line */
+.annotation::before {
+  content: "";
+  display: none;
+  position: absolute;
+  left: -9px; top: 24px;
+  width: 14px; height: 14px;
+  background: inherit;
+  border-left: 1.5px solid; border-bottom: 1.5px solid;
+  border-color: inherit;
+  transform: rotate(45deg);
+}
+@media (min-width: 768px) {
+  .annotation::before { display: block; }
+}
+
+/* tiny "↘ marking" caret used on mobile to bridge doc → annotation */
+.annot-caret {
+  display: inline-block;
+  margin-left: 0.4rem;
+  color: var(--accent-lime);
+  font-size: 0.9rem;
+  animation: bob 1.8s ease-in-out infinite;
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(2px); }
+}
+
+/* the "try this" fix row — clearly secondary, but readable */
+.fix-row {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(200, 255, 62, 0.06);
+  border: 1.5px dashed rgba(200, 255, 62, 0.38);
+}
+
+/* highlight sweep — fires once when a doc-line scrolls into view */
+@keyframes hl-sweep {
+  0% { background-position: -120% 0; }
+  100% { background-position: 0 0; }
+}
+.doc-text-highlight {
+  background-image: linear-gradient(120deg, transparent 0%, rgba(200, 255, 62, 0.42) 50%, transparent 100%);
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: hl-sweep 1.2s ease-out forwards;
+  border-radius: 3px;
+  padding: 0 0.15em;
+  margin: 0 -0.15em;
+}
+
+/* — testimonial cards on landing — sticker cards */
+.testimonial {
+  position: relative;
+  padding: 1.35rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 245, 230, 0.05), rgba(255, 245, 230, 0.015));
+  border: 1.5px solid var(--line-strong);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.testimonial:nth-child(1) { transform: rotate(-1.2deg); }
+.testimonial:nth-child(2) { transform: rotate(0.8deg); }
+.testimonial:nth-child(3) { transform: rotate(-0.6deg); }
+.testimonial:hover {
+  transform: rotate(0) translateY(-3px);
+  border-color: var(--accent-lime);
+  box-shadow: var(--shadow-sticker);
+}
+.testimonial .avatar {
+  width: 46px; height: 46px;
+  border-radius: 999px;
+  background: var(--accent-lilac);
+  border: 1.5px solid var(--ink);
+  overflow: hidden;
+  display: inline-block;
+}
+
+/* trust strip — tiny company chips */
+.trust-chip {
+  display: inline-flex; align-items: center;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  background: rgba(255, 245, 230, 0.035);
+  border: 1px solid var(--line-strong);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.trust-chip:hover { border-color: var(--accent-lime); color: var(--accent-lime); }
+
+::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(249,115,22,0.55); border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #ea580c; }
+::-webkit-scrollbar-thumb { background: rgba(255, 122, 47, 0.55); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-hot); }

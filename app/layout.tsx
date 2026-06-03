@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
-import { Manrope, Space_Grotesk } from "next/font/google";
+import { Inter_Tight, Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const bodyFont = Manrope({
+const bodyFont = Inter_Tight({
   subsets: ["latin"],
   variable: "--font-body",
 });
 
-const displayFont = Space_Grotesk({
+const displayFont = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-display",
+});
+
+const monoFont = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${bodyFont.variable} ${displayFont.variable} bg-[var(--bg-base)] text-[var(--text-primary)] antialiased selection:bg-[var(--accent)] selection:text-black`}
+        className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable} bg-[var(--bg-base)] text-[var(--ink)] antialiased selection:bg-[var(--accent-lime)] selection:text-black`}
       >
         {children}
       </body>

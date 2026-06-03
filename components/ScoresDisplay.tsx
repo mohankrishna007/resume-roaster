@@ -1,10 +1,28 @@
 "use client";
-import { motion } from "framer-motion";
+import { animate, motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { RoastResult } from "@/types/roast";
 import { Clock, Hash } from "lucide-react";
 
 interface ScoresProps {
   scores: RoastResult["scores"];
+}
+
+function CountUp({ to, duration = 1.1, delay = 0 }: { to: number; duration?: number; delay?: number }) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    const controls = animate(0, to, {
+      duration,
+      delay,
+      ease: "easeOut",
+      onUpdate: (v) => setVal(Math.round(v)),
+    });
+    return () => controls.stop();
+  }, [inView, to, duration, delay]);
+  return <span ref={ref}>{val}</span>;
 }
 
 function Ring({
@@ -17,7 +35,7 @@ function Ring({
   delay: number;
 }) {
   const pct = (score / 10) * 100;
-  const color = score >= 7 ? "#7be3a8" : score >= 5 ? "#fb923c" : "#ef4444";
+  const color = score >= 7 ? "#c8ff3e" : score >= 5 ? "#ff7a2f" : "#ff4d8d";
   const r = 38;
   const circ = 2 * Math.PI * r;
   const offset = circ - (pct / 100) * circ;
@@ -102,24 +120,36 @@ export function ScoresDisplay({ scores }: ScoresProps) {
 
       {/* viral stats — designed to be screenshotted */}
       <div className="mt-7 flex flex-wrap gap-3">
-        <div className="flex items-center gap-2.5 rounded-full border border-[var(--line)] bg-white/[0.03] px-4 py-2">
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, duration: 0.4 }}
+          className="flex items-center gap-2.5 rounded-full border border-[var(--line)] bg-white/[0.03] px-4 py-2"
+        >
           <Hash className="h-4 w-4 text-[var(--accent)]" />
           <p className="text-sm">
             <span className="font-display text-base font-bold text-[var(--ink)]">
-              {scores.buzzword_count}
+              <CountUp to={scores.buzzword_count} delay={0.5} />
             </span>{" "}
             <span className="text-[var(--ink-mute)]">buzzwords detected</span>
           </p>
-        </div>
-        <div className="flex items-center gap-2.5 rounded-full border border-[var(--line)] bg-white/[0.03] px-4 py-2">
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.55, duration: 0.4 }}
+          className="flex items-center gap-2.5 rounded-full border border-[var(--line)] bg-white/[0.03] px-4 py-2"
+        >
           <Clock className="h-4 w-4 text-[var(--accent)]" />
           <p className="text-sm">
             <span className="text-[var(--ink-mute)]">recruiter scrolls past in</span>{" "}
             <span className="font-display text-base font-bold text-[var(--ink)]">
-              {scores.recruiter_scroll_seconds}s
+              <CountUp to={scores.recruiter_scroll_seconds} delay={0.65} />s
             </span>
           </p>
-        </div>
+        </motion.div>
       </div>
     </motion.section>
   );

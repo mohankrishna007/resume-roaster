@@ -1,8 +1,8 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { RoastResult } from "@/types/roast";
 import { Copy, RefreshCcw, Share2, Check } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface VerdictPanelProps {
   verdict: RoastResult["verdict"];
@@ -10,8 +10,28 @@ interface VerdictPanelProps {
   onReset: () => void;
 }
 
+function useTypewriter(text: string, start: boolean, speedMs = 22) {
+  const [out, setOut] = useState("");
+  useEffect(() => {
+    if (!start) return;
+    setOut("");
+    let i = 0;
+    const id = setInterval(() => {
+      i++;
+      setOut(text.slice(0, i));
+      if (i >= text.length) clearInterval(id);
+    }, speedMs);
+    return () => clearInterval(id);
+  }, [text, start, speedMs]);
+  return out;
+}
+
 export function VerdictPanel({ verdict, candidateName, onReset }: VerdictPanelProps) {
   const [copied, setCopied] = useState(false);
+  const quoteRef = useRef<HTMLDivElement | null>(null);
+  const quoteInView = useInView(quoteRef, { once: true, margin: "-100px" });
+  const typed = useTypewriter(verdict.share_quote, quoteInView);
+  const typingDone = typed.length >= verdict.share_quote.length;
 
   const shareText = `${candidateName}'s resume just got roasted:\n\n"${verdict.share_quote}"\n\nGet yours →`;
 
@@ -53,18 +73,27 @@ export function VerdictPanel({ verdict, candidateName, onReset }: VerdictPanelPr
       </h2>
 
       <motion.div
+        ref={quoteRef}
         initial={{ scale: 0.96 }}
         whileInView={{ scale: 1 }}
         viewport={{ once: true }}
         transition={{ type: "spring", stiffness: 180, damping: 18 }}
-        className="relative mt-10 rounded-[28px] bg-gradient-to-br from-amber-200 via-orange-300 to-rose-400 p-[2px]"
+        className="relative mt-10 rounded-[28px] bg-gradient-to-br from-[#c8ff3e] via-[#ff7a2f] to-[#ff4d8d] p-[3px]"
       >
-        <div className="rounded-[26px] bg-[#120e0b] px-7 py-10 sm:px-10 sm:py-14">
+        <div className="rounded-[26px] bg-[#0b0810] px-7 py-10 sm:px-10 sm:py-14">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
             ↓ screenshot this ↓
           </p>
           <p className="pull-quote mt-5 text-3xl leading-[1.15] sm:text-4xl">
-            “{verdict.share_quote}”
+            “{typed}
+            <span
+              className={`ml-0.5 inline-block w-[3px] translate-y-1 bg-[var(--accent)] ${
+                typingDone ? "opacity-0" : "animate-pulse"
+              }`}
+              style={{ height: "0.9em" }}
+              aria-hidden
+            />
+            {typingDone ? "”" : ""}
           </p>
           <p className="mt-6 text-sm text-[var(--ink-mute)]">
             — resume roaster, on {candidateName.split(" ")[0]}&apos;s resume

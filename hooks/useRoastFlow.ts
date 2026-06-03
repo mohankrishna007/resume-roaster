@@ -31,24 +31,35 @@ export function useRoastFlow() {
       error: null,
     });
 
+    // Fire the LLM request immediately — don't wait for the animation rhythm.
+    // The processing screen animation runs in parallel with the actual work.
+    const roastPromise = roastResume(file).then(
+      (r) => ({ ok: true as const, roast: r }),
+      (err: unknown) => ({ ok: false as const, err }),
+    );
+
     // Brief moment on the "opening your file" screen for UX rhythm.
     await new Promise((r) => setTimeout(r, 350));
-
     setState((prev) => ({ ...prev, step: "processing" }));
 
-    try {
-      const roast = await roastResume(file);
-      setState((prev) => ({
-        ...prev,
-        step: "result",
-        roastResult: roast,
-      }));
-    } catch (err) {
+    // Minimum time on the processing screen so the steps don't flash by if
+    // the model returns very fast.
+    const [result] = await Promise.all([
+      roastPromise,
+      new Promise((r) => setTimeout(r, 1800)),
+    ]);
+
+    if (result.ok) {
+      setState((prev) => ({ ...prev, step: "result", roastResult: result.roast }));
+    } else {
       setState({
         step: "error",
         uploadedResume: null,
         roastResult: null,
-        error: err instanceof Error ? err.message : "Failed to process resume",
+        error:
+          result.err instanceof Error
+            ? result.err.message
+            : "Failed to process resume",
       });
     }
   }, []);

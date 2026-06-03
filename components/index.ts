@@ -8,3 +8,4 @@ export { ScoresDisplay } from "./ScoresDisplay";
 export { VerdictPanel } from "./VerdictPanel";
 export { HeroRoast } from "./HeroRoast";
 export { PositivePoints } from "./PositivePoints";
+export * from "./Doodles";
