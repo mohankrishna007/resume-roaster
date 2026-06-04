@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, type MotionProps } from "framer-motion";
-import { useEffect } from "react";
+import { motion, type MotionProps } from "framer-motion";
 
 type Blob = {
   animate: MotionProps["animate"];
@@ -33,24 +32,10 @@ const BLOB_ANIMATIONS: Blob[] = [
   },
 ];
 
+// SSR-safe "is this running in the browser" gate — returns false on the server
+// and true after hydration without ever calling setState in an effect.
+
 export function AnimatedBackground() {
-  // cursor-following spotlight — pointer position springs for that smooth lag
-  const x = useMotionValue(typeof window !== "undefined" ? window.innerWidth / 2 : 0);
-  const y = useMotionValue(typeof window !== "undefined" ? window.innerHeight / 3 : 0);
-  const sx = useSpring(x, { stiffness: 70, damping: 22, mass: 0.6 });
-  const sy = useSpring(y, { stiffness: 70, damping: 22, mass: 0.6 });
-
-  useEffect(() => {
-    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
-    if (!isFinePointer) return;
-    const onMove = (e: PointerEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
-  }, [x, y]);
-
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       {BLOB_ANIMATIONS.map((blob, index) => (
@@ -72,19 +57,6 @@ export function AnimatedBackground() {
             "conic-gradient(from 0deg at 50% 50%, transparent 0deg, #ff7a2f33 60deg, transparent 120deg, #b39dff33 200deg, transparent 260deg, #c8ff3e33 320deg, transparent 360deg)",
           filter: "blur(80px)",
         }}
-      />
-
-      {/* cursor spotlight — soft, follows pointer with spring lag */}
-      <motion.div
-        style={{
-          x: sx,
-          y: sy,
-          translateX: "-50%",
-          translateY: "-50%",
-          background:
-            "radial-gradient(closest-side, rgba(200,255,62,0.16), rgba(255,122,47,0.08) 40%, transparent 70%)",
-        }}
-        className="absolute h-[42rem] w-[42rem] rounded-full mix-blend-screen motion-reduce:hidden"
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { extractPdfText } from "@/lib/pdf-parser";
 import { getProvider } from "@/lib/llm";
+import { saveRoast } from "@/lib/roast-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -70,7 +71,19 @@ export async function POST(request: Request) {
 
     stage = "llm";
     const result = await provider.generateRoast(resumeText);
-    return NextResponse.json(result);
+
+    // Best-effort persistence for shareable links. Never blocks the response
+    // shape — if Firestore isn't configured we just return without a shareId.
+    const shareId = await saveRoast(result, {
+      filename: file.name,
+      file_size_bytes: file.size,
+      resume_chars: resumeText.length,
+      provider: process.env.LLM_PROVIDER ?? "openai",
+      user_agent: request.headers.get("user-agent") ?? undefined,
+      referer: request.headers.get("referer") ?? undefined,
+    });
+
+    return NextResponse.json({ ...result, shareId });
   } catch (err) {
     // Log the real reason server-side, return a clean message to the user.
     console.error(`[roast] failed at ${stage}:`, err);

@@ -3,6 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { RoastResult } from "@/types/roast";
 import { Copy, RefreshCcw, Share2, Check } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { track } from "@/lib/analytics";
 
 interface VerdictPanelProps {
   verdict: RoastResult["verdict"];
@@ -46,9 +47,11 @@ export function VerdictPanel({ verdict, candidateName, onReset }: VerdictPanelPr
           text: shareText,
           url: window.location.href,
         });
+        track("share_clicked", { surface: "verdict", method: "native" });
         return;
       }
       await navigator.clipboard?.writeText(`${shareText} ${window.location.href}`);
+      track("share_clicked", { surface: "verdict", method: "clipboard" });
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch {
@@ -58,6 +61,7 @@ export function VerdictPanel({ verdict, candidateName, onReset }: VerdictPanelPr
 
   const handleCopy = async () => {
     await navigator.clipboard?.writeText(`"${verdict.share_quote}" — Resume Roaster`);
+    track("quote_copied", { surface: "verdict" });
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
   };

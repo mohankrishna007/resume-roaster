@@ -77,6 +77,22 @@ h1, h2, h3, .font-display {
 .font-mono { font-family: var(--font-mono), ui-monospace, monospace; }
 
 a, button, input, textarea, select { font: inherit; }
+
+/* gen-z cursors — tiny flame default, pointer-flame on interactive bits.
+   pointer-events: fine only so we don't fight touch. motion-reduce safe. */
+@media (pointer: fine) {
+  html, body {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><g filter='drop-shadow(0 1px 1px rgba(0,0,0,0.45))'><path d='M14 2c1 3 4 4 4 8a4 4 0 0 1-1 2.6c2 .6 4 2.8 4 6 0 4-3.5 7-7 7s-7-3-7-7c0-3 1.6-5 3-6 0-2 .5-3 1.4-4.2C12.6 7 14 5 14 2z' fill='%23ff7a2f' stroke='%23ffd566' stroke-width='1.4' stroke-linejoin='round'/><path d='M14 12c.5 1.4 2 2.2 2 4a2 2 0 1 1-4 0c0-1.4 1.2-2.4 2-4z' fill='%23ffd566'/></g></svg>") 6 4, auto;
+  }
+  a, button, [role="button"], summary, label[for], input[type="submit"], input[type="button"], .cursor-pointer {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><g filter='drop-shadow(0 1px 1px rgba(0,0,0,0.5))'><path d='M15 3c1 3.2 4.2 4.2 4.2 8.4a4 4 0 0 1-.8 2.4c2 .8 4 3 4 6.2 0 4-3.6 7-7.4 7-3.8 0-7.4-3-7.4-7 0-3 1.8-5 3.2-6 0-2 .4-3 1.4-4.2C13.4 8.2 15 6 15 3z' fill='%23c8ff3e' stroke='%23ff7a2f' stroke-width='1.6' stroke-linejoin='round'/><path d='M15 13c.5 1.4 2 2.2 2 4a2 2 0 1 1-4 0c0-1.4 1.2-2.4 2-4z' fill='%23ff4d8d'/></g></svg>") 8 4, pointer;
+  }
+  input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+  textarea {
+    cursor: text;
+  }
+}
+
 button { cursor: pointer; }
 
 ::selection { background: var(--accent-lime); color: #0b0810; }

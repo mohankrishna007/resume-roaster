@@ -12,4 +12,5 @@ export { MagneticButton } from "./MagneticButton";
 export { RevealOnScroll } from "./RevealOnScroll";
 export { TiltCard } from "./TiltCard";
 export { SplitText } from "./SplitText";
+export { RoastResultView } from "./RoastResultView";
 export * from "./Doodles";

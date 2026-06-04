@@ -6,13 +6,7 @@ import {
   AnimatedBackground,
   UploadZone,
   ProcessingScreen,
-  HeroRoast,
-  CandidateSummary,
-  PositivePoints,
-  RoastCard,
-  BiggestTruth,
-  ScoresDisplay,
-  VerdictPanel,
+  RoastResultView,
   ArrowDoodle,
   SparkleDoodle,
   StarDoodle,
@@ -33,10 +27,10 @@ import {
   CONTAINER_TRANSITION,
 } from "@/lib/constants";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, RefreshCcw, Share2 } from "lucide-react";
+import { Flame, RefreshCcw } from "lucide-react";
 
 export default function Home() {
-  const { step, uploadedResume, roastResult, handleUpload, reset, error } =
+  const { step, uploadedResume, roastResult, shareId, handleUpload, reset, error } =
     useRoastFlow();
 
   // Memoize doubled ticker lines to avoid recreation on every render
@@ -146,7 +140,7 @@ export default function Home() {
 
                 {/* tiny human reassurance — not a card */}
                 <p className="mt-5 text-sm leading-6 text-[var(--ink-mute)]">
-                  PDF only · nothing stored
+                  PDF only · roasts are saved so you can share them
                 </p>
               </section>
 
@@ -383,108 +377,12 @@ export default function Home() {
         )}
 
         {step === "result" && roastResult && (
-          <motion.div
+          <RoastResultView
             key="result"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={CONTAINER_TRANSITION}
-            className="relative z-10"
-          >
-            {/* minimal sticky topbar — name + share is the hero action */}
-            <div className="bar-gradient sticky top-0 z-30 border-b border-[var(--line)] bg-[#0b0810]/80 backdrop-blur-xl">
-              <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <Flame className="h-4 w-4 shrink-0 text-[var(--accent)]" />
-                  <p className="truncate text-sm font-semibold text-[var(--ink-soft)]">
-                    <span className="text-[var(--ink-mute)]">roast for</span>{" "}
-                    {roastResult.candidate.name}
-                  </p>
-                </div>
-                <div className="flex shrink-0 items-center gap-2">
-                  <button
-                    onClick={() => {
-                      if (navigator.share) {
-                        navigator.share({
-                          title: `${roastResult.candidate.name}'s resume roast`,
-                          text: roastResult.verdict.share_quote,
-                          url: window.location.href,
-                        });
-                      } else {
-                        navigator.clipboard?.writeText(window.location.href);
-                      }
-                    }}
-                    className="btn-hot !px-4 !py-2 text-sm"
-                  >
-                    <Share2 className="h-3.5 w-3.5" />
-                    Share
-                  </button>
-                  <button
-                    onClick={reset}
-                    className="btn-ghost !px-3 !py-2 text-sm"
-                    aria-label="Roast another"
-                  >
-                    <RefreshCcw className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline">New</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* editorial scroll — narrative sections stay narrow, breakdown grid goes wide */}
-            <article className="mx-auto max-w-5xl px-6 py-12 sm:px-8 sm:py-14 lg:py-16">
-              <div className="mx-auto max-w-3xl">
-                <HeroRoast
-                  archetype={roastResult.archetype}
-                  candidate={roastResult.candidate}
-                />
-
-                <div className="my-12 rule-dotted" />
-
-                <ScoresDisplay scores={roastResult.scores} />
-
-                <div className="my-12 rule-dotted" />
-
-                <CandidateSummary candidate={roastResult.candidate} />
-
-                <div className="my-14">
-                  <p className="kicker">the breakdown</p>
-                  <h2 className="font-display mt-3 text-[2rem] font-bold leading-[1.1] sm:text-5xl sm:leading-[1.05]">
-                    Line by line, no mercy.
-                  </h2>
-                  <p className="mt-3 text-[var(--ink-soft)]">
-                    {roastResult.roasts.length} moments your resume should
-                    probably hear.
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-10 sm:space-y-12">
-                {roastResult.roasts.map((roast, idx) => (
-                  <RoastCard key={idx} roast={roast} index={idx} />
-                ))}
-              </div>
-
-              <div className="mx-auto mt-14 max-w-3xl">
-                <div className="rule-dotted" />
-
-                <div className="mt-14">
-                  <PositivePoints wins={roastResult.wins} />
-                </div>
-
-                <div className="my-14 rule-dotted" />
-
-                <BiggestTruth truth={roastResult.biggest_truth} />
-
-                <div className="my-14 rule-dotted" />
-
-                <VerdictPanel
-                  verdict={roastResult.verdict}
-                  candidateName={roastResult.candidate.name}
-                  onReset={reset}
-                />
-              </div>
-            </article>
-          </motion.div>
+            roastResult={roastResult}
+            shareId={shareId}
+            onReset={reset}
+          />
         )}
 
         {step === "error" && (

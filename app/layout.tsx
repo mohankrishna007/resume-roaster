@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Inter_Tight, Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { AnalyticsBoot } from "@/components/AnalyticsBoot";
 
 const bodyFont = Inter_Tight({
   subsets: ["latin"],
@@ -172,11 +173,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body
         className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable} bg-[var(--bg-base)] text-[var(--ink)] antialiased selection:bg-[var(--accent-lime)] selection:text-black`}
       >
         {children}
+        <AnalyticsBoot />
         <Script
           id="ld-json"
           type="application/ld+json"
