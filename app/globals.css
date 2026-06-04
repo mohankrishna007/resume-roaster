@@ -126,9 +126,11 @@ button { cursor: pointer; }
   font-size: 0.7rem; font-weight: 600;
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--accent-lime);
+  max-width: 100%;
 }
 .kicker::before {
   content: ""; width: 22px; height: 2px; background: var(--accent-lime); border-radius: 2px;
+  flex-shrink: 0;
 }
 
 /* chat bubbles for the roast feed */
@@ -254,11 +256,16 @@ button { cursor: pointer; }
 /* the "document" rendering of a resume line — quoted, with a colored gutter */
 .doc-line {
   position: relative;
-  padding: 0.95rem 1.1rem 0.95rem 1.4rem;
+  padding: 1rem 0.95rem 0.95rem 1.15rem;
   background: linear-gradient(180deg, rgba(255, 245, 230, 0.035), rgba(255, 245, 230, 0.01));
   border: 1px solid var(--line);
   border-radius: 10px;
   border-left: 3px solid var(--accent);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+@media (min-width: 640px) {
+  .doc-line { padding: 0.95rem 1.1rem 0.95rem 1.4rem; }
 }
 .doc-line .doc-meta {
   display: flex; align-items: center; gap: 0.5rem;
@@ -280,11 +287,16 @@ button { cursor: pointer; }
 .doc-line .doc-text {
   margin-top: 0.6rem;
   font-family: var(--font-display);
-  font-size: 1.08rem;
+  font-size: 1rem;
   line-height: 1.5;
   color: var(--ink-soft);
   font-style: italic;
   font-weight: 500;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+@media (min-width: 640px) {
+  .doc-line .doc-text { font-size: 1.08rem; }
 }
 
 /* severity color drives the gutter + stamp */
@@ -297,15 +309,23 @@ button { cursor: pointer; }
 .sev-stamp {
   position: absolute; top: -12px; right: 10px;
   display: inline-flex; align-items: center; gap: 0.3rem;
-  padding: 0.28rem 0.7rem;
+  padding: 0.24rem 0.6rem;
   border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 0.62rem; font-weight: 700;
-  letter-spacing: 0.12em; text-transform: uppercase;
+  font-size: 0.58rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
   border: 1.5px solid #0b0810;
   background: #1a1310;
   box-shadow: var(--shadow-sticker-sm);
   transform: rotate(2deg);
+  white-space: nowrap;
+}
+@media (min-width: 640px) {
+  .sev-stamp {
+    padding: 0.28rem 0.7rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+  }
 }
 .sev-stamp.sev-mild { color: #2a1d05; background: var(--hl-yellow); }
 .sev-stamp.sev-medium { color: #1a0904; background: var(--accent); }
@@ -315,10 +335,15 @@ button { cursor: pointer; }
 /* the annotation card on the right (or below on mobile) — feels handwritten */
 .annotation {
   position: relative;
-  padding: 1.15rem 1.3rem;
+  padding: 1.1rem 1.15rem;
   background: linear-gradient(180deg, rgba(255, 122, 47, 0.12), rgba(255, 122, 47, 0.03));
   border: 1.5px solid rgba(255, 122, 47, 0.32);
   border-radius: 16px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+@media (min-width: 640px) {
+  .annotation { padding: 1.15rem 1.3rem; }
 }
 .annotation.sev-mild {
   background: linear-gradient(180deg, rgba(255, 213, 102, 0.10), rgba(255, 213, 102, 0.03));

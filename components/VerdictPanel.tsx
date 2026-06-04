@@ -68,7 +68,7 @@ export function VerdictPanel({ verdict, candidateName, onReset }: VerdictPanelPr
     >
       <p className="kicker">final verdict</p>
 
-      <h2 className="font-display mt-4 text-4xl font-bold leading-[1.1] sm:text-5xl">
+      <h2 className="font-display mt-4 text-[2rem] font-bold leading-[1.12] sm:text-5xl sm:leading-[1.1]">
         {verdict.headline}
       </h2>
 
@@ -80,11 +80,11 @@ export function VerdictPanel({ verdict, candidateName, onReset }: VerdictPanelPr
         transition={{ type: "spring", stiffness: 180, damping: 18 }}
         className="relative mt-10 rounded-[28px] bg-gradient-to-br from-[#c8ff3e] via-[#ff7a2f] to-[#ff4d8d] p-[3px]"
       >
-        <div className="rounded-[26px] bg-[#0b0810] px-7 py-10 sm:px-10 sm:py-14">
+        <div className="rounded-[26px] bg-[#0b0810] px-5 py-8 sm:px-10 sm:py-14">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
             ↓ screenshot this ↓
           </p>
-          <p className="pull-quote mt-5 text-3xl leading-[1.15] sm:text-4xl">
+          <p className="pull-quote mt-5 text-[1.75rem] leading-[1.18] sm:text-4xl sm:leading-[1.15]">
             “{typed}
             <span
               className={`ml-0.5 inline-block w-[3px] translate-y-1 bg-[var(--accent)] ${

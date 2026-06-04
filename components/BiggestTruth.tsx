@@ -23,15 +23,15 @@ export function BiggestTruth({ truth }: { truth: RoastResult["biggest_truth"] })
 
       <p className="kicker">the biggest truth</p>
 
-      <h2 className="font-display mt-4 text-4xl font-bold leading-[1.15] sm:text-5xl">
+      <h2 className="font-display mt-4 text-[2rem] font-bold leading-[1.15] sm:text-5xl">
         <span className="marker-pink marker">{truth.headline}.</span>
       </h2>
 
-      <p className="mt-6 text-lg leading-8 text-[var(--ink-soft)]">
+      <p className="mt-6 text-base leading-7 text-[var(--ink-soft)] sm:text-lg sm:leading-8">
         {truth.explanation}
       </p>
 
-      <p className="pull-quote mt-10 border-l-4 border-[var(--accent)] pl-5 text-2xl italic text-[var(--ink)] sm:text-3xl">
+      <p className="pull-quote mt-8 border-l-4 border-[var(--accent)] pl-4 text-xl italic text-[var(--ink)] sm:mt-10 sm:pl-5 sm:text-3xl">
         “{truth.one_liner}”
       </p>
     </motion.section>

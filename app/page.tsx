@@ -25,14 +25,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Flame, RefreshCcw, Share2 } from "lucide-react";
 
 const tickerLines = [
-  "“bro this is too accurate 😭”",
-  "called out my fake 80% optimization ☠️",
-  "“passionate team player” → exposed",
-  "shared it in the group chat immediately",
-  "my recruiter friend approved every roast",
-  "the buzzword density score broke me",
+  "“bro it read me for filth 😭”",
+  "caught my fake 80% optimization in 4 seconds ☠️",
+  "“passionate team player” → publicly executed",
+  "sent it to the group chat. they sent it to theirs.",
+  "my recruiter friend said ‘yeah this is what i think too’",
+  "buzzword count hit 23. i am ashamed.",
   "“results-driven” is now banned in my house",
-  "i fixed 4 lines before finishing reading",
+  "fixed 4 lines before i even finished reading",
+  "finally feedback that doesn’t sound like a LinkedIn post 🫡",
+  "this app knows i panic-added ‘leadership’ at 2am",
 ];
 
 const containerTransition = { duration: 0.4 };
@@ -56,15 +58,18 @@ export default function Home() {
             className="relative z-10 min-h-screen"
           >
             {/* minimal masthead — no card, just a line */}
-            <header className="mx-auto flex max-w-6xl items-center justify-between px-5 pt-6 sm:px-8">
+            <header className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pt-6 sm:px-8">
               <div className="flex items-center gap-2.5">
                 <Flame className="h-5 w-5 text-[var(--accent)]" />
                 <p className="font-display text-lg font-bold tracking-tight">
                   Resume Roaster
                 </p>
               </div>
-              <p className="text-xs text-[var(--ink-mute)]">
-                no signup. no fluff. just feedback.
+              <p className="hidden text-right text-xs text-[var(--ink-mute)] sm:block">
+                no signup · no fluff · just the truth your recruiter won’t say
+              </p>
+              <p className="text-right text-[0.7rem] text-[var(--ink-mute)] sm:hidden">
+                no signup · no fluff
               </p>
             </header>
 
@@ -90,30 +95,31 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   className="kicker"
                 >
-                  Drop the PDF. Get roasted.
+                  upload PDF · get personally attacked · improve
                 </motion.p>
 
                 <motion.h1
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 }}
-                  className="font-display mt-5 max-w-4xl text-5xl font-bold leading-[1.05] tracking-tight sm:text-7xl lg:text-[5.5rem]"
+                  className="font-display mt-5 max-w-4xl text-[2.6rem] font-bold leading-[1.08] tracking-tight sm:text-7xl sm:leading-[1.05] lg:text-[5.5rem]"
                 >
                   Your resume is{" "}
                   <span className="marker-pink marker">lying</span> to you.
                   <br className="hidden sm:block" /> We&apos;ll{" "}
-                  <span className="marker">tell you how.</span>
+                  <span className="marker">expose every line.</span>
                 </motion.h1>
 
                 <motion.p
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.12 }}
-                  className="mt-7 max-w-2xl text-lg leading-8 text-[var(--ink-soft)]"
+                  className="mt-6 max-w-2xl text-base leading-7 text-[var(--ink-soft)] sm:mt-7 sm:text-lg sm:leading-8"
                 >
-                  Upload your PDF. We&apos;ll read every &ldquo;results-driven team
-                  player&rdquo; and tell you what a recruiter actually thinks —
-                  in the voice of a friend who&apos;s seen too many resumes.
+                  Drop your PDF below. In 90 seconds we&apos;ll roast every
+                  &ldquo;results-driven team player&rdquo;, count your buzzwords,
+                  and tell you exactly which lines a recruiter scrolls past —
+                  in the voice of the friend who&apos;d actually be honest with you.
                 </motion.p>
 
                 {/* curved arrow pointing from copy down to the upload zone */}
@@ -138,14 +144,14 @@ export default function Home() {
 
                 {/* tiny human reassurance — not a card */}
                 <p className="mt-4 text-sm text-[var(--ink-mute)]">
-                  takes ~90 seconds · PDF only · we don&apos;t store anything
+                  ~90 seconds · PDF only · nothing stored, nothing shared, no inbox spam
                 </p>
               </section>
 
               {/* social proof ticker — what people said */}
               <section className="mt-20 overflow-hidden">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ink-mute)]">
-                  what people texted after
+                  what people texted us at 1am
                 </p>
                 <div className="mt-5 relative overflow-hidden py-2 [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]">
                   <div className="ticker">
@@ -163,22 +169,22 @@ export default function Home() {
               </section>
 
               {/* preview of a roast — show, don't tell — uses the actual annotation style */}
-              <section className="relative mt-24 grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:items-center">
+              <section className="relative mt-20 grid gap-10 sm:mt-24 lg:grid-cols-[1fr_1.15fr] lg:items-center">
                 <LightningDoodle
                   aria-hidden
                   className="absolute -top-6 left-[-12px] hidden h-12 w-8 -rotate-[18deg] text-[var(--accent-lime)] lg:block"
                 />
                 <div>
-                  <p className="kicker">a real moment from the report</p>
-                  <h2 className="font-display mt-4 text-4xl font-bold leading-[1.05] sm:text-5xl">
-                    It&apos;ll find the line you{" "}
+                  <p className="kicker">an actual line from a real report</p>
+                  <h2 className="font-display mt-4 text-[2rem] font-bold leading-[1.1] sm:text-5xl sm:leading-[1.05]">
+                    It finds the line you{" "}
                     <span className="underline-wavy">already knew</span> was
-                    weak.
+                    cooked.
                   </h2>
                   <p className="mt-5 max-w-md text-base leading-7 text-[var(--ink-soft)]">
-                    Not generic AI feedback. Not a 47-bullet checklist. Just the
-                    specific sentences that make a recruiter scroll past you —
-                    in language you&apos;d send to a friend.
+                    No generic AI mush. No 47-bullet checklist nobody reads.
+                    Just the exact sentences making recruiters scroll past you —
+                    explained like your most honest friend, with a fix for every roast.
                   </p>
                 </div>
 
@@ -193,7 +199,7 @@ export default function Home() {
                     </div>
                     <p className="doc-text">
                       <span className="doc-text-highlight">
-                        &ldquo;Optimized performance by 80%&rdquo;
+                        &ldquo;Skills: Java, Python, C++, JavaScript, React, Node, Angular, Vue, AWS, Azure, GCP, Docker, Kubernetes, MongoDB, MySQL, Figma, Photoshop, Leadership&rdquo;
                       </span>
                     </p>
                   </div>
@@ -202,25 +208,26 @@ export default function Home() {
                       what the roaster said
                     </p>
                     <p className="mt-2 text-sm font-semibold text-[var(--ink-soft)]">
-                      WAIT 😭 80%?
+                      BHAI 💀 this is Big Bazaar sale
                     </p>
                     <p className="font-display mt-2 text-xl leading-[1.3] font-semibold sm:text-[1.4rem]">
-                      What was the app doing before — running on emotional support?
+                      Buy 1 skill get 14 free. Recruiter walks in, sees this aisle, walks straight out.
                     </p>
                   </div>
                 </div>
               </section>
 
               {/* testimonials — illustrated avatars (DiceBear) */}
-              <section className="relative mt-24">
+              <section className="relative mt-20 sm:mt-24">
                 <StarDoodle
                   aria-hidden
                   className="absolute right-2 top-2 hidden h-7 w-7 rotate-12 text-[var(--accent-pink)] lg:block"
                 />
                 <p className="kicker">straight from the group chats</p>
-                <h2 className="font-display mt-4 text-3xl font-bold leading-[1.1] sm:text-4xl">
-                  People send it to their friends. Then{" "}
-                  <span className="marker-green marker">fix four lines.</span>
+                <h2 className="font-display mt-4 text-[1.85rem] font-bold leading-[1.12] sm:text-4xl sm:leading-[1.1]">
+                  They came to laugh.
+                  <br className="hidden sm:block" /> They left and{" "}
+                  <span className="marker-green marker">fixed four lines.</span>
                 </h2>
 
                 <div className="mt-10 grid gap-5 md:grid-cols-3">
@@ -230,21 +237,21 @@ export default function Home() {
                       name: "Priya, SDE-2",
                       handle: "Bengaluru",
                       quote:
-                        "first feedback that actually called out my fake metrics. brutal but right.",
+                        "first feedback that actually called out my fake metrics. brutal, healing, 10/10.",
                     },
                     {
                       seed: "Rohit",
                       name: "Rohit, PM",
                       handle: "Hyderabad",
                       quote:
-                        "“results-driven team player” got demolished in 2 lines. i deserve that.",
+                        "my “results-driven team player” line got demolished in 2 sentences. i deserved that.",
                     },
                     {
                       seed: "Aanya",
                       name: "Aanya, Frontend",
                       handle: "Mumbai",
                       quote:
-                        "screenshot went straight to the WhatsApp group. fixed my resume same night.",
+                        "screenshot → WhatsApp group → cried laughing → fixed my resume same night.",
                     },
                   ].map((t) => (
                     <div key={t.seed} className="testimonial">
@@ -291,7 +298,7 @@ export default function Home() {
               </section>
 
               {/* final call — bare, no card */}
-              <section className="relative my-24 text-center">
+              <section className="relative my-20 text-center sm:my-24">
                 <ScribbleCircle
                   aria-hidden
                   className="pointer-events-none absolute left-1/2 top-1/2 hidden h-[180px] w-[480px] -translate-x-1/2 -translate-y-[42%] text-[var(--accent-lime)] opacity-70 sm:block"
@@ -304,28 +311,31 @@ export default function Home() {
                   aria-hidden
                   className="absolute right-[14%] top-2 hidden h-12 w-3 rotate-[12deg] text-[var(--accent)] lg:block"
                 />
-                <h2 className="relative font-display mx-auto max-w-3xl text-4xl font-bold leading-[1.15] sm:text-5xl">
-                  Okay enough scrolling.
+                <h2 className="relative font-display mx-auto max-w-3xl text-[2rem] font-bold leading-[1.15] sm:text-5xl">
+                  Okay, enough doomscrolling.
                   <br />
                   <span className="marker-green marker">
-                    Find out what yours says.
+                    Find out what yours really says.
                   </span>
                 </h2>
+                <p className="mx-auto mt-5 max-w-md px-2 text-sm text-[var(--ink-soft)]">
+                  Drop the PDF. We&apos;ll do the rest. Worst case you laugh — best case you finally fix that one line.
+                </p>
                 <a
                   href="#top"
                   onClick={(e) => {
                     e.preventDefault();
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  className="btn-hot relative mt-8"
+                  className="btn-hot relative mt-7"
                 >
                   <Flame className="h-4 w-4" />
-                  Roast my resume
+                  Upload &amp; roast me
                 </a>
               </section>
 
               <footer className="border-t border-[var(--line)] py-6 text-center text-xs text-[var(--ink-mute)]">
-                made for people who already know · {new Date().getFullYear()}
+                made for people who already kinda know · {new Date().getFullYear()}
               </footer>
             </main>
           </motion.div>
@@ -388,14 +398,14 @@ export default function Home() {
             {/* minimal sticky topbar — name + share is the hero action */}
             <div className="sticky top-0 z-30 border-b border-[var(--line)] bg-[#0b0810]/80 backdrop-blur-xl">
               <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3 sm:px-8">
-                <div className="flex items-center gap-2.5">
-                  <Flame className="h-4 w-4 text-[var(--accent)]" />
-                  <p className="text-sm font-semibold text-[var(--ink-soft)]">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <Flame className="h-4 w-4 shrink-0 text-[var(--accent)]" />
+                  <p className="truncate text-sm font-semibold text-[var(--ink-soft)]">
                     <span className="text-[var(--ink-mute)]">roast for</span>{" "}
                     {roastResult.candidate.name}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex shrink-0 items-center gap-2">
                   <button
                     onClick={() => {
                       if (navigator.share) {
@@ -443,7 +453,7 @@ export default function Home() {
 
                 <div className="my-14">
                   <p className="kicker">the breakdown</p>
-                  <h2 className="font-display mt-3 text-4xl font-bold leading-[1.05] sm:text-5xl">
+                  <h2 className="font-display mt-3 text-[2rem] font-bold leading-[1.1] sm:text-5xl sm:leading-[1.05]">
                     Line by line, no mercy.
                   </h2>
                   <p className="mt-3 text-[var(--ink-soft)]">

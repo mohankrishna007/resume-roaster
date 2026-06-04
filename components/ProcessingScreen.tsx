@@ -47,7 +47,7 @@ export function ProcessingScreen({ filename }: { filename?: string }) {
         </motion.div>
 
         {/* big chunky headline that changes vibe per step */}
-        <h2 className="font-display mt-6 text-5xl font-bold leading-[1.02] tracking-[-0.035em] sm:text-7xl">
+        <h2 className="font-display mt-6 text-[2.6rem] font-bold leading-[1.04] tracking-[-0.035em] sm:text-7xl sm:leading-[1.02]">
           <span className="text-[var(--ink-mute)]">cooking up</span>{" "}
           <br className="hidden sm:block" />
           <span className="marker-green marker">your roast.</span>

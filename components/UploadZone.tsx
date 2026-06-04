@@ -47,10 +47,10 @@ export function UploadZone({ onUpload, isLoading = false, selectedFile }: Upload
           </div>
           <div>
             <p className="font-display text-2xl font-bold leading-tight">
-              {isDragActive ? "drop it 👇" : selectedFile ?? "Drop your resume here"}
+              {isDragActive ? "yes. let it go 👇" : selectedFile ?? "Drop your resume in. We dare you."}
             </p>
             <p className="mt-1 text-sm text-[var(--ink-mute)]">
-              or click anywhere · PDF, single file, no signup
+              or tap to upload · PDF only · no signup, no email, no data kept
             </p>
           </div>
         </div>

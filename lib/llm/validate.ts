@@ -76,12 +76,12 @@ export function validateRoastResult(input: unknown): RoastResult {
     };
   });
 
-  const education = isObject(candidate.education)
-    ? {
-        degree: str(candidate.education.degree, "candidate.education.degree"),
-        college: str(candidate.education.college, "candidate.education.college"),
-      }
-    : undefined;
+  let education: { degree: string; college: string } | undefined;
+  if (isObject(candidate.education)) {
+    const degree = typeof candidate.education.degree === "string" ? candidate.education.degree.trim() : "";
+    const college = typeof candidate.education.college === "string" ? candidate.education.college.trim() : "";
+    education = degree || college ? { degree, college } : undefined;
+  }
 
   return {
     archetype: {
