@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useRoastFlow } from "@/hooks/useRoastFlow";
 import {
   AnimatedBackground,
@@ -21,27 +22,24 @@ import {
   PaperDoodle,
   ExclaimDoodle,
 } from "@/components";
+import {
+  TICKER_LINES,
+  TESTIMONIALS,
+  TRUST_COMPANIES,
+  CONTAINER_TRANSITION,
+} from "@/lib/constants";
 import { motion, AnimatePresence } from "framer-motion";
 import { Flame, RefreshCcw, Share2 } from "lucide-react";
-
-const tickerLines = [
-  "“bro it read me for filth 😭”",
-  "caught my fake 80% optimization in 4 seconds ☠️",
-  "“passionate team player” → publicly executed",
-  "sent it to the group chat. they sent it to theirs.",
-  "my recruiter friend said ‘yeah this is what i think too’",
-  "buzzword count hit 23. i am ashamed.",
-  "“results-driven” is now banned in my house",
-  "fixed 4 lines before i even finished reading",
-  "finally feedback that doesn’t sound like a LinkedIn post 🫡",
-  "this app knows i panic-added ‘leadership’ at 2am",
-];
-
-const containerTransition = { duration: 0.4 };
 
 export default function Home() {
   const { step, uploadedResume, roastResult, handleUpload, reset, error } =
     useRoastFlow();
+
+  // Memoize doubled ticker lines to avoid recreation on every render
+  const doubledTickerLines = useMemo(
+    () => [...TICKER_LINES, ...TICKER_LINES],
+    []
+  );
 
   return (
     <div className="relative min-h-screen text-[var(--ink)]">
@@ -54,7 +52,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -16 }}
-            transition={containerTransition}
+            transition={CONTAINER_TRANSITION}
             className="relative z-10 min-h-screen"
           >
             {/* minimal masthead — no card, just a line */}
@@ -66,10 +64,10 @@ export default function Home() {
                 </p>
               </div>
               <p className="hidden text-right text-xs text-[var(--ink-mute)] sm:block">
-                no signup · no fluff · just the truth your recruiter won’t say
+                free AI resume review · no signup · no recruiter cosplay
               </p>
               <p className="text-right text-[0.7rem] text-[var(--ink-mute)] sm:hidden">
-                no signup · no fluff
+                free · no signup · no fluff
               </p>
             </header>
 
@@ -95,7 +93,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   className="kicker"
                 >
-                  upload PDF · get personally attacked · improve
+                  free AI resume roast · drop PDF · get the truth · ~90s
                 </motion.p>
 
                 <motion.h1
@@ -105,9 +103,9 @@ export default function Home() {
                   className="font-display mt-5 max-w-4xl text-[2.6rem] font-bold leading-[1.08] tracking-tight sm:text-7xl sm:leading-[1.05] lg:text-[5.5rem]"
                 >
                   Your resume is{" "}
-                  <span className="marker-pink marker">lying</span> to you.
-                  <br className="hidden sm:block" /> We&apos;ll{" "}
-                  <span className="marker">expose every line.</span>
+                  <span className="marker-pink marker">quietly lying</span>.
+                  <br className="hidden sm:block" /> Our AI will{" "}
+                  <span className="marker">roast every line.</span>
                 </motion.h1>
 
                 <motion.p
@@ -116,10 +114,12 @@ export default function Home() {
                   transition={{ delay: 0.12 }}
                   className="mt-6 max-w-2xl text-base leading-7 text-[var(--ink-soft)] sm:mt-7 sm:text-lg sm:leading-8"
                 >
-                  Drop your PDF below. In 90 seconds we&apos;ll roast every
-                  &ldquo;results-driven team player&rdquo;, count your buzzwords,
-                  and tell you exactly which lines a recruiter scrolls past —
-                  in the voice of the friend who&apos;d actually be honest with you.
+                  Upload your resume PDF. In about 90 seconds, our AI resume
+                  reviewer counts every buzzword, clocks how long a recruiter
+                  would actually read it, and points at the exact lines killing
+                  your callbacks — with a fix for each one. It&apos;s the
+                  feedback your honest friend would give you, if your honest
+                  friend had read 10,000 resumes.
                 </motion.p>
 
                 {/* curved arrow pointing from copy down to the upload zone */}
@@ -144,18 +144,18 @@ export default function Home() {
 
                 {/* tiny human reassurance — not a card */}
                 <p className="mt-4 text-sm text-[var(--ink-mute)]">
-                  ~90 seconds · PDF only · nothing stored, nothing shared, no inbox spam
+                  100% free · PDF only · nothing stored · no signup · no inbox spam
                 </p>
               </section>
 
               {/* social proof ticker — what people said */}
-              <section className="mt-20 overflow-hidden">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ink-mute)]">
-                  what people texted us at 1am
+              <section aria-labelledby="buzz" className="mt-20 overflow-hidden">
+                <p id="buzz" className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ink-mute)]">
+                  what people texted us at 1am after getting roasted
                 </p>
                 <div className="mt-5 relative overflow-hidden py-2 [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]">
                   <div className="ticker">
-                    {[...tickerLines, ...tickerLines].map((line, i) => (
+                    {doubledTickerLines.map((line, i) => (
                       <span
                         key={i}
                         className="font-display text-2xl text-[var(--ink-soft)] whitespace-nowrap sm:text-3xl"
@@ -175,16 +175,17 @@ export default function Home() {
                   className="absolute -top-6 left-[-12px] hidden h-12 w-8 -rotate-[18deg] text-[var(--accent-lime)] lg:block"
                 />
                 <div>
-                  <p className="kicker">an actual line from a real report</p>
+                  <p className="kicker">a real line from a real report</p>
                   <h2 className="font-display mt-4 text-[2rem] font-bold leading-[1.1] sm:text-5xl sm:leading-[1.05]">
                     It finds the line you{" "}
                     <span className="underline-wavy">already knew</span> was
                     cooked.
                   </h2>
                   <p className="mt-5 max-w-md text-base leading-7 text-[var(--ink-soft)]">
-                    No generic AI mush. No 47-bullet checklist nobody reads.
-                    Just the exact sentences making recruiters scroll past you —
-                    explained like your most honest friend, with a fix for every roast.
+                    No generic AI mush. No 47-point checklist nobody reads.
+                    Just the exact sentences making recruiters scroll past you,
+                    explained like your sharpest friend — and a one-line fix
+                    for every roast you can paste straight back in.
                   </p>
                 </div>
 
@@ -218,42 +219,20 @@ export default function Home() {
               </section>
 
               {/* testimonials — illustrated avatars (DiceBear) */}
-              <section className="relative mt-20 sm:mt-24">
+              <section aria-labelledby="testimonials" className="relative mt-20 sm:mt-24">
                 <StarDoodle
                   aria-hidden
                   className="absolute right-2 top-2 hidden h-7 w-7 rotate-12 text-[var(--accent-pink)] lg:block"
                 />
                 <p className="kicker">straight from the group chats</p>
-                <h2 className="font-display mt-4 text-[1.85rem] font-bold leading-[1.12] sm:text-4xl sm:leading-[1.1]">
+                <h2 id="testimonials" className="font-display mt-4 text-[1.85rem] font-bold leading-[1.12] sm:text-4xl sm:leading-[1.1]">
                   They came to laugh.
                   <br className="hidden sm:block" /> They left and{" "}
                   <span className="marker-green marker">fixed four lines.</span>
                 </h2>
 
                 <div className="mt-10 grid gap-5 md:grid-cols-3">
-                  {[
-                    {
-                      seed: "Priya",
-                      name: "Priya, SDE-2",
-                      handle: "Bengaluru",
-                      quote:
-                        "first feedback that actually called out my fake metrics. brutal, healing, 10/10.",
-                    },
-                    {
-                      seed: "Rohit",
-                      name: "Rohit, PM",
-                      handle: "Hyderabad",
-                      quote:
-                        "my “results-driven team player” line got demolished in 2 sentences. i deserved that.",
-                    },
-                    {
-                      seed: "Aanya",
-                      name: "Aanya, Frontend",
-                      handle: "Mumbai",
-                      quote:
-                        "screenshot → WhatsApp group → cried laughing → fixed my resume same night.",
-                    },
-                  ].map((t) => (
+                  {TESTIMONIALS.map((t) => (
                     <div key={t.seed} className="testimonial">
                       <div className="flex items-center gap-3">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -286,7 +265,7 @@ export default function Home() {
                     used by folks at
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {["Razorpay", "Swiggy", "Microsoft", "TCS", "Zomato", "Flipkart"].map(
+                    {TRUST_COMPANIES.map(
                       (c) => (
                         <span key={c} className="trust-chip">
                           {c}
@@ -298,7 +277,7 @@ export default function Home() {
               </section>
 
               {/* final call — bare, no card */}
-              <section className="relative my-20 text-center sm:my-24">
+              <section aria-labelledby="cta" className="relative my-20 text-center sm:my-24">
                 <ScribbleCircle
                   aria-hidden
                   className="pointer-events-none absolute left-1/2 top-1/2 hidden h-[180px] w-[480px] -translate-x-1/2 -translate-y-[42%] text-[var(--accent-lime)] opacity-70 sm:block"
@@ -311,7 +290,7 @@ export default function Home() {
                   aria-hidden
                   className="absolute right-[14%] top-2 hidden h-12 w-3 rotate-[12deg] text-[var(--accent)] lg:block"
                 />
-                <h2 className="relative font-display mx-auto max-w-3xl text-[2rem] font-bold leading-[1.15] sm:text-5xl">
+                <h2 id="cta" className="relative font-display mx-auto max-w-3xl text-[2rem] font-bold leading-[1.15] sm:text-5xl">
                   Okay, enough doomscrolling.
                   <br />
                   <span className="marker-green marker">
@@ -319,7 +298,9 @@ export default function Home() {
                   </span>
                 </h2>
                 <p className="mx-auto mt-5 max-w-md px-2 text-sm text-[var(--ink-soft)]">
-                  Drop the PDF. We&apos;ll do the rest. Worst case you laugh — best case you finally fix that one line.
+                  Drop the PDF, we&apos;ll handle the brutal honesty. Worst
+                  case you laugh. Best case you fix the one line that&apos;s
+                  been quietly costing you interviews.
                 </p>
                 <a
                   href="#top"
@@ -328,14 +309,15 @@ export default function Home() {
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="btn-hot relative mt-7"
+                  aria-label="Upload your resume and get roasted"
                 >
                   <Flame className="h-4 w-4" />
-                  Upload &amp; roast me
+                  Roast my resume
                 </a>
               </section>
 
               <footer className="border-t border-[var(--line)] py-6 text-center text-xs text-[var(--ink-mute)]">
-                made for people who already kinda know · {new Date().getFullYear()}
+                Resume Roaster · free AI resume review · made for people who already kinda know · &copy; {new Date().getFullYear()}
               </footer>
             </main>
           </motion.div>
@@ -347,7 +329,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={containerTransition}
+            transition={CONTAINER_TRANSITION}
             className="relative z-10 flex min-h-screen items-center justify-center px-5"
           >
             <div className="max-w-lg text-center">
@@ -360,15 +342,15 @@ export default function Home() {
               </motion.div>
               <p className="kicker mt-6 justify-center">reading your pdf</p>
               <h2 className="font-display mt-4 text-4xl font-bold leading-tight sm:text-5xl">
-                Okay, opening{" "}
+                Cracking open{" "}
                 <span className="marker">
                   {uploadedResume?.filename ?? "your file"}
                 </span>
                 …
               </h2>
               <p className="mt-5 text-[var(--ink-soft)]">
-                Pulling out every sentence, every metric, every &ldquo;passionate
-                team player.&rdquo;
+                Scanning every sentence, every metric, every suspiciously
+                &ldquo;passionate team player&rdquo; lurking in there.
               </p>
             </div>
           </motion.div>
@@ -380,7 +362,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={containerTransition}
+            transition={CONTAINER_TRANSITION}
             className="relative z-10"
           >
             <ProcessingScreen filename={uploadedResume?.filename} />
@@ -392,7 +374,7 @@ export default function Home() {
             key="result"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={containerTransition}
+            transition={CONTAINER_TRANSITION}
             className="relative z-10"
           >
             {/* minimal sticky topbar — name + share is the hero action */}
@@ -497,16 +479,16 @@ export default function Home() {
             key="error"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={containerTransition}
+            transition={CONTAINER_TRANSITION}
             className="relative z-10 flex min-h-screen items-center justify-center px-5"
           >
             <div className="max-w-lg text-center">
               <p className="text-6xl">💀</p>
               <h2 className="font-display mt-6 text-4xl font-bold sm:text-5xl">
-                Yeah that didn&apos;t work.
+                Welp, that flopped.
               </h2>
               <p className="mt-4 text-[var(--ink-soft)]">
-                {error ?? "Make sure it's a real PDF. Try one more time?"}
+                {error ?? "Make sure it's a real text-based PDF (not a scanned image) and give it another shot."}
               </p>
               <button onClick={reset} className="btn-hot mt-7">
                 <RefreshCcw className="h-4 w-4" />

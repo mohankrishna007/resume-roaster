@@ -14,14 +14,17 @@ function useTypewriter(text: string, start: boolean, speedMs = 22) {
   const [out, setOut] = useState("");
   useEffect(() => {
     if (!start) return;
-    setOut("");
+    const init = setTimeout(() => setOut(""), 0);
     let i = 0;
     const id = setInterval(() => {
       i++;
       setOut(text.slice(0, i));
       if (i >= text.length) clearInterval(id);
     }, speedMs);
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(id);
+      clearTimeout(init);
+    };
   }, [text, start, speedMs]);
   return out;
 }
