@@ -37,22 +37,22 @@ export function UploadZone({ onUpload, isLoading = false, selectedFile }: Upload
         animate={isDragActive ? { scale: 1.015 } : { scale: 1 }}
         transition={{ type: "spring", stiffness: 280, damping: 22 }}
         className={[
-          "group relative flex flex-col gap-5 rounded-[28px] border-2 border-dashed p-6 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-7",
+          "group relative flex flex-col gap-4 rounded-[28px] border-2 border-dashed p-4 transition-colors sm:flex-row sm:items-center sm:justify-between sm:gap-5 sm:p-6 md:p-7",
           isDragActive
             ? "border-[var(--accent)] bg-[var(--accent-soft)]"
             : "border-[var(--line)] bg-white/[0.02] hover:border-[var(--accent)]/60 hover:bg-white/[0.04]",
           isLoading ? "opacity-60 cursor-not-allowed" : "cursor-pointer",
         ].join(" ")}
       >
-        <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-300 to-orange-500 text-zinc-900 shadow-lg shadow-orange-900/30">
-            <FileUp className="h-6 w-6" />
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-300 to-orange-500 text-zinc-900 shadow-lg shadow-orange-900/30 sm:h-14 sm:w-14">
+            <FileUp className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
-          <div>
-            <p className="font-display text-2xl font-bold leading-tight">
+          <div className="min-w-0">
+            <p className="font-display text-lg font-bold leading-tight sm:text-xl md:text-2xl">
               {isDragActive ? "yes. let it go 👇" : selectedFile ?? "Drop your resume in. We dare you."}
             </p>
-            <p className="mt-1 text-sm text-[var(--ink-mute)]">
+            <p className="mt-1 text-xs text-[var(--ink-mute)] sm:text-sm">
               or tap to upload · PDF only · nothing stored
             </p>
           </div>

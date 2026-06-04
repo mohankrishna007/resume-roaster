@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getRoast } from "@/lib/roast-store";
+import { getRoast } from "@/lib/roast/store";
 import { AnimatedBackground, RoastResultView } from "@/components";
 
 export const dynamic = "force-dynamic";

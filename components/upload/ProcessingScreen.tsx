@@ -29,7 +29,7 @@ export function ProcessingScreen({ filename }: { filename?: string }) {
   const dots = useMemo(() => Array.from({ length: STEPS.length }), []);
 
   return (
-    <div className="relative mx-auto flex min-h-screen max-w-3xl items-center justify-center px-6 sm:px-8">
+    <div className="relative mx-auto flex min-h-screen max-w-3xl items-center justify-center px-4 sm:px-8 lg:max-w-4xl">
       <div className="relative z-10 w-full">
         {/* live "now roasting" badge */}
         <motion.div
@@ -47,7 +47,7 @@ export function ProcessingScreen({ filename }: { filename?: string }) {
         </motion.div>
 
         {/* big chunky headline that changes vibe per step */}
-        <h2 className="font-display mt-6 text-[2.6rem] font-bold leading-[1.04] tracking-[-0.035em] sm:text-7xl sm:leading-[1.02]">
+        <h2 className="font-display mt-6 text-[2rem] font-bold leading-[1.04] tracking-[-0.035em] sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl sm:leading-[1.02]">
           <span className="text-[var(--ink-mute)]">cooking up</span>{" "}
           <br className="hidden sm:block" />
           <span className="marker-green marker">your roast.</span>
@@ -71,12 +71,12 @@ export function ProcessingScreen({ filename }: { filename?: string }) {
               <motion.span
                 animate={{ rotate: [0, -8, 8, -4, 0], scale: [1, 1.08, 1] }}
                 transition={{ duration: 1.1, repeat: Infinity }}
-                className="text-5xl sm:text-6xl"
+                className="text-4xl sm:text-5xl md:text-6xl"
               >
                 {current.emoji}
               </motion.span>
               <div className="flex-1 pt-1">
-                <p className="font-display text-2xl font-bold leading-tight sm:text-3xl">
+                <p className="font-display text-xl font-bold leading-tight sm:text-2xl md:text-3xl">
                   {current.line}
                   <span className="ml-1 text-[var(--accent-lime)]">
                     <Dots />

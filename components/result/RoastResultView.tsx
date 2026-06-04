@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Flame, RefreshCcw, Share2 } from "lucide-react";
+import { Flame, RefreshCcw, Share2, LogOut } from "lucide-react";
 import type { RoastResult } from "@/types/roast";
 import {
   HeroRoast,
@@ -14,7 +14,13 @@ import {
   VerdictPanel,
 } from "@/components";
 import { CONTAINER_TRANSITION } from "@/lib/constants";
-import { track } from "@/lib/analytics";
+import { useShareRoast } from "@/hooks/useShareRoast";
+import { useAuth } from "../auth/AuthProvider";
+import { SignInGate } from "../auth/SignInGate";
+import { SectionKicker } from "../ui/SectionKicker";
+
+/** Fraction of items shown to anonymous users before the sign-in gate. */
+const FREE_FRACTION = 0.6;
 
 interface RoastResultViewProps {
   roastResult: RoastResult;
@@ -28,27 +34,15 @@ export function RoastResultView({
   shareId,
   onReset,
 }: RoastResultViewProps) {
-  const handleShare = () => {
-    const url =
-      shareId && typeof window !== "undefined"
-        ? `${window.location.origin}/r/${shareId}`
-        : typeof window !== "undefined"
-          ? window.location.href
-          : "";
+  const { user, signOut } = useAuth();
+  const shareRoast = useShareRoast();
+  const allRoasts = roastResult.roasts;
+  const freeRoasts = Math.max(1, Math.ceil(allRoasts.length * FREE_FRACTION));
+  const isLocked = !user && allRoasts.length > freeRoasts;
+  const visibleRoasts = isLocked ? allRoasts.slice(0, freeRoasts) : allRoasts;
 
-    if (typeof navigator !== "undefined" && navigator.share) {
-      navigator
-        .share({
-          title: `${roastResult.candidate.name}'s resume roast`,
-          text: roastResult.verdict.share_quote,
-          url,
-        })
-        .catch(() => {});
-      track("share_clicked", { surface: "topbar", method: "native" });
-    } else {
-      navigator.clipboard?.writeText(url);
-      track("share_clicked", { surface: "topbar", method: "clipboard" });
-    }
+  const handleShare = () => {
+    void shareRoast(roastResult, shareId, "topbar");
   };
 
   return (
@@ -59,7 +53,7 @@ export function RoastResultView({
       className="relative z-10"
     >
       <div className="bar-gradient sticky top-0 z-30 border-b border-[var(--line)] bg-[#0b0810]/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8 lg:max-w-6xl lg:px-12 2xl:max-w-7xl">
           <div className="flex min-w-0 items-center gap-2.5">
             <Flame className="h-4 w-4 shrink-0 text-[var(--accent)]" />
             <p className="truncate text-sm font-semibold text-[var(--ink-soft)]">
@@ -68,14 +62,10 @@ export function RoastResultView({
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <button onClick={handleShare} className="btn-hot !px-4 !py-2 text-sm">
-              <Share2 className="h-3.5 w-3.5" />
-              Share
-            </button>
             {onReset ? (
               <button
                 onClick={onReset}
-                className="btn-ghost !px-3 !py-2 text-sm"
+                className="btn-bar btn-bar-ghost max-sm:btn-bar-icon"
                 aria-label="Roast another"
               >
                 <RefreshCcw className="h-3.5 w-3.5" />
@@ -84,19 +74,34 @@ export function RoastResultView({
             ) : (
               <Link
                 href="/"
-                className="btn-ghost !px-3 !py-2 text-sm"
+                className="btn-bar max-sm:btn-bar-icon text-[var(--ink-soft)] hover:text-[var(--ink)]"
                 aria-label="Roast your own"
               >
                 <Flame className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Roast mine</span>
               </Link>
             )}
+            {user && (
+              <button
+                onClick={signOut}
+                className="btn-bar btn-bar-ghost max-sm:btn-bar-icon"
+                title={user.email ?? undefined}
+                aria-label="Sign out"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Sign out</span>
+              </button>
+            )}
+            <button onClick={handleShare} className="btn-bar btn-bar-primary">
+              <Share2 className="h-3.5 w-3.5" />
+              Share
+            </button>
           </div>
         </div>
       </div>
 
-      <article className="mx-auto max-w-5xl px-6 py-12 sm:px-8 sm:py-14 lg:py-16">
-        <div className="mx-auto max-w-3xl">
+      <article className="mx-auto max-w-5xl px-4 py-10 sm:px-8 sm:py-14 lg:max-w-6xl lg:px-12 lg:py-16 2xl:max-w-7xl 2xl:py-20">
+        <div className="mx-auto max-w-3xl lg:max-w-4xl 2xl:max-w-5xl">
           <HeroRoast
             archetype={roastResult.archetype}
             candidate={roastResult.candidate}
@@ -111,27 +116,42 @@ export function RoastResultView({
           <CandidateSummary candidate={roastResult.candidate} />
 
           <div className="my-14">
-            <p className="kicker">the breakdown</p>
-            <h2 className="font-display mt-3 text-[2rem] font-bold leading-[1.1] sm:text-5xl sm:leading-[1.05]">
+            <SectionKicker>the breakdown</SectionKicker>
+            <h2 className="font-display mt-3 text-[1.65rem] font-bold leading-[1.1] sm:text-3xl md:text-4xl lg:text-5xl lg:leading-[1.05]">
               Line by line, no mercy.
             </h2>
             <p className="mt-3 text-[var(--ink-soft)]">
-              {roastResult.roasts.length} moments your resume should probably hear.
+              {isLocked
+                ? "A taste of the breakdown — sign in to see the rest."
+                : `${allRoasts.length} moments your resume should probably hear.`}
             </p>
           </div>
         </div>
 
-        <div className="space-y-10 sm:space-y-12">
-          {roastResult.roasts.map((roast, idx) => (
+        <div className="space-y-8 sm:space-y-10 lg:space-y-12">
+          {visibleRoasts.map((roast, idx) => (
             <RoastCard key={idx} roast={roast} index={idx} />
           ))}
         </div>
 
-        <div className="mx-auto mt-14 max-w-3xl">
+        {isLocked && (
+          <div className="mx-auto mt-12 max-w-3xl">
+            <SignInGate />
+          </div>
+        )}
+
+        <div className="mx-auto mt-14 max-w-3xl lg:max-w-4xl 2xl:max-w-5xl">
           <div className="rule-dotted" />
 
           <div className="mt-14">
-            <PositivePoints wins={roastResult.wins} />
+            <PositivePoints
+              wins={roastResult.wins}
+              maxWins={
+                isLocked && roastResult.wins.length > 1
+                  ? Math.max(1, Math.ceil(roastResult.wins.length * 0.6))
+                  : undefined
+              }
+            />
           </div>
 
           <div className="my-14 rule-dotted" />
@@ -141,8 +161,8 @@ export function RoastResultView({
           <div className="my-14 rule-dotted" />
 
           <VerdictPanel
-            verdict={roastResult.verdict}
-            candidateName={roastResult.candidate.name}
+            result={roastResult}
+            shareId={shareId ?? null}
             onReset={onReset ?? (() => (window.location.href = "/"))}
           />
         </div>

@@ -7,6 +7,8 @@ import {
   UploadZone,
   ProcessingScreen,
   RoastResultView,
+  SignInGate,
+  AuthBadge,
   ArrowDoodle,
   SparkleDoodle,
   StarDoodle,
@@ -27,7 +29,7 @@ import {
   CONTAINER_TRANSITION,
 } from "@/lib/constants";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, RefreshCcw } from "lucide-react";
+import { Flame, RefreshCcw, Wrench, HeartCrack } from "lucide-react";
 
 export default function Home() {
   const { step, uploadedResume, roastResult, shareId, handleUpload, reset, error } =
@@ -54,22 +56,22 @@ export default function Home() {
             className="relative z-10 min-h-screen"
           >
             {/* minimal masthead — no card, just a line */}
-            <header className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-6 pt-7 sm:px-8">
+            <header className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 pt-5 sm:gap-3 sm:px-8 sm:pt-7 lg:max-w-7xl lg:px-12">
               <div className="flex items-center gap-2.5">
                 <Flame className="h-5 w-5 text-[var(--accent)]" />
                 <p className="font-display text-lg font-bold tracking-tight">
                   Resume Roaster
                 </p>
               </div>
-              <p className="hidden text-right text-xs text-[var(--ink-mute)] sm:block">
-                AI resume review · no recruiter cosplay
-              </p>
-              <p className="text-right text-[0.7rem] text-[var(--ink-mute)] sm:hidden">
-                no fluff
-              </p>
+              <div className="flex items-center gap-3">
+                <p className="hidden text-right text-xs text-[var(--ink-mute)] sm:block">
+                  AI resume review · no recruiter cosplay
+                </p>
+                <AuthBadge />
+              </div>
             </header>
 
-            <main className="mx-auto max-w-6xl px-6 sm:px-8">
+            <main className="mx-auto max-w-6xl px-4 sm:px-8 lg:max-w-7xl lg:px-12 2xl:max-w-[110rem]">
               {/* hero — editorial, one big idea */}
               <section className="relative pt-12 sm:pt-20 lg:pt-24">
                 {/* hero gutter doodles — only visible on larger screens */}
@@ -95,27 +97,80 @@ export default function Home() {
                 </motion.p>
 
                 <h1
-                  className="font-display mt-6 max-w-4xl text-[2.15rem] font-bold leading-[1.1] tracking-tight sm:mt-5 sm:text-7xl sm:leading-[1.05] lg:text-[5.5rem]"
+                  className="font-display mt-6 max-w-4xl text-[1.85rem] font-bold leading-[1.1] tracking-tight sm:mt-5 sm:text-5xl md:text-6xl sm:leading-[1.05] lg:text-7xl 2xl:text-[5.5rem] 2xl:max-w-5xl"
                 >
                   <SplitText text="Your resume is" delay={0.05} />{" "}
-                  <span className="marker-pink marker">quietly lying</span>.
-                  <br className="hidden sm:block" /> Our AI will{" "}
-                  <span className="marker">roast</span>{" "}
-                  <span className="text-shimmer">every line</span>.
+                  <span className="marker-pink marker">bluffing</span>.
+                  <br className="hidden sm:block" /> We&apos;ll{" "}
+                  <span className="marker">roast</span> the{" "}
+                  <span className="text-shimmer">truth</span> out of it.
                 </h1>
 
                 <motion.p
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.12 }}
-                  className="mt-6 max-w-2xl text-base leading-7 text-[var(--ink-soft)] sm:mt-7 sm:text-lg sm:leading-8"
+                  className="mt-6 max-w-2xl text-[1.05rem] leading-7 text-[var(--ink-soft)] sm:mt-7 sm:text-lg md:text-xl sm:leading-8 lg:max-w-3xl"
                 >
-                  Drop your PDF. We&apos;ll read it the way a recruiter actually
-                  does — fast, unimpressed, and side-eyeing every &ldquo;passionate
-                  team player.&rdquo; You&apos;ll get the exact lines making
-                  them scroll past, a one-line fix you can paste straight back
-                  in, and zero LinkedIn-coach energy. Bring your ego. Leave with
-                  a better resume.
+                  Drop your PDF.{" "}
+                  <span className="font-semibold text-[var(--ink)]">
+                    Get the recruiter&apos;s side-eye in 30 seconds.
+                  </span>
+                </motion.p>
+
+                <motion.ul
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.18 }}
+                  className="mt-7 grid max-w-2xl gap-2.5 sm:mt-8 sm:grid-cols-2 sm:gap-3 lg:max-w-3xl"
+                >
+                  {[
+                    {
+                      Icon: HeartCrack,
+                      tint: "var(--accent)",
+                      title: "Every weak line, called out",
+                      body: "The exact bullets a recruiter would skim past — quoted back with the reaction they earned.",
+                    },
+                    {
+                      Icon: Wrench,
+                      tint: "var(--accent-lime)",
+                      title: "Numbers, not vibes",
+                      body: "Buzzword count, recruiter-scroll seconds, and a 0–10 verdict you can screenshot.",
+                    },
+                  ].map(({ Icon, tint, title, body }, i) => (
+                    <motion.li
+                      key={title}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.22 + i * 0.05, duration: 0.35 }}
+                      className="group flex items-start gap-3 rounded-2xl border border-[var(--line)] bg-white/[0.02] px-3.5 py-3 transition hover:border-white/15 hover:bg-white/[0.04] sm:px-4 sm:py-3.5"
+                    >
+                      <span
+                        className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ring-1 ring-inset ring-white/10 transition group-hover:scale-110"
+                        style={{ background: `color-mix(in oklab, ${tint} 18%, transparent)`, color: tint }}
+                        aria-hidden
+                      >
+                        <Icon className="h-3.5 w-3.5" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-[var(--ink)] sm:text-[0.95rem]">
+                          {title}
+                        </p>
+                        <p className="mt-0.5 text-[0.82rem] leading-snug text-[var(--ink-mute)] sm:text-sm">
+                          {body}
+                        </p>
+                      </div>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="mt-5 max-w-2xl text-sm italic text-[var(--ink-mute)] sm:text-[0.95rem] lg:max-w-3xl"
+                >
+                  Bring your ego. Leave with a better resume.
                 </motion.p>
 
                 {/* curved arrow pointing from copy down to the upload zone */}
@@ -155,7 +210,7 @@ export default function Home() {
                     {doubledTickerLines.map((line, i) => (
                       <span
                         key={i}
-                        className="font-display text-2xl text-[var(--ink-soft)] whitespace-nowrap sm:text-3xl"
+                        className="font-display text-xl text-[var(--ink-soft)] whitespace-nowrap sm:text-2xl md:text-3xl lg:text-4xl"
                       >
                         {line}
                         <span className="ml-10 text-[var(--accent)]">✦</span>
@@ -168,23 +223,23 @@ export default function Home() {
 
               {/* preview of a roast — show, don't tell — uses the actual annotation style */}
               <RevealOnScroll>
-              <section className="relative mt-24 grid gap-8 sm:mt-24 sm:gap-10 lg:grid-cols-[1fr_1.15fr] lg:items-center">
+              <section className="relative mt-20 grid gap-8 sm:mt-24 sm:gap-10 md:grid-cols-[1fr_1.15fr] md:items-center md:gap-9 lg:gap-12">
                 <LightningDoodle
                   aria-hidden
                   className="absolute -top-6 left-[-12px] hidden h-12 w-8 -rotate-[18deg] text-[var(--accent-lime)] lg:block"
                 />
                 <div>
                   <p className="kicker">a real line from a real report</p>
-                  <h2 className="font-display mt-4 text-[2rem] font-bold leading-[1.1] sm:text-5xl sm:leading-[1.05]">
+                  <h2 className="font-display mt-4 text-[1.65rem] font-bold leading-[1.1] sm:text-3xl md:text-4xl lg:text-5xl lg:leading-[1.05]">
                     It finds the line you{" "}
                     <span className="underline-wavy">already knew</span> was
                     cooked.
                   </h2>
                   <p className="mt-5 max-w-md text-base leading-7 text-[var(--ink-soft)]">
-                    No generic AI mush. No 47-point checklist nobody reads.
-                    Just the exact sentences making recruiters scroll past you,
-                    explained like your sharpest friend — and a one-line fix
-                    for every roast you can paste straight back in.
+                    No checklists. No AI mush. Just the exact sentence making
+                    recruiters scroll past — and{" "}
+                    <span className="font-semibold text-[var(--ink)]">why</span>,
+                    in your sharpest friend&apos;s voice.
                   </p>
                 </div>
 
@@ -211,7 +266,7 @@ export default function Home() {
                       BHAI 💀 this is Big Bazaar sale
                     </p>
                     <p className="font-display mt-2 text-xl leading-[1.3] font-semibold sm:text-[1.4rem]">
-                      Buy 1 skill get 14 free. Recruiter walks in, sees this aisle, walks straight out.
+                      Buy 1 skill get 14 free. Nobody&apos;s buying the bundle.
                     </p>
                   </div>
                 </div>
@@ -226,13 +281,13 @@ export default function Home() {
                   className="absolute right-2 top-2 hidden h-7 w-7 rotate-12 text-[var(--accent-pink)] lg:block"
                 />
                 <p className="kicker">straight from the group chats</p>
-                <h2 id="testimonials" className="font-display mt-4 text-[1.85rem] font-bold leading-[1.12] sm:text-4xl sm:leading-[1.1]">
+                <h2 id="testimonials" className="font-display mt-4 text-[1.65rem] font-bold leading-[1.12] sm:text-3xl md:text-4xl lg:text-5xl lg:leading-[1.1]">
                   They came to laugh.
                   <br className="hidden sm:block" /> They left and{" "}
                   <span className="marker-green marker">fixed four lines.</span>
                 </h2>
 
-                <div className="mt-8 grid gap-6 sm:mt-10 sm:gap-5 md:grid-cols-3">
+                <div className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
                   {TESTIMONIALS.map((t) => (
                     <TiltCard key={t.seed} className="testimonial">
                       <div className="flex items-center gap-3">
@@ -283,7 +338,7 @@ export default function Home() {
               <section aria-labelledby="cta" className="relative my-24 text-center sm:my-24">
                 <ScribbleCircle
                   aria-hidden
-                  className="pointer-events-none absolute left-1/2 top-1/2 hidden h-[180px] w-[480px] -translate-x-1/2 -translate-y-[42%] text-[var(--accent-lime)] opacity-70 sm:block"
+                  className="pointer-events-none absolute left-1/2 top-1/2 hidden h-[140px] w-[340px] -translate-x-1/2 -translate-y-[42%] text-[var(--accent-lime)] opacity-70 md:block md:h-[180px] md:w-[480px]"
                 />
                 <SparkleDoodle
                   aria-hidden
@@ -293,7 +348,7 @@ export default function Home() {
                   aria-hidden
                   className="absolute right-[14%] top-2 hidden h-12 w-3 rotate-[12deg] text-[var(--accent)] lg:block"
                 />
-                <h2 id="cta" className="relative font-display mx-auto max-w-3xl text-[2rem] font-bold leading-[1.15] sm:text-5xl">
+                <h2 id="cta" className="relative font-display mx-auto max-w-3xl text-[1.65rem] font-bold leading-[1.15] sm:text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl">
                   Okay, enough doomscrolling.
                   <br />
                   <span className="marker-green marker">
@@ -323,7 +378,7 @@ export default function Home() {
               </section>
               </RevealOnScroll>
 
-              <footer className="border-t border-[var(--line)] px-6 py-7 text-center text-xs leading-5 text-[var(--ink-mute)] sm:px-0">
+              <footer className="border-t border-[var(--line)] px-4 py-7 text-center text-xs leading-5 text-[var(--ink-mute)] sm:px-0 sm:py-9">
                 Resume Roaster · AI resume review · made for people who already kinda know · &copy; {new Date().getFullYear()}
               </footer>
             </main>
@@ -383,6 +438,39 @@ export default function Home() {
             shareId={shareId}
             onReset={reset}
           />
+        )}
+
+        {step === "sign-in-required" && (
+          <motion.div
+            key="sign-in-required"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={CONTAINER_TRANSITION}
+            className="relative z-10 flex min-h-screen items-center justify-center px-6 py-16"
+          >
+            <div className="w-full max-w-3xl">
+              <div className="mb-8 text-center">
+                <p className="kicker">first one was on the house</p>
+                <h2 className="font-display mt-3 text-4xl font-bold leading-tight sm:text-5xl">
+                  Sign in to roast{" "}
+                  <span className="marker-pink marker">another</span>.
+                </h2>
+                <p className="mt-4 text-[var(--ink-soft)]">
+                  You already used your free roast. One click
+                  with Google and you&apos;re back in.
+                </p>
+              </div>
+              <SignInGate />
+              <div className="mt-6 text-center">
+                <button
+                  onClick={reset}
+                  className="text-sm text-[var(--ink-mute)] underline-offset-4 hover:text-[var(--ink)] hover:underline"
+                >
+                  ← back
+                </button>
+              </div>
+            </div>
+          </motion.div>
         )}
 
         {step === "error" && (

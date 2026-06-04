@@ -2,7 +2,7 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import { FieldValue } from "firebase-admin/firestore";
 import type { RoastResult } from "@/types/roast";
-import { getDb } from "./firestore-admin";
+import { getDb } from "@/lib/firebase/firestore-admin";
 
 const COLLECTION = "roasts";
 
@@ -13,6 +13,7 @@ export interface RoastMeta {
   provider: string;
   user_agent?: string;
   referer?: string;
+  uid?: string;
 }
 
 export interface StoredRoast {

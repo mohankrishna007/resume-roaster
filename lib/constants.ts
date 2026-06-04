@@ -25,28 +25,29 @@ export const TESTIMONIALS = [
       "made me delete three bullets before i could close the tab. genuinely the most useful 5 minutes i’ve spent on my resume in months.",
   },
   {
-    seed: "Karthik",
-    name: "Karthik, Data Eng",
-    handle: "Pune",
+    seed: "Eswar",
+    name: "Eswar, Principle Engineer",
+    handle: "Hyderabad",
     quote:
       "expected a meme, got an actual diagnosis. the line it flagged was the exact one my manager kept squinting at in 1:1s.",
   },
   {
-    seed: "Aanya",
-    name: "Aanya, Frontend",
-    handle: "Mumbai",
+    seed: "Nandhini",
+    name: "Nandhini, Frontend",
+    handle: "Bengaluru",
     quote:
-      "i laughed, then i screenshotted, then i actually fixed the lines. in that order. would recommend.",
+      "i laughed, then i screenshotted, then i actually fixed the lines.",
   },
 ] as const;
 
 export const TRUST_COMPANIES = [
-  "Razorpay",
-  "Swiggy",
   "Microsoft",
   "TCS",
-  "Zomato",
   "Flipkart",
+  "Google",
+  "Infosys",
+  "Amazon",
+  "Accenture",
 ] as const;
 
 export const CONTAINER_TRANSITION = { duration: 0.4 } as const;

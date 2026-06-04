@@ -3,6 +3,8 @@ import Script from "next/script";
 import { Inter_Tight, Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AnalyticsBoot } from "@/components/AnalyticsBoot";
+import { AuthProvider } from "@/components/auth/AuthProvider";
+import { GoogleOneTap } from "@/components/auth/GoogleOneTap";
 
 const bodyFont = Inter_Tight({
   subsets: ["latin"],
@@ -177,7 +179,10 @@ export default function RootLayout({
       <body
         className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable} bg-[var(--bg-base)] text-[var(--ink)] antialiased selection:bg-[var(--accent-lime)] selection:text-black`}
       >
-        {children}
+        <AuthProvider>
+          {children}
+          <GoogleOneTap />
+        </AuthProvider>
         <AnalyticsBoot />
         <Script
           id="ld-json"

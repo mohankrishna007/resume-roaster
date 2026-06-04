@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { extractPdfText } from "@/lib/pdf-parser";
+import { extractPdfText } from "@/lib/roast/pdf-parser";
 import { getProvider } from "@/lib/llm";
-import { saveRoast } from "@/lib/roast-store";
+import { saveRoast } from "@/lib/roast/store";
+import { verifyBearerToken } from "@/lib/firebase/auth-admin";
+import { checkAndConsumeRoastQuota } from "@/lib/roast/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -38,6 +40,24 @@ function classifyProviderError(err: unknown): { status: number; message: string 
 export async function POST(request: Request) {
   let stage: "parse" | "llm" = "parse";
   try {
+    // Identify the caller before doing any work. Signed-in users get a higher
+    // daily quota; everyone else is gated to a single roast per IP, ever.
+    const verified = await verifyBearerToken(request.headers.get("authorization"));
+    const quota = await checkAndConsumeRoastQuota({
+      uid: verified?.uid ?? null,
+      headers: request.headers,
+    });
+    if (!quota.allowed) {
+      const message =
+        quota.reason === "guest_limit"
+          ? "You've used your free roast. Sign in with Google to keep going."
+          : "Daily roast limit reached. Try again tomorrow.";
+      return NextResponse.json(
+        { error: message, reason: quota.reason },
+        { status: 401 },
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get("file");
 
@@ -83,6 +103,8 @@ export async function POST(request: Request) {
       provider: process.env.LLM_PROVIDER ?? "openai",
       user_agent: request.headers.get("user-agent") ?? undefined,
       referer: request.headers.get("referer") ?? undefined,
+      // Firestore rejects `undefined` — only include uid when signed in.
+      ...(verified?.uid ? { uid: verified.uid } : {}),
     });
 
     return NextResponse.json({ ...result, shareId });

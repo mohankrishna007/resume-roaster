@@ -1,4 +1,5 @@
-export const FREE_TIER_MAX_ROASTS = 6;
+export const FREE_TIER_MAX_ROASTS = 8;
+export const FREE_TIER_MIN_ROASTS = 3;
 export const FREE_TIER_MAX_WINS = 4;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -194,7 +195,7 @@ Read the whole thing first:
 Then find the REAL problems. Quote exact lines. Do not invent flaws.
 If something is genuinely good — call it out as a win. Don't manufacture wins either.
 
-Pick EXACTLY ${FREE_TIER_MAX_ROASTS} roast items.
+Pick between ${FREE_TIER_MIN_ROASTS} and ${FREE_TIER_MAX_ROASTS} roast items — only as many as the resume actually earns. A clean resume gets fewer; a messy one gets more. Don't pad to hit a number.
 Up to ${FREE_TIER_MAX_WINS} wins — only if they are actually deserved.
 
 Return EXACTLY this JSON:
@@ -259,7 +260,7 @@ Return EXACTLY this JSON:
 }
 
 HARD RULES:
-- EXACTLY ${FREE_TIER_MAX_ROASTS} items in roasts array
+- Between ${FREE_TIER_MIN_ROASTS} and ${FREE_TIER_MAX_ROASTS} items in roasts array — quality over quantity, never pad
 - MAX 2 with severity "savage"
 - Every roast must reference a real line from the resume — no invented problems
 - reaction field is 4-6 words only — the instinctive blurt, not a sentence

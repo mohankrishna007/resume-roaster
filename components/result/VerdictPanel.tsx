@@ -2,80 +2,49 @@
 import { motion, useInView } from "framer-motion";
 import { RoastResult } from "@/types/roast";
 import { Copy, RefreshCcw, Share2, Check } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { track } from "@/lib/analytics";
+import { buildQuoteOnly } from "@/lib/roast/share";
+import { FADE_UP_VIEWPORT } from "@/lib/motion";
+import { useTypewriter } from "@/hooks/useTypewriter";
+import { useShareRoast } from "@/hooks/useShareRoast";
+import { SectionKicker } from "../ui/SectionKicker";
 
 interface VerdictPanelProps {
-  verdict: RoastResult["verdict"];
-  candidateName: string;
+  result: RoastResult;
+  shareId?: string | null;
   onReset: () => void;
 }
 
-function useTypewriter(text: string, start: boolean, speedMs = 22) {
-  const [out, setOut] = useState("");
-  useEffect(() => {
-    if (!start) return;
-    const init = setTimeout(() => setOut(""), 0);
-    let i = 0;
-    const id = setInterval(() => {
-      i++;
-      setOut(text.slice(0, i));
-      if (i >= text.length) clearInterval(id);
-    }, speedMs);
-    return () => {
-      clearInterval(id);
-      clearTimeout(init);
-    };
-  }, [text, start, speedMs]);
-  return out;
-}
-
-export function VerdictPanel({ verdict, candidateName, onReset }: VerdictPanelProps) {
+export function VerdictPanel({ result, shareId, onReset }: VerdictPanelProps) {
+  const { verdict, candidate: { name: candidateName } } = result;
   const [copied, setCopied] = useState(false);
   const quoteRef = useRef<HTMLDivElement | null>(null);
   const quoteInView = useInView(quoteRef, { once: true, margin: "-100px" });
   const typed = useTypewriter(verdict.share_quote, quoteInView);
   const typingDone = typed.length >= verdict.share_quote.length;
-
-  const shareText = `${candidateName}'s resume just got roasted:\n\n"${verdict.share_quote}"\n\nGet yours →`;
+  const shareRoast = useShareRoast();
 
   const handleShare = async () => {
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title: "My Resume Roast",
-          text: shareText,
-          url: window.location.href,
-        });
-        track("share_clicked", { surface: "verdict", method: "native" });
-        return;
-      }
-      await navigator.clipboard?.writeText(`${shareText} ${window.location.href}`);
-      track("share_clicked", { surface: "verdict", method: "clipboard" });
+    const method = await shareRoast(result, shareId ?? null, "verdict");
+    if (method === "clipboard") {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
-    } catch {
-      // ignore
     }
   };
 
   const handleCopy = async () => {
-    await navigator.clipboard?.writeText(`"${verdict.share_quote}" — Resume Roaster`);
+    await navigator.clipboard?.writeText(buildQuoteOnly(result));
     track("quote_copied", { surface: "verdict" });
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
   };
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
-    >
-      <p className="kicker">final verdict</p>
+    <motion.section {...FADE_UP_VIEWPORT}>
+      <SectionKicker>final verdict</SectionKicker>
 
-      <h2 className="font-display mt-4 text-[2rem] font-bold leading-[1.12] sm:text-5xl sm:leading-[1.1]">
+      <h2 className="font-display mt-4 text-[1.5rem] font-bold leading-[1.12] sm:text-3xl md:text-4xl lg:text-5xl lg:leading-[1.1]">
         {verdict.headline}
       </h2>
 
@@ -87,11 +56,11 @@ export function VerdictPanel({ verdict, candidateName, onReset }: VerdictPanelPr
         transition={{ type: "spring", stiffness: 180, damping: 18 }}
         className="relative mt-10 rounded-[28px] bg-gradient-to-br from-[#c8ff3e] via-[#ff7a2f] to-[#ff4d8d] p-[3px]"
       >
-        <div className="rounded-[26px] bg-[#0b0810] px-6 py-10 sm:px-10 sm:py-14">
+        <div className="rounded-[26px] bg-[#0b0810] px-5 py-8 sm:px-8 sm:py-12 md:px-10 md:py-14 lg:px-12 lg:py-16">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
             ↓ screenshot this ↓
           </p>
-          <p className="pull-quote mt-5 text-[1.75rem] leading-[1.18] sm:text-4xl sm:leading-[1.15]">
+          <p className="pull-quote mt-5 text-[1.35rem] leading-[1.18] sm:text-2xl md:text-3xl lg:text-4xl sm:leading-[1.15]">
             “{typed}
             <span
               className={`ml-0.5 inline-block w-[3px] translate-y-1 bg-[var(--accent)] ${
