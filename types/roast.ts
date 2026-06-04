@@ -30,8 +30,8 @@ export interface RoastResult {
   /** The roast feed — the bulk of the experience. Free tier: cap at 4. */
   roasts: Roast[];
 
-  /** Wins. Flat strings instead of {point, category} to save tokens. */
-  wins: string[];
+  /** Wins. Structured so the UI can show line + reaction + callout instead of a flat string. */
+  wins: Win[];
 
   /** The unlock moment — one sharp insight, no bullet list. */
   biggest_truth: {
@@ -53,6 +53,12 @@ export interface Roast {
   roast: string;           // the joke / critique
   severity: Severity;      // drives visual treatment
   fix: string;             // short rewrite hint — the return-value
+}
+
+export interface Win {
+  resume_line: string;     // the exact line from the resume that actually works
+  reaction: string;        // short “okay this is real work” style reaction
+  callout: string;         // specific reason it lands — not generic praise
 }
 
 export interface UploadedResume {

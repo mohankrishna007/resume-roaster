@@ -26,7 +26,7 @@ const SITE_URL =
 const SITE_NAME = "Resume Roaster";
 const TITLE = "Resume Roaster — The brutally honest AI resume review your friend won't give you";
 const DESCRIPTION =
-  "Free AI resume roaster. Drop your PDF, get a savage-but-useful line-by-line review in 90 seconds — buzzword count, recruiter-scroll time, and the exact fixes. No signup. No fluff. No LinkedIn energy.";
+  "Free AI resume roaster. Drop your PDF, get a savage-but-useful line-by-line review — buzzword count, recruiter-scroll time, and the exact fixes. No signup. No fluff. No LinkedIn energy.";
 
 export const viewport: Viewport = {
   themeColor: "#0b0810",
@@ -150,7 +150,7 @@ const jsonLd = {
           name: "How long does the roast take?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Usually around 90 seconds. Long enough to grab water, short enough that you don't tab away.",
+            text: "Just a moment — long enough to grab water, short enough that you won't tab away.",
           },
         },
         {

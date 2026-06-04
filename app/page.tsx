@@ -21,6 +21,10 @@ import {
   ZigZagDoodle,
   PaperDoodle,
   ExclaimDoodle,
+  MagneticButton,
+  RevealOnScroll,
+  TiltCard,
+  SplitText,
 } from "@/components";
 import {
   TICKER_LINES,
@@ -56,7 +60,7 @@ export default function Home() {
             className="relative z-10 min-h-screen"
           >
             {/* minimal masthead — no card, just a line */}
-            <header className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pt-6 sm:px-8">
+            <header className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-6 pt-7 sm:px-8">
               <div className="flex items-center gap-2.5">
                 <Flame className="h-5 w-5 text-[var(--accent)]" />
                 <p className="font-display text-lg font-bold tracking-tight">
@@ -64,16 +68,16 @@ export default function Home() {
                 </p>
               </div>
               <p className="hidden text-right text-xs text-[var(--ink-mute)] sm:block">
-                free AI resume review · no signup · no recruiter cosplay
+                AI resume review · no recruiter cosplay
               </p>
               <p className="text-right text-[0.7rem] text-[var(--ink-mute)] sm:hidden">
-                free · no signup · no fluff
+                no fluff
               </p>
             </header>
 
-            <main className="mx-auto max-w-6xl px-5 sm:px-8">
+            <main className="mx-auto max-w-6xl px-6 sm:px-8">
               {/* hero — editorial, one big idea */}
-              <section className="relative pt-14 sm:pt-20 lg:pt-24">
+              <section className="relative pt-12 sm:pt-20 lg:pt-24">
                 {/* hero gutter doodles — only visible on larger screens */}
                 <SparkleDoodle
                   aria-hidden
@@ -93,20 +97,18 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   className="kicker"
                 >
-                  free AI resume roast · drop PDF · get the truth · ~90s
+                  AI resume roast · drop PDF · get the truth
                 </motion.p>
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 }}
-                  className="font-display mt-5 max-w-4xl text-[2.6rem] font-bold leading-[1.08] tracking-tight sm:text-7xl sm:leading-[1.05] lg:text-[5.5rem]"
+                <h1
+                  className="font-display mt-6 max-w-4xl text-[2.15rem] font-bold leading-[1.1] tracking-tight sm:mt-5 sm:text-7xl sm:leading-[1.05] lg:text-[5.5rem]"
                 >
-                  Your resume is{" "}
+                  <SplitText text="Your resume is" delay={0.05} />{" "}
                   <span className="marker-pink marker">quietly lying</span>.
                   <br className="hidden sm:block" /> Our AI will{" "}
-                  <span className="marker">roast every line.</span>
-                </motion.h1>
+                  <span className="marker">roast</span>{" "}
+                  <span className="text-shimmer">every line</span>.
+                </h1>
 
                 <motion.p
                   initial={{ opacity: 0, y: 14 }}
@@ -114,12 +116,12 @@ export default function Home() {
                   transition={{ delay: 0.12 }}
                   className="mt-6 max-w-2xl text-base leading-7 text-[var(--ink-soft)] sm:mt-7 sm:text-lg sm:leading-8"
                 >
-                  Upload your resume PDF. In about 90 seconds, our AI resume
-                  reviewer counts every buzzword, clocks how long a recruiter
-                  would actually read it, and points at the exact lines killing
-                  your callbacks — with a fix for each one. It&apos;s the
-                  feedback your honest friend would give you, if your honest
-                  friend had read 10,000 resumes.
+                  Drop your PDF. We&apos;ll read it the way a recruiter actually
+                  does — fast, unimpressed, and side-eyeing every &ldquo;passionate
+                  team player.&rdquo; You&apos;ll get the exact lines making
+                  them scroll past, a one-line fix you can paste straight back
+                  in, and zero LinkedIn-coach energy. Bring your ego. Leave with
+                  a better resume.
                 </motion.p>
 
                 {/* curved arrow pointing from copy down to the upload zone */}
@@ -132,7 +134,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="relative mt-10"
+                  className="relative mt-8 sm:mt-10"
                 >
                   {/* tiny paper doodle peeking into the upload box from the side */}
                   <PaperDoodle
@@ -143,17 +145,18 @@ export default function Home() {
                 </motion.div>
 
                 {/* tiny human reassurance — not a card */}
-                <p className="mt-4 text-sm text-[var(--ink-mute)]">
-                  100% free · PDF only · nothing stored · no signup · no inbox spam
+                <p className="mt-5 text-sm leading-6 text-[var(--ink-mute)]">
+                  PDF only · nothing stored
                 </p>
               </section>
 
               {/* social proof ticker — what people said */}
-              <section aria-labelledby="buzz" className="mt-20 overflow-hidden">
+              <RevealOnScroll>
+              <section aria-labelledby="buzz" className="mt-24 overflow-hidden sm:mt-20">
                 <p id="buzz" className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ink-mute)]">
-                  what people texted us at 1am after getting roasted
+                  what people actually said after
                 </p>
-                <div className="mt-5 relative overflow-hidden py-2 [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]">
+                <div className="ticker-wrap mt-5 relative overflow-hidden py-2 [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]">
                   <div className="ticker">
                     {doubledTickerLines.map((line, i) => (
                       <span
@@ -167,9 +170,11 @@ export default function Home() {
                   </div>
                 </div>
               </section>
+              </RevealOnScroll>
 
               {/* preview of a roast — show, don't tell — uses the actual annotation style */}
-              <section className="relative mt-20 grid gap-10 sm:mt-24 lg:grid-cols-[1fr_1.15fr] lg:items-center">
+              <RevealOnScroll>
+              <section className="relative mt-24 grid gap-8 sm:mt-24 sm:gap-10 lg:grid-cols-[1fr_1.15fr] lg:items-center">
                 <LightningDoodle
                   aria-hidden
                   className="absolute -top-6 left-[-12px] hidden h-12 w-8 -rotate-[18deg] text-[var(--accent-lime)] lg:block"
@@ -189,7 +194,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-[1fr_1.15fr] md:gap-6 md:items-start">
+                <div className="grid gap-5 md:grid-cols-[1fr_1.15fr] md:gap-6 md:items-start">
                   <div className="doc-line sev-savage">
                     <div className="sev-stamp sev-savage">
                       <Flame className="h-3 w-3" /> savage
@@ -217,9 +222,11 @@ export default function Home() {
                   </div>
                 </div>
               </section>
+              </RevealOnScroll>
 
               {/* testimonials — illustrated avatars (DiceBear) */}
-              <section aria-labelledby="testimonials" className="relative mt-20 sm:mt-24">
+              <RevealOnScroll>
+              <section aria-labelledby="testimonials" className="relative mt-24 sm:mt-24">
                 <StarDoodle
                   aria-hidden
                   className="absolute right-2 top-2 hidden h-7 w-7 rotate-12 text-[var(--accent-pink)] lg:block"
@@ -231,9 +238,9 @@ export default function Home() {
                   <span className="marker-green marker">fixed four lines.</span>
                 </h2>
 
-                <div className="mt-10 grid gap-5 md:grid-cols-3">
+                <div className="mt-8 grid gap-6 sm:mt-10 sm:gap-5 md:grid-cols-3">
                   {TESTIMONIALS.map((t) => (
-                    <div key={t.seed} className="testimonial">
+                    <TiltCard key={t.seed} className="testimonial">
                       <div className="flex items-center gap-3">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
@@ -255,7 +262,7 @@ export default function Home() {
                       <p className="mt-4 leading-7 text-[var(--ink-soft)]">
                         &ldquo;{t.quote}&rdquo;
                       </p>
-                    </div>
+                    </TiltCard>
                   ))}
                 </div>
 
@@ -275,9 +282,11 @@ export default function Home() {
                   </div>
                 </div>
               </section>
+              </RevealOnScroll>
 
               {/* final call — bare, no card */}
-              <section aria-labelledby="cta" className="relative my-20 text-center sm:my-24">
+              <RevealOnScroll>
+              <section aria-labelledby="cta" className="relative my-24 text-center sm:my-24">
                 <ScribbleCircle
                   aria-hidden
                   className="pointer-events-none absolute left-1/2 top-1/2 hidden h-[180px] w-[480px] -translate-x-1/2 -translate-y-[42%] text-[var(--accent-lime)] opacity-70 sm:block"
@@ -302,22 +311,26 @@ export default function Home() {
                   case you laugh. Best case you fix the one line that&apos;s
                   been quietly costing you interviews.
                 </p>
-                <a
-                  href="#top"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="btn-hot relative mt-7"
-                  aria-label="Upload your resume and get roasted"
-                >
-                  <Flame className="h-4 w-4" />
-                  Roast my resume
-                </a>
+                <div className="mt-7 inline-block">
+                  <MagneticButton
+                    href="#top"
+                    ariaLabel="Upload your resume and get roasted"
+                    className="btn-hot relative"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    strength={0.4}
+                  >
+                    <Flame className="h-4 w-4" />
+                    Roast my resume
+                  </MagneticButton>
+                </div>
               </section>
+              </RevealOnScroll>
 
-              <footer className="border-t border-[var(--line)] py-6 text-center text-xs text-[var(--ink-mute)]">
-                Resume Roaster · free AI resume review · made for people who already kinda know · &copy; {new Date().getFullYear()}
+              <footer className="border-t border-[var(--line)] px-6 py-7 text-center text-xs leading-5 text-[var(--ink-mute)] sm:px-0">
+                Resume Roaster · AI resume review · made for people who already kinda know · &copy; {new Date().getFullYear()}
               </footer>
             </main>
           </motion.div>
@@ -330,7 +343,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={CONTAINER_TRANSITION}
-            className="relative z-10 flex min-h-screen items-center justify-center px-5"
+            className="relative z-10 flex min-h-screen items-center justify-center px-6"
           >
             <div className="max-w-lg text-center">
               <motion.div
@@ -378,8 +391,8 @@ export default function Home() {
             className="relative z-10"
           >
             {/* minimal sticky topbar — name + share is the hero action */}
-            <div className="sticky top-0 z-30 border-b border-[var(--line)] bg-[#0b0810]/80 backdrop-blur-xl">
-              <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3 sm:px-8">
+            <div className="bar-gradient sticky top-0 z-30 border-b border-[var(--line)] bg-[#0b0810]/80 backdrop-blur-xl">
+              <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
                 <div className="flex min-w-0 items-center gap-2.5">
                   <Flame className="h-4 w-4 shrink-0 text-[var(--accent)]" />
                   <p className="truncate text-sm font-semibold text-[var(--ink-soft)]">
@@ -418,7 +431,7 @@ export default function Home() {
             </div>
 
             {/* editorial scroll — narrative sections stay narrow, breakdown grid goes wide */}
-            <article className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-14 lg:py-16">
+            <article className="mx-auto max-w-5xl px-6 py-12 sm:px-8 sm:py-14 lg:py-16">
               <div className="mx-auto max-w-3xl">
                 <HeroRoast
                   archetype={roastResult.archetype}
@@ -480,7 +493,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={CONTAINER_TRANSITION}
-            className="relative z-10 flex min-h-screen items-center justify-center px-5"
+            className="relative z-10 flex min-h-screen items-center justify-center px-6"
           >
             <div className="max-w-lg text-center">
               <p className="text-6xl">💀</p>

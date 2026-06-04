@@ -4,16 +4,16 @@
  */
 
 export const TICKER_LINES = [
-  "“bro it read me for filth 😭”",
-  "caught my fake 80% optimization in 4 seconds ☠️",
-  "“passionate team player” → publicly executed",
-  "sent it to the group chat. they sent it to theirs.",
-  "my recruiter friend said ‘yeah this is what i think too’",
-  "buzzword count hit 23. i am ashamed.",
-  "“results-driven” is now banned in my house",
-  "fixed 4 lines before i even finished reading",
-  "finally feedback that doesn’t sound like a LinkedIn post 🫡",
-  "this app knows i panic-added ‘leadership’ at 2am",
+  "i didn’t know a webpage could call me out like that",
+  "it found the metric i made up at 1am",
+  "“synergy” got removed from my vocabulary forever",
+  "first tool that didn’t try to sell me a course",
+  "my friend opened it and went quiet for 4 minutes",
+  "“led cross-functional initiatives” → straight to jail",
+  "i was warned. i still wasn’t ready.",
+  "fixed two bullets, got a callback the same week",
+  "less LinkedIn coach, more older sibling energy",
+  "i was today years old when i learned my resume was mid",
 ] as const;
 
 export const TESTIMONIALS = [
@@ -22,21 +22,21 @@ export const TESTIMONIALS = [
     name: "Priya, SDE-2",
     handle: "Bengaluru",
     quote:
-      "first feedback that actually called out my fake metrics. brutal, healing, 10/10.",
+      "made me delete three bullets before i could close the tab. genuinely the most useful 5 minutes i’ve spent on my resume in months.",
   },
   {
-    seed: "Rohit",
-    name: "Rohit, PM",
-    handle: "Hyderabad",
+    seed: "Karthik",
+    name: "Karthik, Data Eng",
+    handle: "Pune",
     quote:
-      "my “results-driven team player” line got demolished in 2 sentences. i deserved that.",
+      "expected a meme, got an actual diagnosis. the line it flagged was the exact one my manager kept squinting at in 1:1s.",
   },
   {
     seed: "Aanya",
     name: "Aanya, Frontend",
     handle: "Mumbai",
     quote:
-      "screenshot → WhatsApp group → cried laughing → fixed my resume same night.",
+      "i laughed, then i screenshotted, then i actually fixed the lines. in that order. would recommend.",
   },
 ] as const;
 

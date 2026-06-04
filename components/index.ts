@@ -8,4 +8,8 @@ export { ScoresDisplay } from "./ScoresDisplay";
 export { VerdictPanel } from "./VerdictPanel";
 export { HeroRoast } from "./HeroRoast";
 export { PositivePoints } from "./PositivePoints";
+export { MagneticButton } from "./MagneticButton";
+export { RevealOnScroll } from "./RevealOnScroll";
+export { TiltCard } from "./TiltCard";
+export { SplitText } from "./SplitText";
 export * from "./Doodles";

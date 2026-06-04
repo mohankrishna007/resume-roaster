@@ -4,14 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // the steps the roaster pretends to be doing — each with its own vibe
 const STEPS: { line: string; emoji: string; aside?: string }[] = [
-  { line: "opening the pdf", emoji: "📄", aside: "okay let's see what we're working with" },
-  { line: "counting buzzwords", emoji: "🔢", aside: "'synergy' detected. multiple times." },
-  { line: "side-eyeing every metric", emoji: "🧐", aside: "'increased efficiency by 80%'... of what??" },
-  { line: "checking for 'passionate'", emoji: "🤨", aside: "yep. there it is." },
-  { line: "reading between the bullet points", emoji: "🔍", aside: "the silence is loud" },
-  { line: "consulting the recruiter brain", emoji: "🧠", aside: "she would not survive this resume" },
-  { line: "deciding how honest to be", emoji: "⚖️", aside: "(very)" },
-  { line: "warming up the keyboard", emoji: "⌨️", aside: "okay i'm cooking" },
+  { line: "unrolling the pdf", emoji: "📄", aside: "alright, what are we working with here" },
+  { line: "scanning for buzzwords", emoji: "🔎", aside: "'synergy' spotted. and again. and again." },
+  { line: "fact-checking your metrics", emoji: "📊", aside: "increased what by 80%? say the words." },
+  { line: "hunting for 'passionate'", emoji: "🫠", aside: "found it. of course." },
+  { line: "reading between the bullets", emoji: "👀", aside: "the gaps are telling a story too" },
+  { line: "weighing the skills section", emoji: "⚖️", aside: "12 frameworks. let me guess — 3 you've actually used." },
+  { line: "channeling a tired recruiter", emoji: "🥱", aside: "she's on resume #47 today. be honest." },
+  { line: "writing the roast", emoji: "🔥", aside: "putting it nicely. then putting it real." },
 ];
 
 export function ProcessingScreen({ filename }: { filename?: string }) {
@@ -29,7 +29,7 @@ export function ProcessingScreen({ filename }: { filename?: string }) {
   const dots = useMemo(() => Array.from({ length: STEPS.length }), []);
 
   return (
-    <div className="relative mx-auto flex min-h-screen max-w-3xl items-center justify-center px-5 sm:px-8">
+    <div className="relative mx-auto flex min-h-screen max-w-3xl items-center justify-center px-6 sm:px-8">
       <div className="relative z-10 w-full">
         {/* live "now roasting" badge */}
         <motion.div
@@ -115,8 +115,8 @@ export function ProcessingScreen({ filename }: { filename?: string }) {
 
         {/* tiny disclaimer in the genz voice */}
         <p className="mt-8 max-w-md font-mono text-xs leading-5 text-[var(--ink-mute)]">
-          this takes ~30s. don&apos;t close the tab pls. we&apos;re cooking
-          your resume with our whole chest
+          don&apos;t close the tab pls. we&apos;re cooking your resume with our
+          whole chest
           <span className="text-[var(--accent-lime)]">.</span>
         </p>
       </div>

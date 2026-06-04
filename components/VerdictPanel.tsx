@@ -83,7 +83,7 @@ export function VerdictPanel({ verdict, candidateName, onReset }: VerdictPanelPr
         transition={{ type: "spring", stiffness: 180, damping: 18 }}
         className="relative mt-10 rounded-[28px] bg-gradient-to-br from-[#c8ff3e] via-[#ff7a2f] to-[#ff4d8d] p-[3px]"
       >
-        <div className="rounded-[26px] bg-[#0b0810] px-5 py-8 sm:px-10 sm:py-14">
+        <div className="rounded-[26px] bg-[#0b0810] px-6 py-10 sm:px-10 sm:py-14">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
             ↓ screenshot this ↓
           </p>

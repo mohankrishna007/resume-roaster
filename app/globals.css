@@ -256,16 +256,16 @@ button { cursor: pointer; }
 /* the "document" rendering of a resume line — quoted, with a colored gutter */
 .doc-line {
   position: relative;
-  padding: 1rem 0.95rem 0.95rem 1.15rem;
+  padding: 1.25rem 1.1rem 1.1rem 1.25rem;
   background: linear-gradient(180deg, rgba(255, 245, 230, 0.035), rgba(255, 245, 230, 0.01));
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
   border-left: 3px solid var(--accent);
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 @media (min-width: 640px) {
-  .doc-line { padding: 0.95rem 1.1rem 0.95rem 1.4rem; }
+  .doc-line { padding: 0.95rem 1.1rem 0.95rem 1.4rem; border-radius: 10px; }
 }
 .doc-line .doc-meta {
   display: flex; align-items: center; gap: 0.5rem;
@@ -335,15 +335,15 @@ button { cursor: pointer; }
 /* the annotation card on the right (or below on mobile) — feels handwritten */
 .annotation {
   position: relative;
-  padding: 1.1rem 1.15rem;
+  padding: 1.25rem 1.2rem;
   background: linear-gradient(180deg, rgba(255, 122, 47, 0.12), rgba(255, 122, 47, 0.03));
   border: 1.5px solid rgba(255, 122, 47, 0.32);
-  border-radius: 16px;
+  border-radius: 18px;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 @media (min-width: 640px) {
-  .annotation { padding: 1.15rem 1.3rem; }
+  .annotation { padding: 1.15rem 1.3rem; border-radius: 16px; }
 }
 .annotation.sev-mild {
   background: linear-gradient(180deg, rgba(255, 213, 102, 0.10), rgba(255, 213, 102, 0.03));
@@ -389,11 +389,14 @@ button { cursor: pointer; }
 
 /* the "try this" fix row — clearly secondary, but readable */
 .fix-row {
-  display: flex; align-items: flex-start; gap: 0.6rem;
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
+  display: flex; align-items: flex-start; gap: 0.65rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 14px;
   background: rgba(200, 255, 62, 0.06);
   border: 1.5px dashed rgba(200, 255, 62, 0.38);
+}
+@media (min-width: 640px) {
+  .fix-row { padding: 0.75rem 1rem; border-radius: 12px; }
 }
 
 /* highlight sweep — fires once when a doc-line scrolls into view */
@@ -414,11 +417,14 @@ button { cursor: pointer; }
 /* — testimonial cards on landing — sticker cards */
 .testimonial {
   position: relative;
-  padding: 1.35rem;
-  border-radius: 18px;
+  padding: 1.5rem 1.4rem;
+  border-radius: 20px;
   background: linear-gradient(180deg, rgba(255, 245, 230, 0.05), rgba(255, 245, 230, 0.015));
   border: 1.5px solid var(--line-strong);
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+@media (min-width: 640px) {
+  .testimonial { padding: 1.35rem; border-radius: 18px; }
 }
 .testimonial:nth-child(1) { transform: rotate(-1.2deg); }
 .testimonial:nth-child(2) { transform: rotate(0.8deg); }
@@ -456,3 +462,94 @@ button { cursor: pointer; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255, 122, 47, 0.55); border-radius: 9999px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-hot); }
+
+/* ───────────────────────────────────────────────────────────────
+   trending / modern flourishes — added without breaking the zine vibe
+   ─────────────────────────────────────────────────────────────── */
+
+/* animated gradient text — drifts a multi-stop gradient through a phrase */
+.text-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    #ff7a2f 0%,
+    #ff4d8d 25%,
+    #b39dff 50%,
+    #c8ff3e 75%,
+    #ff7a2f 100%
+  );
+  background-size: 300% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 7s linear infinite;
+}
+@keyframes text-shimmer {
+  to { background-position: -300% 0; }
+}
+
+/* hover pauses the ticker — gives users a beat to actually read a line */
+.ticker { will-change: transform; }
+.ticker-wrap:hover .ticker { animation-play-state: paused; }
+
+/* glow-pulse halo around the upload dropzone when drag-active */
+.dropzone-glow {
+  position: absolute; inset: -2px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--g-angle, 0deg),
+    #ff7a2f, #ff4d8d, #b39dff, #c8ff3e, #ff7a2f
+  );
+  filter: blur(14px);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.25s ease;
+  animation: spin-conic 6s linear infinite;
+}
+.dropzone-glow.is-active { opacity: 0.65; }
+@property --g-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes spin-conic {
+  to { --g-angle: 360deg; }
+}
+
+/* magnetic-button container — keeps the hard sticker shadow but smooths the lift */
+.lift-soft { transition: transform 0.2s cubic-bezier(0.21, 0.47, 0.32, 0.98); }
+.lift-soft:hover { transform: translateY(-3px); }
+
+/* sticker-style chips get a subtle glow on hover */
+.tag, .trust-chip { transition: box-shadow 0.2s ease, border-color 0.15s ease, color 0.15s ease, background 0.15s ease; }
+.tag:hover, .trust-chip:hover {
+  box-shadow: 0 0 0 1px var(--accent-lime), 0 0 24px -6px rgba(200, 255, 62, 0.5);
+}
+
+/* sticky topbar — animated gradient hairline */
+.bar-gradient::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent) 25%,
+    var(--accent-pink) 50%,
+    var(--accent-lime) 75%,
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: bar-shimmer 6s linear infinite;
+  opacity: 0.5;
+}
+@keyframes bar-shimmer {
+  to { background-position: -200% 0; }
+}
+
+/* respect reduced-motion: kill the heavy ambient animations */
+@media (prefers-reduced-motion: reduce) {
+  .ticker,
+  .text-shimmer,
+  .dropzone-glow,
+  .bar-gradient::after { animation: none !important; }
+}

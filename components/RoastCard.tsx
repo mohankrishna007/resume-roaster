@@ -34,7 +34,7 @@ export function RoastCard({ roast, index }: { roast: Roast; index: number }) {
         duration: 0.4,
         ease: "easeOut",
       }}
-      className="grid gap-4 md:grid-cols-[1fr_1.15fr] md:gap-6 md:items-start"
+      className="grid gap-5 md:grid-cols-[1fr_1.15fr] md:gap-6 md:items-start"
     >
       {/* LEFT — the resume line, rendered as a quoted document line */}
       <div className={`doc-line sev-${meta.key}`}>

@@ -94,7 +94,19 @@ export const ROAST_JSON_SCHEMA = {
           },
         },
       },
-      wins: { type: "array", items: { type: "string" } },
+      wins: {
+        type: "array",
+        items: {
+          type: "object",
+          additionalProperties: false,
+          required: ["resume_line", "reaction", "callout"],
+          properties: {
+            resume_line: { type: "string" },
+            reaction: { type: "string" },
+            callout: { type: "string" },
+          },
+        },
+      },
       biggest_truth: {
         type: "object",
         additionalProperties: false,

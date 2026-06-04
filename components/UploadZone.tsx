@@ -28,11 +28,14 @@ export function UploadZone({ onUpload, isLoading = false, selectedFile }: Upload
   });
 
   return (
-    <div {...getRootProps()} className="w-full">
+    <div {...getRootProps()} className="relative w-full">
       <input {...getInputProps()} className="hidden" />
+      <span aria-hidden className={`dropzone-glow ${isDragActive ? "is-active" : ""}`} />
       <motion.div
         whileHover={!isLoading ? { y: -2 } : undefined}
         whileTap={!isLoading ? { scale: 0.99 } : undefined}
+        animate={isDragActive ? { scale: 1.015 } : { scale: 1 }}
+        transition={{ type: "spring", stiffness: 280, damping: 22 }}
         className={[
           "group relative flex flex-col gap-5 rounded-[28px] border-2 border-dashed p-6 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-7",
           isDragActive
@@ -50,7 +53,7 @@ export function UploadZone({ onUpload, isLoading = false, selectedFile }: Upload
               {isDragActive ? "yes. let it go 👇" : selectedFile ?? "Drop your resume in. We dare you."}
             </p>
             <p className="mt-1 text-sm text-[var(--ink-mute)]">
-              or tap to upload · PDF only · no signup, no email, no data kept
+              or tap to upload · PDF only · nothing stored
             </p>
           </div>
         </div>

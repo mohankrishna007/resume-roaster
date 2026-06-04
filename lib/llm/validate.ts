@@ -1,4 +1,4 @@
-import type { RoastResult, Severity } from "@/types/roast";
+import type { RoastResult, Severity, Win } from "@/types/roast";
 
 const SEVERITIES: Severity[] = ["mild", "medium", "savage", "actually_good"];
 
@@ -54,6 +54,33 @@ function strArray(v: unknown, path: string): string[] {
   return v.map((item, i) => str(item, `${path}[${i}]`));
 }
 
+function parseWins(v: unknown): Win[] {
+  if (!Array.isArray(v)) return [];
+  const out: Win[] = [];
+  v.forEach((item, i) => {
+    if (typeof item === "string" && item.trim()) {
+      // legacy/fallback: a flat string becomes the callout, leaving the other
+      // two fields blank so the UI can render whatever's available.
+      out.push({ resume_line: "", reaction: "", callout: item.trim() });
+      return;
+    }
+    if (!isObject(item)) return;
+    const resume_line = typeof item.resume_line === "string" ? item.resume_line.trim() : "";
+    const reaction = typeof item.reaction === "string" ? item.reaction.trim() : "";
+    const callout =
+      typeof item.callout === "string"
+        ? item.callout.trim()
+        : typeof item.note === "string"
+          ? item.note.trim()
+          : "";
+    // skip empties so the section can stay clean if the model returns nothing useful
+    if (!resume_line && !reaction && !callout) return;
+    out.push({ resume_line, reaction, callout });
+    void i;
+  });
+  return out;
+}
+
 export function validateRoastResult(input: unknown): RoastResult {
   if (!isObject(input)) fail("(root)");
 
@@ -105,7 +132,7 @@ export function validateRoastResult(input: unknown): RoastResult {
       recruiter_scroll_seconds: num(scores.recruiter_scroll_seconds, "scores.recruiter_scroll_seconds"),
     },
     roasts,
-    wins: Array.isArray(input.wins) ? strArray(input.wins, "wins") : [],
+    wins: parseWins(input.wins),
     biggest_truth: {
       headline: str(biggest_truth.headline, "biggest_truth.headline"),
       explanation: str(biggest_truth.explanation, "biggest_truth.explanation"),
