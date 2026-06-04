@@ -9,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { signInWithGoogle, signOutUser, subscribeToAuth, type User } from "@/lib/firebase/auth-client";
+import { signInWithGoogle, signOutUser, subscribeToAuth, consumeRedirectResult, type User } from "@/lib/firebase/auth-client";
 import { track } from "@/lib/analytics";
 
 interface AuthState {
@@ -33,6 +33,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(u);
       setReady(true);
     });
+    // Resolve a pending redirect-based Google sign-in (popup fallback path).
+    void consumeRedirectResult().then((u) => {
+      if (u) {
+        track("sign_in_succeeded", { provider: "google_redirect", uid: u.uid });
+      }
+    });
     return () => unsub();
   }, []);
 
@@ -48,14 +54,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           uid: u.uid,
         });
       }
+      // If u is null, a full-page redirect was kicked off — the page is
+      // about to unload, so keep `signingIn` true to avoid a UI flash.
     } catch (err) {
+      console.error("[auth] sign-in failed:", err);
       track("sign_in_failed", {
         provider: "google",
         message: (err as Error)?.message?.slice(0, 120) ?? "unknown",
       });
-    } finally {
       setSigningIn(false);
+      return;
     }
+    setSigningIn(false);
   }, [signingIn]);
 
   const signOut = useCallback(async () => {
