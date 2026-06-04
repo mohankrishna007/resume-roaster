@@ -20,7 +20,7 @@ export function ProcessingScreen({ filename }: { filename?: string }) {
   useEffect(() => {
     const id = setInterval(
       () => setStepIdx((p) => (p + 1) % STEPS.length),
-      1400,
+      1800,
     );
     return () => clearInterval(id);
   }, []);
@@ -58,15 +58,15 @@ export function ProcessingScreen({ filename }: { filename?: string }) {
         </p>
 
         {/* the actual live step — emoji + line + aside, animated in and out */}
-        <div className="relative mt-12 min-h-[150px]">
-          <AnimatePresence mode="wait">
+        <div className="relative mt-12 min-h-[180px]">
+          <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={stepIdx}
-              initial={{ opacity: 0, y: 14, filter: "blur(6px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -14, filter: "blur(6px)" }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              className="flex items-start gap-4"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-0 flex items-start gap-4"
             >
               <motion.span
                 animate={{ rotate: [0, -8, 8, -4, 0], scale: [1, 1.08, 1] }}

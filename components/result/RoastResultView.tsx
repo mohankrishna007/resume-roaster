@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Flame, RefreshCcw, Share2, LogOut } from "lucide-react";
 import type { RoastResult } from "@/types/roast";
@@ -55,7 +56,15 @@ export function RoastResultView({
       <div className="bar-gradient sticky top-0 z-30 border-b border-[var(--line)] bg-[#0b0810]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8 lg:max-w-6xl lg:px-12 2xl:max-w-7xl">
           <div className="flex min-w-0 items-center gap-2.5">
-            <Flame className="h-4 w-4 shrink-0 text-[var(--accent)]" />
+            <span className="inline-flex shrink-0 items-center justify-center rounded-md bg-white/95 p-1 shadow-sm ring-1 ring-black/5">
+              <Image
+                src="/icon.png"
+                alt=""
+                width={28}
+                height={28}
+                className="h-7 w-7 rounded-sm"
+              />
+            </span>
             <p className="truncate text-sm font-semibold text-[var(--ink-soft)]">
               <span className="text-[var(--ink-mute)]">roast for</span>{" "}
               {roastResult.candidate.name}

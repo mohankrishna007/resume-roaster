@@ -7,7 +7,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * Static assets, the maintenance page itself, and Next internals are skipped
  * so the page still renders.
  */
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   if (process.env.MAINTENANCE_MODE !== "true") return NextResponse.next();
 
   const { pathname } = req.nextUrl;

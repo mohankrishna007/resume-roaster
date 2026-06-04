@@ -93,9 +93,6 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
   formatDetection: {
     email: false,
     address: false,
