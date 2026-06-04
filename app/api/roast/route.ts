@@ -5,6 +5,8 @@ import { saveRoast } from "@/lib/roast-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// LLM + PDF parse can run long; Vercel hobby caps at 60s, Pro at 300s.
+export const maxDuration = 60;
 
 const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
 const MAX_RESUME_CHARS = 18_000;    // hard cap on tokens we send to the LLM
