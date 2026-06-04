@@ -39,7 +39,8 @@ export async function signInWithGoogle(): Promise<User | null> {
   const auth = getAuthInstance();
   if (!auth) throw new Error("Sign-in isn't configured. Try again later.");
   const provider = new GoogleAuthProvider();
-  // No prompt override — lets Google auto-pick the active session when possible.
+  // Force account selection popup to appear, ensuring sign-in flow works correctly.
+  provider.setCustomParameters({ prompt: 'select_account' });
   const result = await signInWithPopup(auth, provider);
   return result.user;
 }
