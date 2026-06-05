@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { Inter_Tight, Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AnalyticsBoot } from "@/components/AnalyticsBoot";
@@ -47,16 +46,15 @@ export const metadata: Metadata = {
   generator: "Next.js",
   keywords: [
     "resume roaster",
-    "resume review",
     "AI resume review",
-    "free resume feedback",
     "resume critique",
+    "resume feedback",
+    "free resume review",
     "CV roaster",
     "CV review",
     "resume checker",
     "ATS resume checker",
     "resume buzzwords",
-    "resume tips",
     "improve resume",
     "AI CV feedback",
     "honest resume feedback",
@@ -68,6 +66,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    shortcut: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/icon.png", type: "image/png" }],
+  },
+  manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
@@ -101,11 +105,17 @@ export const metadata: Metadata = {
 };
 
 // JSON-LD structured data — helps Google understand what this app is.
+// Note: an `aggregateRating` block was deliberately removed. Google's
+// Structured Data policy prohibits fabricated/unverifiable review counts
+// and can issue a manual action that removes the site from search
+// results. Re-add only when ratings come from a real on-site review
+// system the user can interact with.
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "WebApplication",
+      "@id": `${SITE_URL}#app`,
       name: SITE_NAME,
       url: SITE_URL,
       applicationCategory: "BusinessApplication",
@@ -119,12 +129,51 @@ const jsonLd = {
         "Quick fix suggestions for every line",
         "PDF upload, no signup required",
       ],
-      browserRequirements: "Requires a modern browser with JavaScript enabled.",
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.9",
-        ratingCount: "1842",
-      },
+      browserRequirements:
+        "Requires a modern browser with JavaScript enabled.",
+    },
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}#org`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/icon.png`,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      description: DESCRIPTION,
+      publisher: { "@id": `${SITE_URL}#org` },
+      inLanguage: "en-US",
+    },
+    {
+      "@type": "HowTo",
+      name: "How to roast your resume",
+      description:
+        "Get an honest, line-by-line AI critique of your resume in under a minute.",
+      totalTime: "PT1M",
+      step: [
+        {
+          "@type": "HowToStep",
+          position: 1,
+          name: "Upload your resume PDF",
+          text: "Drop a PDF resume onto the upload zone. Text-based PDFs from Word, Google Docs, or Canva work best.",
+        },
+        {
+          "@type": "HowToStep",
+          position: 2,
+          name: "Wait for the AI roast",
+          text: "The AI scans every line, counts buzzwords, estimates recruiter-scroll time, and writes the roast.",
+        },
+        {
+          "@type": "HowToStep",
+          position: 3,
+          name: "Read the verdict and fixes",
+          text: "Review the line-by-line burns plus concrete suggestions you can paste straight into your next draft.",
+        },
+      ],
     },
     {
       "@type": "FAQPage",
@@ -181,10 +230,14 @@ export default function RootLayout({
           <GoogleOneTap />
         </AuthProvider>
         <AnalyticsBoot />
-        <Script
-          id="ld-json"
+        {/*
+          Render JSON-LD inline in the initial HTML so search crawlers
+          always see it. Using next/script with afterInteractive can
+          inject the tag too late for some crawlers.
+        */}
+        <script
           type="application/ld+json"
-          strategy="afterInteractive"
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </body>

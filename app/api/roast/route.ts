@@ -103,8 +103,9 @@ export async function POST(request: Request) {
       provider: process.env.LLM_PROVIDER ?? "openai",
       user_agent: request.headers.get("user-agent") ?? undefined,
       referer: request.headers.get("referer") ?? undefined,
-      // Firestore rejects `undefined` — only include uid when signed in.
+      // Firestore rejects `undefined` — only include uid/email when signed in.
       ...(verified?.uid ? { uid: verified.uid } : {}),
+      ...(verified?.email ? { email: verified.email } : {}),
     });
 
     return NextResponse.json({ ...result, shareId });

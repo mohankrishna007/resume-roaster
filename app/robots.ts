@@ -8,7 +8,12 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/"],
+        // /api/* never has indexable content. /r/* pages are user-shared
+        // roast snapshots — they're great for social previews but create
+        // thin/duplicate search results, so keep crawlers out. The per-page
+        // <meta robots> on /r/[id] already says noindex; this is an extra
+        // layer that also blocks crawling cost.
+        disallow: ["/api/", "/r/", "/maintenance"],
       },
     ],
     sitemap: `${base}/sitemap.xml`,

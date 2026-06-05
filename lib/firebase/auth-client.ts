@@ -63,7 +63,7 @@ export async function signInWithGoogle(): Promise<User | null> {
   provider.setCustomParameters({ prompt: "select_account" });
 
   if (shouldUseRedirect()) {
-    await signInWithRedirect(auth, provider);
+    await signInWithRedirect(auth, provider, browserPopupRedirectResolver);
     return null; // user resolved by consumeRedirectResult after the round trip
   }
 
@@ -81,7 +81,7 @@ export async function signInWithGoogle(): Promise<User | null> {
       code === "auth/web-storage-unsupported" ||
       code === "auth/internal-error"
     ) {
-      await signInWithRedirect(auth, provider);
+      await signInWithRedirect(auth, provider, browserPopupRedirectResolver);
       return null;
     }
     throw err;
@@ -93,7 +93,7 @@ export async function consumeRedirectResult(): Promise<User | null> {
   const auth = getAuthInstance();
   if (!auth) return null;
   try {
-    const result = await getRedirectResult(auth);
+    const result = await getRedirectResult(auth, browserPopupRedirectResolver);
     return result?.user ?? null;
   } catch (err) {
     // Bubble up useful diagnostics for unauthorized-domain / config issues.

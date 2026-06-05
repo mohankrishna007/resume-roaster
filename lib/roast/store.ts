@@ -14,6 +14,7 @@ export interface RoastMeta {
   user_agent?: string;
   referer?: string;
   uid?: string;
+  email?: string;
 }
 
 export interface StoredRoast {
@@ -45,10 +46,14 @@ export async function saveRoast(
       result,
       meta,
       created_at: FieldValue.serverTimestamp(),
-      // denormalized for cheap list queries / dashboards
+      // Denormalized for cheap list queries / dashboards. Top-level `uid`
+      // lets us run `where('uid', '==', x)` to list every roast a user has
+      // produced without nested-field queries.
       candidate_name: result.candidate.name ?? "Anonymous",
       overall_score: result.scores.overall,
       roast_count: result.roasts.length,
+      uid: meta.uid ?? null,
+      email: meta.email ?? null,
     });
     return id;
   } catch (err) {
