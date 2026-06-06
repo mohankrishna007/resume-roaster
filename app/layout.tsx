@@ -3,7 +3,6 @@ import { Inter_Tight, Bricolage_Grotesque, JetBrains_Mono } from "next/font/goog
 import "./globals.css";
 import { AnalyticsBoot } from "@/components/AnalyticsBoot";
 import { AuthProvider } from "@/components/auth/AuthProvider";
-import { GoogleOneTap } from "@/components/auth/GoogleOneTap";
 
 const bodyFont = Inter_Tight({
   subsets: ["latin"],
@@ -227,7 +226,6 @@ export default function RootLayout({
       >
         <AuthProvider>
           {children}
-          <GoogleOneTap />
         </AuthProvider>
         <AnalyticsBoot />
         {/*
