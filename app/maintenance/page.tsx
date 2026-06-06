@@ -38,13 +38,13 @@ export default function MaintenancePage() {
         </p>
 
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-bold text-black transition hover:brightness-110"
           >
             <Flame className="h-4 w-4" />
             Try again
-          </a>
+          </Link>
           <Link
             href="https://x.com"
             target="_blank"

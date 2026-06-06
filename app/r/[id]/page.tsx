@@ -85,7 +85,6 @@ export default async function SharedRoastPage({ params }: PageProps) {
       <RoastResultView roastResult={stored.result} shareId={stored.id} />
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
     </div>

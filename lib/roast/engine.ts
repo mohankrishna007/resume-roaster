@@ -32,10 +32,21 @@ export async function roastResume(file: File): Promise<RoastResponse> {
   const idToken = await getIdTokenIfSignedIn();
   if (idToken) headers["Authorization"] = `Bearer ${idToken}`;
 
+  console.debug("[roast] sending resume to /api/roast", {
+    fileName: file.name,
+    fileSize: file.size,
+    authHeader: Boolean(headers["Authorization"]),
+  });
   const res = await fetch("/api/roast", {
     method: "POST",
     body: form,
     headers,
+  });
+  console.debug("[roast] /api/roast response", {
+    status: res.status,
+    statusText: res.statusText,
+    redirected: res.redirected,
+    url: res.url,
   });
 
   if (!res.ok) {

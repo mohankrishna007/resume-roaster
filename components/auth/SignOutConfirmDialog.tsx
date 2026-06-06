@@ -84,7 +84,7 @@ export function SignOutConfirmDialog({
               id="signout-desc"
               className="mt-1.5 text-sm text-[var(--ink-soft)]"
             >
-              You'll need to sign back in to roast another resume. The page
+              You&apos;ll need to sign back in to roast another resume. The page
               will reload once you sign out.
             </p>
           </div>

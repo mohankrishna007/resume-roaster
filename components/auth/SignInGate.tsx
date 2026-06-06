@@ -53,7 +53,7 @@ export function SignInGate() {
           ) : (
             <>
               <GoogleMark />
-              Continue with Google
+              Sign in with Google
             </>
           )}
         </button>

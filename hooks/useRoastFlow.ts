@@ -151,11 +151,17 @@ export function useRoastFlow() {
   // Once the user signs in from the sign-in gate, auto-resume the roast with
   // the file they originally dropped — no need to re-pick it.
   useEffect(() => {
-    if (user && pendingFile && state.step === "sign-in-required") {
-      const file = pendingFile;
+    if (!(user && pendingFile && state.step === "sign-in-required")) return;
+
+    const file = pendingFile;
+    const timer = window.setTimeout(() => {
       setPendingFile(null);
       void handleUpload(file);
-    }
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
   }, [user, pendingFile, state.step, handleUpload]);
 
   return { ...state, handleUpload, reset };

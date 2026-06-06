@@ -7,8 +7,10 @@ import {
   signInWithRedirect,
   signInWithCredential,
   getRedirectResult,
-  browserPopupRedirectResolver,
-  signOut as fbSignOut,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
+  signOut as firebaseSignOut,
   onAuthStateChanged,
   type Auth,
   type User,
@@ -18,10 +20,16 @@ import { getFirebaseApp } from "./client";
 
 let cachedAuth: Auth | null = null;
 
+function isMobileBrowser(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /Mobi|Android|iPhone|iPad|iPod|Mobile|Silk/i.test(navigator.userAgent || "");
+}
+
 function getAuthInstance(): Auth | null {
   if (cachedAuth) return cachedAuth;
   const app = getFirebaseApp();
   if (!app) return null;
+
   try {
     cachedAuth = getAuth(app);
     return cachedAuth;
@@ -29,6 +37,8 @@ function getAuthInstance(): Auth | null {
     return null;
   }
 }
+
+export { getAuthInstance };
 
 export function subscribeToAuth(cb: (user: User | null) => void): () => void {
   const auth = getAuthInstance();
@@ -39,40 +49,39 @@ export function subscribeToAuth(cb: (user: User | null) => void): () => void {
   return onAuthStateChanged(auth, cb);
 }
 
-/**
- * In Codespaces / iframe-style preview origins, hosted Vercel previews, and
- * any browser that blocks 3rd-party cookies, `signInWithPopup` opens the
- * Google tab, completes OAuth, then closes without ever delivering the
- * credential back — the postMessage from the popup to the opener is
- * severed by COOP or by cookie partitioning. Full-page redirect avoids
- * that whole class of bug, so we use it whenever the host doesn't look
- * like a normal first-party origin (localhost or your production domain).
- */
-function shouldUseRedirect(): boolean {
-  if (typeof window === "undefined") return false;
-  const host = window.location.hostname;
-  if (host === "localhost" || host === "127.0.0.1") return false;
-  // Heuristic: previews / containerized dev URLs need redirect.
-  return /\.(github\.dev|gitpod\.io|app\.github\.dev|vercel\.app|ngrok-free\.app|ngrok\.io|trycloudflare\.com|webcontainer\.io)$/i.test(host);
+async function ensurePersistence(auth: Auth): Promise<void> {
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+    console.debug("[auth] persistence set", { persistence: "local" });
+  } catch (err) {
+    console.debug("[auth] local persistence failed, falling back to session", { error: err });
+    await setPersistence(auth, browserSessionPersistence);
+  }
 }
 
 export async function signInWithGoogle(): Promise<User | null> {
   const auth = getAuthInstance();
-  if (!auth) throw new Error("Sign-in isn't configured. Try again later.");
+  console.debug("[auth] signInWithGoogle start", { authConfigured: !!auth });
+  if (!auth) throw new Error("Google auth is not available");
+
+  await ensurePersistence(auth);
+
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: "select_account" });
 
-  if (shouldUseRedirect()) {
-    await signInWithRedirect(auth, provider, browserPopupRedirectResolver);
-    return null; // user resolved by consumeRedirectResult after the round trip
+  if (isMobileBrowser()) {
+    console.debug("[auth] mobile browser detected, using redirect");
+    await signInWithRedirect(auth, provider);
+    return null;
   }
 
   try {
-    const result = await signInWithPopup(auth, provider, browserPopupRedirectResolver);
+    const result = await signInWithPopup(auth, provider);
+    console.debug("[auth] signInWithPopup success", { uid: result.user?.uid });
     return result.user;
   } catch (err) {
+    console.error("[auth] signInWithPopup failed", err);
     const code = err instanceof FirebaseError ? err.code : "";
-    // Any popup failure -> fall back to redirect.
     if (
       code === "auth/popup-blocked" ||
       code === "auth/popup-closed-by-user" ||
@@ -81,44 +90,54 @@ export async function signInWithGoogle(): Promise<User | null> {
       code === "auth/web-storage-unsupported" ||
       code === "auth/internal-error"
     ) {
-      await signInWithRedirect(auth, provider, browserPopupRedirectResolver);
+      console.debug("[auth] signInWithPopup fallback to redirect");
+      await signInWithRedirect(auth, provider);
       return null;
     }
     throw err;
   }
 }
 
-/** Resolve any pending redirect-based sign-in. Safe to call once on app load. */
 export async function consumeRedirectResult(): Promise<User | null> {
   const auth = getAuthInstance();
   if (!auth) return null;
+  console.debug("[auth] consumeRedirectResult start");
+
   try {
-    const result = await getRedirectResult(auth, browserPopupRedirectResolver);
+    const result = await getRedirectResult(auth);
+    console.debug("[auth] consumeRedirectResult result", { uid: result?.user?.uid });
     return result?.user ?? null;
   } catch (err) {
-    // Bubble up useful diagnostics for unauthorized-domain / config issues.
-    if (err instanceof FirebaseError) {
-      console.error("[auth] redirect sign-in failed:", err.code, err.message);
-    } else {
-      console.error("[auth] redirect sign-in failed:", err);
-    }
+    console.error("[auth] consumeRedirectResult failed", err);
     return null;
   }
 }
 
-/** Sign in to Firebase using a Google ID token (from Google One Tap / GIS). */
 export async function signInWithGoogleIdToken(idToken: string): Promise<User | null> {
+  console.debug("[auth] signInWithGoogleIdToken start", { hasToken: Boolean(idToken) });
   const auth = getAuthInstance();
-  if (!auth) return null;
+  if (!auth) {
+    console.error("[auth] signInWithGoogleIdToken failed: auth unavailable");
+    return null;
+  }
+
+  await ensurePersistence(auth);
+
   const credential = GoogleAuthProvider.credential(idToken);
-  const result = await signInWithCredential(auth, credential);
-  return result.user;
+  try {
+    const result = await signInWithCredential(auth, credential);
+    console.debug("[auth] signInWithCredential success", { uid: result.user?.uid });
+    return result.user;
+  } catch (err) {
+    console.error("[auth] signInWithCredential failed", err);
+    throw err;
+  }
 }
 
 export async function signOutUser(): Promise<void> {
   const auth = getAuthInstance();
   if (!auth) return;
-  await fbSignOut(auth);
+  await firebaseSignOut(auth);
 }
 
 export type { User };

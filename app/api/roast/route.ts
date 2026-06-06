@@ -38,6 +38,10 @@ function classifyProviderError(err: unknown): { status: number; message: string 
 }
 
 export async function POST(request: Request) {
+  console.debug("[roast] /api/roast POST received", {
+    url: request.url,
+    method: request.method,
+  });
   let stage: "parse" | "llm" = "parse";
   try {
     // Identify the caller before doing any work. Signed-in users get a higher
