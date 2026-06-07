@@ -114,7 +114,7 @@ export default async function OgImage() {
             color: "#9c8b9a",
           }}
         >
-          <span>resume-roaster.app</span>
+          <span>roastume.app</span>
           <span style={{ color: "#c8ff3e" }}>No signup · No fluff</span>
         </div>
       </div>

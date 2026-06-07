@@ -155,7 +155,7 @@ export default async function OgImage({ params }: Params) {
             color: "#9c8b9a",
           }}
         >
-          <span>resume-roaster.app</span>
+          <span>roastume.app</span>
           <span style={{ color: "#c8ff3e" }}>Roast yours · free</span>
         </div>
       </div>

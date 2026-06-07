@@ -23,7 +23,7 @@ const monoFont = JetBrains_Mono({
 });
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://resume-roaster.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://roastume.app";
 const SITE_NAME = "Resume Roaster";
 const TITLE = "Resume Roaster — The brutally honest AI resume review your friend won't give you";
 const DESCRIPTION =

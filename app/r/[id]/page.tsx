@@ -60,7 +60,7 @@ export default async function SharedRoastPage({ params }: PageProps) {
   if (!stored) notFound();
 
   const SITE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://resume-roaster.app";
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://roastume.app";
   const pageUrl = `${SITE_URL}/r/${id}`;
   const articleJsonLd = {
     "@context": "https://schema.org",
