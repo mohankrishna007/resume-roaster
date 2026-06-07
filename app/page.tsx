@@ -59,16 +59,14 @@ export default function Home() {
             {/* minimal masthead — no card, just a line */}
             <header className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 pt-5 sm:gap-3 sm:px-8 sm:pt-7 lg:max-w-7xl lg:px-12">
               <div className="flex items-center gap-2.5">
-                <span className="inline-flex items-center justify-center rounded-lg bg-white/95 p-1.5 shadow-sm ring-1 ring-black/5">
-                  <Image
-                    src="/icon.png"
-                    alt=""
-                    width={36}
-                    height={36}
-                    priority
-                    className="h-9 w-9 rounded-sm"
-                  />
-                </span>
+                <Image
+                  src="/icon.png"
+                  alt="Resume Roaster"
+                  width={36}
+                  height={36}
+                  priority
+                  className="h-9 w-9"
+                />
                 <p className="font-display text-lg font-bold tracking-tight">
                   Resume Roaster
                 </p>
