@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { signInWithGoogle, signOutUser, subscribeToAuth, consumeRedirectResult, type User } from "@/lib/firebase/auth-client";
+import { authLog } from "@/lib/auth-log-client";
 
 interface AuthState {
   user: User | null;
@@ -26,31 +27,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
   const [signingIn, setSigningIn] = useState(false);
-  const redirectResultConsumed = useRef(false);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    const unsubscribe = subscribeToAuth((u) => {
-      console.debug("[auth] onAuthStateChanged", { user: u?.uid });
-      setUser(u);
-      setReady(true);
-    });
+    if (initialized.current) return;
+    initialized.current = true;
 
-    if (!redirectResultConsumed.current) {
-      redirectResultConsumed.current = true;
-      void (async () => {
-        try {
-          const resultUser = await consumeRedirectResult();
-          if (resultUser) {
-            setUser(resultUser);
-            console.debug("[auth] consumeRedirectResult succeeded", { uid: resultUser.uid });
-          }
-        } catch (err) {
-          console.error("[auth] consumeRedirectResult threw", err);
+    let active = true;
+    let unsubscribe: () => void = () => {};
+
+    void (async () => {
+      try {
+        const resultUser = await consumeRedirectResult();
+        if (active && resultUser) {
+          authLog("debug", "[auth] consumeRedirectResult succeeded", { uid: resultUser.uid });
+          setUser(resultUser);
         }
-      })();
-    }
+      } catch (err) {
+        authLog("error", "[auth] consumeRedirectResult threw", { error: String(err) });
+      }
 
-    return unsubscribe;
+      if (!active) return;
+
+      // Subscribe only after redirect processing to avoid redirect-result races.
+      unsubscribe = subscribeToAuth((u) => {
+        authLog("debug", "[auth] onAuthStateChanged", { user: u?.uid });
+        setUser(u);
+        setReady(true);
+      });
+    })();
+
+    return () => {
+      active = false;
+      unsubscribe();
+    };
   }, []);
 
   const signIn = useCallback(async () => {
@@ -59,22 +69,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       const signedInUser = await signInWithGoogle();
+      // On mobile, signInWithRedirect navigates away — we never reach here
+      // On desktop, we resolve immediately with a user or null
       if (signedInUser) {
-        console.debug("[auth] signIn succeeded", { uid: signedInUser.uid });
+        authLog("debug", "[auth] signIn succeeded", { uid: signedInUser.uid });
       }
     } catch (err) {
-      console.error("[auth] sign-in failed:", err);
-    } finally {
+      // Only reset signingIn on actual error (not redirect)
+      // If sign-in failed and user stayed on page, they can retry
+      authLog("error", "[auth] sign-in failed", { error: String(err) });
       setSigningIn(false);
     }
+    // No finally block — intentional. On mobile redirect, signingIn stays true
+    // until page navigates away. On success, auth listener updates state.
   }, [signingIn]);
 
   const signOut = useCallback(async () => {
     try {
       await signOutUser();
-      console.debug("[auth] signOut succeeded");
+      authLog("debug", "[auth] signOut succeeded");
     } catch (err) {
-      console.error("[auth] sign-out failed", err);
+      authLog("error", "[auth] sign-out failed", { error: String(err) });
     }
   }, []);
 

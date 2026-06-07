@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { signInWithGoogleIdToken } from "@/lib/firebase/auth-client";
+import { authLog } from "@/lib/auth-log-client";
 import { useAuth } from "./AuthProvider";
 
 const GIS_SRC = "https://accounts.google.com/gsi/client";
@@ -47,6 +48,11 @@ function loadGoogleIdentityScript(): Promise<void> {
   });
 }
 
+function isMobileBrowser(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /Mobi|Android|iPhone|iPad|iPod|Mobile|Silk/i.test(navigator.userAgent || "");
+}
+
 export function GoogleOneTap() {
   const { user, ready } = useAuth();
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -54,6 +60,11 @@ export function GoogleOneTap() {
   useEffect(() => {
     if (!ready || user || !clientId) return;
     if (typeof window === "undefined") return;
+    // Google One Tap doesn't work reliably on mobile; skip initialization
+    if (isMobileBrowser()) {
+      authLog("debug", "[auth] GoogleOneTap skipped on mobile browser");
+      return;
+    }
 
     let active = true;
 
@@ -61,14 +72,14 @@ export function GoogleOneTap() {
       try {
         await loadGoogleIdentityScript();
       } catch (err) {
-        console.error("[auth] GoogleOneTap script load failed", err);
+        authLog("error", "[auth] GoogleOneTap script load failed", { error: String(err) });
         return;
       }
 
       if (!active) return;
       const gid = window.google?.accounts?.id;
       if (!gid) {
-        console.error("[auth] GoogleOneTap initialization failed: google.accounts.id unavailable");
+        authLog("error", "[auth] GoogleOneTap initialization failed: google.accounts.id unavailable");
         return;
       }
 
@@ -84,7 +95,7 @@ export function GoogleOneTap() {
             try {
               await signInWithGoogleIdToken(response.credential);
             } catch (err) {
-              console.error("[auth] GoogleOneTap credential exchange failed", err);
+              authLog("error", "[auth] GoogleOneTap credential exchange failed", { error: String(err) });
             }
           },
           auto_select: true,
@@ -92,7 +103,7 @@ export function GoogleOneTap() {
         });
         gid.prompt();
       } catch (err) {
-        console.error("[auth] GoogleOneTap prompt failed", err);
+        authLog("error", "[auth] GoogleOneTap prompt failed", { error: String(err) });
       }
     };
 
