@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { LogOut, X } from "lucide-react";
 
 interface SignOutConfirmDialogProps {
@@ -40,15 +41,15 @@ export function SignOutConfirmDialog({
     };
   }, [open, busy, onCancel]);
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="signout-title"
       aria-describedby="signout-desc"
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
     >
       <button
         type="button"
@@ -58,7 +59,7 @@ export function SignOutConfirmDialog({
         tabIndex={-1}
       />
       <div
-        className="relative w-full max-w-md rounded-2xl border border-[var(--line-strong)] bg-[var(--bg-warm)] p-6 shadow-[6px_6px_0_0_rgba(0,0,0,0.55)]"
+        className="relative w-full max-w-md rounded-2xl border border-[var(--line-strong)] bg-[var(--bg-warm)] p-5 shadow-[6px_6px_0_0_rgba(0,0,0,0.55)] sm:p-6"
       >
         <button
           type="button"
@@ -78,22 +79,21 @@ export function SignOutConfirmDialog({
               id="signout-title"
               className="font-[var(--font-display)] text-lg font-extrabold tracking-tight text-[var(--ink)]"
             >
-              Sign out of Resume Roaster?
+              Are you sure you want to sign out?
             </h2>
             <p
               id="signout-desc"
               className="mt-1.5 text-sm text-[var(--ink-soft)]"
             >
-              You&apos;ll need to sign back in to roast another resume. The page
-              will reload once you sign out.
+              You&apos;ll need to sign back in to roast another resume.
             </p>
           </div>
         </div>
-        <div className="mt-6 flex flex-wrap justify-end gap-2">
+        <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <button
             type="button"
             onClick={onCancel}
-            className="btn-bar btn-bar-ghost"
+            className="btn-bar btn-bar-ghost w-full sm:w-auto"
             disabled={busy}
           >
             Stay signed in
@@ -102,7 +102,7 @@ export function SignOutConfirmDialog({
             ref={confirmRef}
             type="button"
             onClick={onConfirm}
-            className="btn-bar btn-bar-primary"
+            className="btn-bar btn-bar-primary w-full sm:w-auto"
             disabled={busy}
           >
             <LogOut className="h-3.5 w-3.5" />
@@ -110,6 +110,7 @@ export function SignOutConfirmDialog({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

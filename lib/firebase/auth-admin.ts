@@ -13,8 +13,7 @@ function ensureApp(): App | null {
   const privateKey = privateKeyRaw.replace(/\\n/g, "\n");
   try {
     return initializeApp({ credential: cert({ projectId, clientEmail, privateKey }) });
-  } catch (err) {
-    console.error("[auth-admin] init failed:", err);
+  } catch {
     return null;
   }
 }
@@ -29,8 +28,7 @@ function getAuthInstance(): Auth | null {
   try {
     cachedAuth = getAuth(app);
     return cachedAuth;
-  } catch (err) {
-    console.error("[auth-admin] getAuth failed:", err);
+  } catch {
     cachedAuth = null;
     return null;
   }

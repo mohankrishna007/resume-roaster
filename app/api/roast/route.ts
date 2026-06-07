@@ -38,10 +38,6 @@ function classifyProviderError(err: unknown): { status: number; message: string 
 }
 
 export async function POST(request: Request) {
-  console.debug("[roast] /api/roast POST received", {
-    url: request.url,
-    method: request.method,
-  });
   let stage: "parse" | "llm" = "parse";
   try {
     // Identify the caller before doing any work. Signed-in users get a higher
@@ -114,9 +110,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ...result, shareId });
   } catch (err) {
-    // Log the real reason server-side, return a clean message to the user.
-    console.error(`[roast] failed at ${stage}:`, err);
-
     if (stage === "parse") {
       return NextResponse.json(
         { error: "We couldn't open this PDF. Make sure it's not password-protected and try again." },

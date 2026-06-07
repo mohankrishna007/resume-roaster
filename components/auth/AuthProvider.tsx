@@ -11,7 +11,6 @@ import {
   type ReactNode,
 } from "react";
 import { signInWithGoogle, signOutUser, subscribeToAuth, consumeRedirectResult, type User } from "@/lib/firebase/auth-client";
-import { authLog } from "@/lib/auth-log-client";
 
 interface AuthState {
   user: User | null;
@@ -40,18 +39,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const resultUser = await consumeRedirectResult();
         if (active && resultUser) {
-          authLog("debug", "[auth] consumeRedirectResult succeeded", { uid: resultUser.uid });
           setUser(resultUser);
         }
-      } catch (err) {
-        authLog("error", "[auth] consumeRedirectResult threw", { error: String(err) });
+      } catch {
+        // Ignore redirect result errors and continue with listener subscription.
       }
 
       if (!active) return;
 
       // Subscribe only after redirect processing to avoid redirect-result races.
       unsubscribe = subscribeToAuth((u) => {
-        authLog("debug", "[auth] onAuthStateChanged", { user: u?.uid });
         setUser(u);
         setReady(true);
       });
@@ -68,16 +65,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSigningIn(true);
 
     try {
-      const signedInUser = await signInWithGoogle();
-      // On mobile, signInWithRedirect navigates away — we never reach here
-      // On desktop, we resolve immediately with a user or null
-      if (signedInUser) {
-        authLog("debug", "[auth] signIn succeeded", { uid: signedInUser.uid });
-      }
-    } catch (err) {
+      await signInWithGoogle();
+    } catch {
       // Only reset signingIn on actual error (not redirect)
       // If sign-in failed and user stayed on page, they can retry
-      authLog("error", "[auth] sign-in failed", { error: String(err) });
       setSigningIn(false);
     }
     // No finally block — intentional. On mobile redirect, signingIn stays true
@@ -87,9 +78,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(async () => {
     try {
       await signOutUser();
-      authLog("debug", "[auth] signOut succeeded");
-    } catch (err) {
-      authLog("error", "[auth] sign-out failed", { error: String(err) });
+      if (typeof window !== "undefined") {
+        window.location.reload();
+      }
+    } catch {
+      // Ignore sign-out errors.
     }
   }, []);
 

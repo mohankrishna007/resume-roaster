@@ -35,8 +35,7 @@ export function getDb(): Firestore | null {
         });
     cached = getFirestore(app);
     return cached;
-  } catch (err) {
-    console.error("[firestore-admin] init failed:", err);
+  } catch {
     cached = null;
     return null;
   }

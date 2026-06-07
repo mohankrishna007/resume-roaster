@@ -46,20 +46,12 @@ export class OpenAIProvider implements LLMProvider {
     const choice = completion.choices[0];
     const raw = choice?.message?.content;
     const finishReason = choice?.finish_reason;
-    const usage = completion.usage;
-
-    console.log(
-      `[${this.name}] finish=${finishReason} ` +
-        `tokens in=${usage?.prompt_tokens} out=${usage?.completion_tokens} ` +
-        `reasoning=${(usage as { completion_tokens_details?: { reasoning_tokens?: number } } | undefined)?.completion_tokens_details?.reasoning_tokens ?? 0}`,
-    );
 
     if (!raw) {
       throw new Error(`${this.name} returned an empty response (finish=${finishReason})`);
     }
 
     if (finishReason === "length") {
-      console.error(`[${this.name}] truncated output (last 200 chars): ${raw.slice(-200)}`);
       throw new Error(`${this.name} output was truncated — increase max_completion_tokens or shrink schema`);
     }
 

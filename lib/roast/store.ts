@@ -56,8 +56,7 @@ export async function saveRoast(
       email: meta.email ?? null,
     });
     return id;
-  } catch (err) {
-    console.error("[roast-store] save failed:", err);
+  } catch {
     return null;
   }
 }
@@ -82,8 +81,7 @@ export async function getRoast(id: string): Promise<StoredRoast | null> {
       result: data.result as RoastResult,
       meta: { ...(data.meta as RoastMeta), created_at_ms: createdAt },
     };
-  } catch (err) {
-    console.error("[roast-store] fetch failed:", err);
+  } catch {
     return null;
   }
 }

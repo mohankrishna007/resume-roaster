@@ -92,8 +92,7 @@ async function runTxn(
       );
       return { allowed: true, remaining: Math.max(0, limit - current - 1) };
     });
-  } catch (err) {
-    console.error("[rate-limit] txn failed, failing open:", err);
+  } catch {
     return { allowed: true, remaining: -1 };
   }
 }

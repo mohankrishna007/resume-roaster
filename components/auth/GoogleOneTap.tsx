@@ -2,28 +2,9 @@
 
 import { useEffect } from "react";
 import { signInWithGoogleIdToken } from "@/lib/firebase/auth-client";
-import { authLog } from "@/lib/auth-log-client";
 import { useAuth } from "./AuthProvider";
 
 const GIS_SRC = "https://accounts.google.com/gsi/client";
-
-declare global {
-  interface Window {
-    google?: {
-      accounts?: {
-        id?: {
-          initialize: (config: {
-            client_id: string;
-            callback: (response: { credential?: string }) => void;
-            auto_select?: boolean;
-            use_fedcm_for_prompt?: boolean;
-          }) => void;
-          prompt: () => void;
-        };
-      };
-    };
-  }
-}
 
 function loadGoogleIdentityScript(): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -62,7 +43,6 @@ export function GoogleOneTap() {
     if (typeof window === "undefined") return;
     // Google One Tap doesn't work reliably on mobile; skip initialization
     if (isMobileBrowser()) {
-      authLog("debug", "[auth] GoogleOneTap skipped on mobile browser");
       return;
     }
 
@@ -71,15 +51,24 @@ export function GoogleOneTap() {
     const initOneTap = async () => {
       try {
         await loadGoogleIdentityScript();
-      } catch (err) {
-        authLog("error", "[auth] GoogleOneTap script load failed", { error: String(err) });
+      } catch {
         return;
       }
 
       if (!active) return;
-      const gid = window.google?.accounts?.id;
-      if (!gid) {
-        authLog("error", "[auth] GoogleOneTap initialization failed: google.accounts.id unavailable");
+      const gid = window.google?.accounts?.id as
+        | {
+            initialize?: (config: {
+              client_id: string;
+              callback: (response: { credential?: string }) => void;
+              auto_select?: boolean;
+              use_fedcm_for_prompt?: boolean;
+            }) => void;
+            prompt?: () => void;
+          }
+        | undefined;
+
+      if (!gid?.initialize || !gid.prompt) {
         return;
       }
 
@@ -94,16 +83,16 @@ export function GoogleOneTap() {
             if (!response?.credential) return;
             try {
               await signInWithGoogleIdToken(response.credential);
-            } catch (err) {
-              authLog("error", "[auth] GoogleOneTap credential exchange failed", { error: String(err) });
+            } catch {
+              // Ignore One Tap credential errors.
             }
           },
           auto_select: true,
           use_fedcm_for_prompt: supportsFedCM,
         });
         gid.prompt();
-      } catch (err) {
-        authLog("error", "[auth] GoogleOneTap prompt failed", { error: String(err) });
+      } catch {
+        // Ignore One Tap prompt errors.
       }
     };
 
