@@ -73,7 +73,7 @@ export default function Home() {
                   priority
                   className="h-8 w-8 sm:h-9 sm:w-9"
                 />
-                <p className="font-display text-base font-bold tracking-tight sm:text-lg">
+                <p className="font-display text-lg font-bold tracking-tight sm:text-2xl md:text-3xl">
                   Roastume
                 </p>
               </div>
