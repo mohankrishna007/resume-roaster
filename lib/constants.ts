@@ -9,7 +9,6 @@ export const TICKER_LINES = [
   "“synergy” got removed from my vocabulary forever",
   "first tool that didn’t try to sell me a course",
   "my friend opened it and went quiet for 4 minutes",
-  "“led cross-functional initiatives” → straight to jail",
   "i was warned. i still wasn’t ready.",
   "fixed two bullets, got a callback the same week",
   "less LinkedIn coach, more older sibling energy",

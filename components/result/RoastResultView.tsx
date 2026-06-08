@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Flame, RefreshCcw, Share2, LogOut } from "lucide-react";
+import { Flame, RefreshCcw } from "lucide-react";
 import type { RoastResult } from "@/types/roast";
 import {
   HeroRoast,
@@ -19,7 +19,6 @@ import { CONTAINER_TRANSITION } from "@/lib/constants";
 import { useShareRoast } from "@/hooks/useShareRoast";
 import { useAuth } from "../auth/AuthProvider";
 import { SignInGate } from "../auth/SignInGate";
-import { SignOutConfirmDialog } from "../auth/SignOutConfirmDialog";
 import { SectionKicker } from "../ui/SectionKicker";
 
 /** Fraction of items shown to anonymous users before the sign-in gate. */
@@ -37,9 +36,7 @@ export function RoastResultView({
   shareId,
   onReset,
 }: RoastResultViewProps) {
-  const { user, signOut } = useAuth();
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const { user } = useAuth();
   const shareRoast = useShareRoast();
   const allRoasts = roastResult.roasts;
   const freeRoasts = Math.max(1, Math.ceil(allRoasts.length * FREE_FRACTION));
@@ -50,36 +47,7 @@ export function RoastResultView({
     void shareRoast(roastResult, shareId, "topbar");
   };
 
-  useEffect(() => {
-    if (!user) return;
 
-    const timeout = window.setTimeout(() => {
-      setConfirmOpen(false);
-      setBusy(false);
-    }, 0);
-
-    return () => {
-      window.clearTimeout(timeout);
-    };
-  }, [user]);
-
-  const openConfirm = useCallback(() => {
-    setConfirmOpen(true);
-  }, []);
-
-  const closeConfirm = useCallback(() => {
-    if (!busy) setConfirmOpen(false);
-  }, [busy]);
-
-  const handleConfirm = useCallback(async () => {
-    setBusy(true);
-    try {
-      await signOut();
-    } finally {
-      setBusy(false);
-      setConfirmOpen(false);
-    }
-  }, [signOut]);
 
   return (
     <motion.div
@@ -91,7 +59,7 @@ export function RoastResultView({
       <div className="bar-gradient sticky top-0 z-30 border-b border-[var(--line)] bg-[#0b0810]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8 lg:max-w-6xl lg:px-12 2xl:max-w-7xl">
           <div className="flex min-w-0 items-center gap-2.5">
-            <span className="inline-flex shrink-0 items-center justify-center rounded-md bg-white/95 p-1 shadow-sm ring-1 ring-black/5">
+            <Link href="/" aria-label="Home" className="inline-flex shrink-0 items-center justify-center rounded-md p-0 !cursor-pointer">
               <Image
                 src="/icon.png"
                 alt=""
@@ -99,7 +67,7 @@ export function RoastResultView({
                 height={28}
                 className="h-7 w-7 rounded-sm"
               />
-            </span>
+            </Link>
             <p className="truncate text-sm font-semibold text-[var(--ink-soft)]">
               <span className="text-[var(--ink-mute)]">roast for</span>{" "}
               {roastResult.candidate.name}
@@ -118,37 +86,13 @@ export function RoastResultView({
             ) : (
               <Link
                 href="/"
-                className="btn-bar max-sm:btn-bar-icon text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                className="btn-bar btn-bar-primary max-sm:btn-bar-icon"
                 aria-label="Roast your own"
               >
                 <Flame className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Roast mine</span>
               </Link>
             )}
-            {user && (
-              <>
-                <button
-                  type="button"
-                  onClick={openConfirm}
-                  className="btn-bar btn-bar-ghost max-sm:btn-bar-icon"
-                  title={user.email ?? undefined}
-                  aria-label="Sign out"
-                >
-                  <LogOut className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Sign out</span>
-                </button>
-                <SignOutConfirmDialog
-                  open={confirmOpen}
-                  busy={busy}
-                  onConfirm={handleConfirm}
-                  onCancel={closeConfirm}
-                />
-              </>
-            )}
-            <button onClick={handleShare} className="btn-bar btn-bar-primary">
-              <Share2 className="h-3.5 w-3.5" />
-              Share
-            </button>
           </div>
         </div>
       </div>

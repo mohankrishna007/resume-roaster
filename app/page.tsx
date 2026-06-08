@@ -31,6 +31,11 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Flame, RefreshCcw, Wrench, HeartCrack } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const ShareAppButton = dynamic(() => import("@/components/ShareAppButton"), {
+  ssr: false,
+});
 
 export default function Home() {
   const { step, uploadedResume, roastResult, shareId, handleUpload, reset, error } =
@@ -203,7 +208,7 @@ export default function Home() {
 
                 {/* tiny human reassurance — not a card */}
                 <p className="mt-5 text-sm leading-6 text-[var(--ink-mute)]">
-                  PDF only · roasts are saved so you can share them
+                  Share your resume roast with friends and get their reactions
                 </p>
               </section>
 
@@ -368,26 +373,35 @@ export default function Home() {
                   case you laugh. Best case you fix the one line that&apos;s
                   been quietly costing you interviews.
                 </p>
-                <div className="mt-7 inline-block">
-                  <MagneticButton
-                    href="#top"
-                    ariaLabel="Upload your resume and get roasted"
-                    className="btn-hot relative"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                    strength={0.4}
-                  >
-                    <Flame className="h-4 w-4" />
-                    Roast my resume
-                  </MagneticButton>
+                <div className="mt-7 flex flex-col items-center gap-8">
+                  <div className="flex-shrink-0">
+                    <MagneticButton
+                      href="#top"
+                      ariaLabel="Upload your resume and get roasted"
+                      className="btn-hot relative"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      strength={0.4}
+                    >
+                      <Flame className="h-4 w-4" />
+                      Roast my resume
+                    </MagneticButton>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <ShareAppButton iconOnly />
+                  </div>
                 </div>
               </section>
               </RevealOnScroll>
 
               <footer className="border-t border-[var(--line)] px-4 py-7 text-center text-xs leading-5 text-[var(--ink-mute)] sm:px-0 sm:py-9">
-                Resume Roaster · AI resume review · made for people who already kinda know · &copy; {new Date().getFullYear()}
+                <div className="mx-auto max-w-3xl flex items-center justify-between gap-4">
+                  <div className="mx-auto">
+                    Resume Roaster · AI resume review · made for people who already kinda know · &copy; {new Date().getFullYear()}
+                  </div>
+                </div>
               </footer>
             </main>
           </motion.div>

@@ -31,13 +31,14 @@ export function buildShareContent(
   const text =
     `${firstName}'s resume scored ${score}/10 on Resume Roaster 🔥\n\n` +
     `"${quote}"\n\n` +
-    `Brutally honest AI resume review — drop your PDF, get the truth in 30 seconds.`;
+    `Brutally honest AI resume review — drop your PDF, get the truth in 30 seconds.` +
+    `\n\n Check it out: ${shareUrl}`;
 
   return {
     title,
     text,
     url: shareUrl,
-    full: `${text}\n${shareUrl}`,
+    full: `${text}`,
   };
 }
 

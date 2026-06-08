@@ -108,7 +108,7 @@ export function UploadZone({ onUpload, isLoading = false, selectedFile }: Upload
                 ? "nope — PDFs only"
                 : isDragActive
                   ? "yes. let it go 👇"
-                  : selectedFile ?? "Drop your resume in. We dare you."}
+                  : selectedFile ?? "Drop your resume. Get roasted."}
             </p>
             <p className="mt-1 text-xs text-[var(--ink-mute)] sm:text-sm">
               or tap to upload · PDF only · max 5 MB · nothing stored
