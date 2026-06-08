@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { RoastResult } from "@/types/roast";
 import { FADE_UP_ENTER } from "@/lib/motion";
 import { SectionKicker } from "../ui/SectionKicker";
+import { FormattedText } from "../ui/FormattedText";
 
 interface HeroRoastProps {
   archetype: RoastResult["archetype"];
@@ -21,11 +22,11 @@ export function HeroRoast({ archetype, candidate }: HeroRoastProps) {
       </h1>
 
       <p className="mt-6 text-[0.95rem] leading-7 text-[var(--ink-soft)] sm:text-base md:text-lg sm:leading-8">
-        {archetype.tagline}
+        <FormattedText text={archetype.tagline} />
       </p>
 
       <p className="pull-quote mt-8 text-[1.35rem] leading-[1.18] text-[var(--ink)] sm:text-2xl md:text-3xl lg:text-4xl sm:leading-[1.15]">
-        “{archetype.opener}”
+        “<FormattedText text={archetype.opener} />”
       </p>
     </motion.section>
   );

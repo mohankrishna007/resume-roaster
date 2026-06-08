@@ -21,8 +21,8 @@ import { useAuth } from "../auth/AuthProvider";
 import { SignInGate } from "../auth/SignInGate";
 import { SectionKicker } from "../ui/SectionKicker";
 
-/** Fraction of items shown to anonymous users before the sign-in gate. */
-const FREE_FRACTION = 0.6;
+/** Max number of items shown to anonymous users before the sign-in gate. */
+const MAX_FREE_ROASTS = 3;
 
 interface RoastResultViewProps {
   roastResult: RoastResult;
@@ -39,9 +39,8 @@ export function RoastResultView({
   const { user } = useAuth();
  
   const allRoasts = roastResult.roasts;
-  const freeRoasts = Math.max(1, Math.ceil(allRoasts.length * FREE_FRACTION));
-  const isLocked = !user && allRoasts.length > freeRoasts;
-  const visibleRoasts = isLocked ? allRoasts.slice(0, freeRoasts) : allRoasts;
+  const isLocked = !user && allRoasts.length > MAX_FREE_ROASTS;
+  const visibleRoasts = isLocked ? allRoasts.slice(0, MAX_FREE_ROASTS) : allRoasts;
 
 
 

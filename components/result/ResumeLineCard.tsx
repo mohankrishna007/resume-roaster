@@ -5,6 +5,7 @@ import { fadeUpStaggered } from "@/lib/motion";
 import { SEVERITY_META, type SevKey } from "@/lib/roast/severity";
 import type { Severity } from "@/types/roast";
 import { AnnotationLabel } from "../ui/AnnotationLabel";
+import { FormattedText } from "../ui/FormattedText";
 
 interface ResumeLineCardProps {
   /** Drives the visual treatment + icon. */
@@ -43,6 +44,10 @@ export function ResumeLineCard({
   const meta = SEVERITY_META[severity];
   const lineNum = String(index + 1).padStart(2, "0");
 
+  const renderFormatted = (text: string) => {
+    return <FormattedText text={text} />;
+  };
+
   if (!resumeLine) {
     return (
       <motion.div
@@ -55,11 +60,11 @@ export function ResumeLineCard({
         </AnnotationLabel>
         {reaction && (
           <p className="mt-2 text-sm font-semibold text-[var(--ink-soft)]">
-            {reaction}
+            {renderFormatted(reaction)}
           </p>
         )}
         <p className="font-display mt-2 text-lg leading-[1.3] font-semibold sm:text-xl md:text-[1.3rem] lg:text-[1.4rem]">
-          {body}
+          {renderFormatted(body)}
         </p>
       </motion.div>
     );
@@ -82,11 +87,11 @@ export function ResumeLineCard({
           <AnnotationLabel>{annotationLabel}</AnnotationLabel>
           {reaction && (
             <p className="mt-2 text-sm font-semibold text-[var(--ink-soft)]">
-              {reaction}
+              {renderFormatted(reaction)}
             </p>
           )}
           <p className="font-display mt-2 text-lg leading-[1.3] font-semibold sm:text-xl md:text-[1.3rem] lg:text-[1.4rem]">
-            {body}
+            {renderFormatted(body)}
           </p>
         </div>
         {footer}

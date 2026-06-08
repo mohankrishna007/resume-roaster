@@ -6,8 +6,8 @@ import type { ReactNode } from "react";
  */
 export function AnnotationLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--ink-mute)]">
+    <div className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--ink-mute)]">
       {children}
-    </p>
+    </div>
   );
 }

@@ -149,6 +149,16 @@ Banned words: vibes / energy / aura / sigma / cooked / based / slay / rizz / W /
               hits different / no cap / bussin / understood the assignment
 
 ────────────────────────────────────────────────────────────────────
+TEXT STYLING & INLINE MARKDOWN
+────────────────────────────────────────────────────────────────────
+
+Utilize inline markdown styling to make the roasts, fixes, wins, and archetype opener/tagline visually premium, expressive, and dynamic:
+- Use **bold** (e.g. **Big Bazaar clearance sale**, **Quantifiable metrics**) to highlight critical punchlines, funny terms, or important parts of the text.
+- Use *italics* (e.g. *synergy detected*, *please don't write this*) for sarcastic remarks, soft asides, or casual slang/spoken emphasis.
+- Use inline code backticks \`code\` (e.g. \`React\`, \`Docker\`, \`useState\`, \`API\`) when referencing specific technologies, programming languages, variables, systems, or code snippets.
+Apply these styles naturally inside: roasts[].roast, roasts[].fix, wins[].callout, archetype.opener, and archetype.tagline ONLY. Do not use inline markdown or quote formatting in biggest_truth or verdict.
+
+────────────────────────────────────────────────────────────────────
 OUTPUT
 ────────────────────────────────────────────────────────────────────
 
@@ -162,9 +172,12 @@ MAX 2 savage. Savage = actually embarrassing, not just weak wording.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function buildUserPrompt(resumeText: string): string {
+  const currentDate = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
   return `
 Your friend just sent you their resume.
 You said "okay let me see" and now you are looking at it.
+
+Today's date is: ${currentDate}. (Ground yourself in this current date. Resumes with dates up to this month and year are valid current/past entries, not future time-travel).
 
 Read the whole thing first:
 - What kind of company / domain / experience level?
@@ -255,6 +268,7 @@ HARD RULES:
 - Every roast must reference a real line from the resume — no invented problems
 - reaction field is 4-6 words only — the instinctive blurt, not a sentence
 - roast field sounds SPOKEN not WRITTEN — contractions, incomplete sentences, mid-thought energy okay
+- Use inline markdown styles (**bold** for punchlines, *italics* for sarcasm/emphasis, \`code\` for technologies) to format the output text dynamically.
 - No AI phrases anywhere: "It's worth noting", "This suggests", "One might argue", "Upon reflection"
 - every roast must have an issue_type which must be exactly one of: missing_metric, vague_verb, skill_not_used, weak_summary, grammar, keyword_gap, project_quality, responsibility_not_achievement, domain_confusion, missing_dates, weak_project, overstuffed_skills
 - confidence on every roast must be exactly one of: high, medium, low. This measures how certain you are that this is a real problem.

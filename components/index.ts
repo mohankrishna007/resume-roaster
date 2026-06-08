@@ -37,3 +37,5 @@ export { UploadZone } from "./upload/UploadZone";
 // ui primitives
 export { AnnotationLabel } from "./ui/AnnotationLabel";
 export { SectionKicker } from "./ui/SectionKicker";
+export { FormattedText } from "./ui/FormattedText";
+
