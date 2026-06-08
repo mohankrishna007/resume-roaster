@@ -115,6 +115,7 @@ export default async function OgImage({ params }: Params) {
         <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
           <div
             style={{
+              display: "block",
               fontSize: 22,
               textTransform: "uppercase",
               letterSpacing: 4,
@@ -126,6 +127,7 @@ export default async function OgImage({ params }: Params) {
           </div>
           <div
             style={{
+              display: "block",
               fontSize: 72,
               fontWeight: 800,
               lineHeight: 1.05,
@@ -137,6 +139,7 @@ export default async function OgImage({ params }: Params) {
           </div>
           <div
             style={{
+              display: "block",
               fontSize: 26,
               color: "#e9d9c4",
               maxWidth: 1000,

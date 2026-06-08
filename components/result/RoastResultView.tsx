@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+ 
 import { motion } from "framer-motion";
 import { Flame, RefreshCcw } from "lucide-react";
 import type { RoastResult } from "@/types/roast";
@@ -16,7 +16,7 @@ import {
   VerdictPanel,
 } from "@/components";
 import { CONTAINER_TRANSITION } from "@/lib/constants";
-import { useShareRoast } from "@/hooks/useShareRoast";
+ 
 import { useAuth } from "../auth/AuthProvider";
 import { SignInGate } from "../auth/SignInGate";
 import { SectionKicker } from "../ui/SectionKicker";
@@ -37,15 +37,13 @@ export function RoastResultView({
   onReset,
 }: RoastResultViewProps) {
   const { user } = useAuth();
-  const shareRoast = useShareRoast();
+ 
   const allRoasts = roastResult.roasts;
   const freeRoasts = Math.max(1, Math.ceil(allRoasts.length * FREE_FRACTION));
   const isLocked = !user && allRoasts.length > freeRoasts;
   const visibleRoasts = isLocked ? allRoasts.slice(0, freeRoasts) : allRoasts;
 
-  const handleShare = () => {
-    void shareRoast(roastResult, shareId, "topbar");
-  };
+
 
 
 
