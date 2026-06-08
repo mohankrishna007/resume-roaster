@@ -14,7 +14,7 @@ export interface SeverityMeta {
  * Maps the LLM-emitted severity to the visual treatment + icon used by
  * RoastCard, PositivePoints, and the demo on the landing page.
  */
-export const SEVERITY_META: Record<Severity, SeverityMeta> = {
+export const SEVERITY_META: Record<Severity | "actually_good", SeverityMeta> = {
   mild: { key: "mild", label: "mild", Icon: Zap },
   medium: { key: "medium", label: "medium heat", Icon: Flame },
   savage: { key: "savage", label: "savage", Icon: Skull },

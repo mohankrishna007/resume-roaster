@@ -15,6 +15,7 @@ export interface RoastMeta {
   referer?: string;
   uid?: string;
   email?: string;
+  prompt_version?: string;
 }
 
 export interface StoredRoast {
@@ -54,6 +55,7 @@ export async function saveRoast(
       roast_count: result.roasts.length,
       uid: meta.uid ?? null,
       email: meta.email ?? null,
+      prompt_version: meta.prompt_version ?? null,
     });
     return id;
   } catch {

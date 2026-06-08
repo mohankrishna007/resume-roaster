@@ -104,7 +104,7 @@ export function RoastResultView({
 
           <div className="my-12 rule-dotted" />
 
-          <ScoresDisplay scores={roastResult.scores} />
+          <ScoresDisplay scores={roastResult.scores} section_scores={roastResult.section_scores} />
 
           <div className="my-12 rule-dotted" />
 
@@ -118,7 +118,9 @@ export function RoastResultView({
             <p className="mt-3 text-[var(--ink-soft)]">
               {isLocked
                 ? "A taste of the breakdown — sign in to see the rest."
-                : `${allRoasts.length} moments your resume should probably hear.`}
+                : allRoasts.length === 0
+                  ? "Your resume is shockingly clean. We couldn't find a single thing to roast. (Or did you pay us off?)"
+                  : `${allRoasts.length} moments your resume should probably hear.`}
             </p>
           </div>
         </div>

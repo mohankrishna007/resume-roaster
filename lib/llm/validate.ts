@@ -1,6 +1,6 @@
-import type { RoastResult, Severity, Win } from "@/types/roast";
+import type { RoastResult, Severity, Win, IssueType, Confidence, Roast } from "@/types/roast";
 
-const SEVERITIES: Severity[] = ["mild", "medium", "savage", "actually_good"];
+const SEVERITIES: Severity[] = ["mild", "medium", "savage"];
 
 const SEVERITY_ALIASES: Record<string, Severity> = {
   mild: "mild",
@@ -17,18 +17,60 @@ const SEVERITY_ALIASES: Record<string, Severity> = {
   hot: "savage",
   scorching: "savage",
   ruthless: "savage",
-  actually_good: "actually_good",
-  good: "actually_good",
-  positive: "actually_good",
-  praise: "actually_good",
-  compliment: "actually_good",
+  actually_good: "mild",
+  good: "mild",
+  positive: "mild",
+  praise: "mild",
+  compliment: "mild",
 };
+
+const ISSUE_TYPES: IssueType[] = [
+  "missing_metric",
+  "vague_verb",
+  "skill_not_used",
+  "weak_summary",
+  "grammar",
+  "keyword_gap",
+  "project_quality",
+  "responsibility_not_achievement",
+  "domain_confusion",
+  "missing_dates",
+  "weak_project",
+  "overstuffed_skills",
+];
+
+const CONFIDENCES: Confidence[] = ["high", "medium", "low"];
 
 function coerceSeverity(v: unknown): Severity {
   if (typeof v !== "string") return "medium";
   const key = v.toLowerCase().trim().replace(/[\s-]+/g, "_");
   if (SEVERITIES.includes(key as Severity)) return key as Severity;
   return SEVERITY_ALIASES[key] ?? "medium";
+}
+
+function coerceIssueType(v: unknown): IssueType {
+  if (typeof v !== "string") return "project_quality";
+  const normalized = v.toLowerCase().trim().replace(/[\s-]+/g, "_");
+  if (ISSUE_TYPES.includes(normalized as IssueType)) return normalized as IssueType;
+  return "project_quality";
+}
+
+function coerceConfidence(v: unknown): Confidence {
+  if (typeof v !== "string") return "medium";
+  const normalized = v.toLowerCase().trim();
+  if (CONFIDENCES.includes(normalized as Confidence)) return normalized as Confidence;
+  return "medium";
+}
+
+function parseMissingFields(v: unknown): string[] {
+  if (!Array.isArray(v)) return [];
+  const out: string[] = [];
+  v.forEach((item) => {
+    if (typeof item === "string" && item.trim()) {
+      out.push(item.trim());
+    }
+  });
+  return out;
 }
 
 function isObject(v: unknown): v is Record<string, unknown> {
@@ -39,28 +81,39 @@ function fail(path: string): never {
   throw new Error(`Roast response missing or invalid field: ${path}`);
 }
 
-function str(v: unknown, path: string): string {
-  if (typeof v !== "string" || v.trim() === "") fail(path);
-  return v;
+function coerceString(v: unknown, fallback: string): string {
+  if (typeof v === "string" && v.trim() !== "") return v.trim();
+  if (typeof v === "number" || typeof v === "boolean") return String(v);
+  return fallback;
 }
 
-function num(v: unknown, path: string): number {
-  if (typeof v !== "number" || Number.isNaN(v)) fail(path);
-  return v;
+function coerceNum(v: unknown, fallback = 0): number {
+  if (typeof v === "number" && !Number.isNaN(v)) return v;
+  if (typeof v === "string") {
+    const parsed = Number.parseFloat(v);
+    if (!Number.isNaN(parsed)) return Math.round(parsed);
+  }
+  return fallback;
 }
 
-function strArray(v: unknown, path: string): string[] {
-  if (!Array.isArray(v)) fail(path);
-  return v.map((item, i) => str(item, `${path}[${i}]`));
+function parseStringArray(v: unknown): string[] {
+  if (!Array.isArray(v)) return [];
+  const out: string[] = [];
+  v.forEach((item) => {
+    if (typeof item === "string" && item.trim()) {
+      out.push(item.trim());
+    } else if (typeof item === "number" || typeof item === "boolean") {
+      out.push(String(item));
+    }
+  });
+  return out;
 }
 
 function parseWins(v: unknown): Win[] {
   if (!Array.isArray(v)) return [];
   const out: Win[] = [];
-  v.forEach((item, i) => {
+  v.forEach((item) => {
     if (typeof item === "string" && item.trim()) {
-      // legacy/fallback: a flat string becomes the callout, leaving the other
-      // two fields blank so the UI can render whatever's available.
       out.push({ resume_line: "", reaction: "", callout: item.trim() });
       return;
     }
@@ -73,10 +126,8 @@ function parseWins(v: unknown): Win[] {
         : typeof item.note === "string"
           ? item.note.trim()
           : "";
-    // skip empties so the section can stay clean if the model returns nothing useful
     if (!resume_line && !reaction && !callout) return;
     out.push({ resume_line, reaction, callout });
-    void i;
   });
   return out;
 }
@@ -84,24 +135,36 @@ function parseWins(v: unknown): Win[] {
 export function validateRoastResult(input: unknown): RoastResult {
   if (!isObject(input)) fail("(root)");
 
-  const archetype = isObject(input.archetype) ? input.archetype : fail("archetype");
-  const candidate = isObject(input.candidate) ? input.candidate : fail("candidate");
-  const scores = isObject(input.scores) ? input.scores : fail("scores");
-  const biggest_truth = isObject(input.biggest_truth) ? input.biggest_truth : fail("biggest_truth");
-  const verdict = isObject(input.verdict) ? input.verdict : fail("verdict");
+  const archetype = isObject(input.archetype) ? input.archetype : {};
+  const candidate = isObject(input.candidate) ? input.candidate : {};
+  const scores = isObject(input.scores) ? input.scores : {};
+  const section_scores = isObject(input.section_scores) ? input.section_scores : {};
+  const biggest_truth = isObject(input.biggest_truth) ? input.biggest_truth : {};
+  const verdict = isObject(input.verdict) ? input.verdict : {};
 
-  if (!Array.isArray(input.roasts) || input.roasts.length === 0) fail("roasts");
+  const roasts: Roast[] = [];
+  if (Array.isArray(input.roasts)) {
+    input.roasts.forEach((r) => {
+      if (!isObject(r)) return;
+      const resume_line = coerceString(r.resume_line, "").trim();
+      const roast = coerceString(r.roast, "").trim();
+      
+      // Filter out invalid items where mandatory textual fields are empty
+      if (!resume_line || !roast) return;
 
-  const roasts = input.roasts.map((r, i) => {
-    if (!isObject(r)) fail(`roasts[${i}]`);
-    return {
-      resume_line: str(r.resume_line, `roasts[${i}].resume_line`),
-      reaction: str(r.reaction, `roasts[${i}].reaction`),
-      roast: str(r.roast, `roasts[${i}].roast`),
-      severity: coerceSeverity(r.severity),
-      fix: str(r.fix, `roasts[${i}].fix`),
-    };
-  });
+      roasts.push({
+        resume_line,
+        reaction: coerceString(r.reaction, "bro"),
+        roast,
+        severity: coerceSeverity(r.severity),
+        fix: coerceString(r.fix, "Rewrite this section to focus on metrics and impact."),
+        issue_type: coerceIssueType(r.issue_type),
+        confidence: coerceConfidence(r.confidence),
+        rewrite_candidate: typeof r.rewrite_candidate === "boolean" ? r.rewrite_candidate : false,
+        missing_fields: parseMissingFields(r.missing_fields),
+      });
+    });
+  }
 
   let education: { degree: string; college: string } | undefined;
   if (isObject(candidate.education)) {
@@ -112,35 +175,41 @@ export function validateRoastResult(input: unknown): RoastResult {
 
   return {
     archetype: {
-      title: str(archetype.title, "archetype.title"),
-      tagline: str(archetype.tagline, "archetype.tagline"),
-      opener: str(archetype.opener, "archetype.opener"),
+      title: coerceString(archetype.title, "Resume Review"),
+      tagline: coerceString(archetype.tagline, "Needs a friend's advice"),
+      opener: coerceString(archetype.opener, "Let me take a look at this..."),
     },
     candidate: {
-      name: str(candidate.name, "candidate.name"),
-      experience_level: str(candidate.experience_level, "candidate.experience_level"),
-      experience_years: str(candidate.experience_years, "candidate.experience_years"),
-      location: strArray(candidate.location, "candidate.location"),
+      name: coerceString(candidate.name, "Anonymous"),
+      experience_level: coerceString(candidate.experience_level, "junior"),
+      experience_years: coerceString(candidate.experience_years, "0"),
+      location: parseStringArray(candidate.location),
       education,
-      domain_focus: strArray(candidate.domain_focus, "candidate.domain_focus"),
+      domain_focus: parseStringArray(candidate.domain_focus),
     },
     scores: {
-      overall: num(scores.overall, "scores.overall"),
-      resume_quality: num(scores.resume_quality, "scores.resume_quality"),
-      experience_strength: num(scores.experience_strength, "scores.experience_strength"),
-      buzzword_count: num(scores.buzzword_count, "scores.buzzword_count"),
-      recruiter_scroll_seconds: num(scores.recruiter_scroll_seconds, "scores.recruiter_scroll_seconds"),
+      overall: coerceNum(scores.overall, 5),
+      resume_quality: coerceNum(scores.resume_quality, 5),
+      experience_strength: coerceNum(scores.experience_strength, 5),
+      buzzword_count: coerceNum(scores.buzzword_count, 0),
+      attention_score: coerceNum(scores.attention_score, 5),
+    },
+    section_scores: {
+      summary: coerceNum(section_scores.summary, 5),
+      experience: coerceNum(section_scores.experience, 5),
+      skills: coerceNum(section_scores.skills, 5),
+      projects: coerceNum(section_scores.projects, 5),
     },
     roasts,
     wins: parseWins(input.wins),
     biggest_truth: {
-      headline: str(biggest_truth.headline, "biggest_truth.headline"),
-      explanation: str(biggest_truth.explanation, "biggest_truth.explanation"),
-      one_liner: str(biggest_truth.one_liner, "biggest_truth.one_liner"),
+      headline: coerceString(biggest_truth.headline, "First Impression"),
+      explanation: coerceString(biggest_truth.explanation, "Your resume has some structural opportunities."),
+      one_liner: coerceString(biggest_truth.one_liner, "Let's fix this up."),
     },
     verdict: {
-      headline: str(verdict.headline, "verdict.headline"),
-      share_quote: str(verdict.share_quote, "verdict.share_quote"),
+      headline: coerceString(verdict.headline, "In Progress"),
+      share_quote: coerceString(verdict.share_quote, "My friend looked at my resume and it was an experience."),
     },
   };
 }

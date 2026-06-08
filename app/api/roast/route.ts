@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 import { extractPdfText } from "@/lib/roast/pdf-parser";
 import { getProvider } from "@/lib/llm";
+import { PROMPT_VERSION } from "@/lib/llm/prompt";
 import { saveRoast } from "@/lib/roast/store";
 import { verifyBearerToken } from "@/lib/firebase/auth-admin";
 import { checkAndConsumeRoastQuota } from "@/lib/roast/rate-limit";
@@ -104,6 +105,7 @@ export async function POST(request: Request) {
       provider: process.env.LLM_PROVIDER ?? "openai",
       user_agent: request.headers.get("user-agent") ?? undefined,
       referer: request.headers.get("referer") ?? undefined,
+      prompt_version: PROMPT_VERSION,
       // Firestore rejects `undefined` — only include uid/email when signed in.
       ...(verified?.uid ? { uid: verified.uid } : {}),
       ...(verified?.email ? { email: verified.email } : {}),

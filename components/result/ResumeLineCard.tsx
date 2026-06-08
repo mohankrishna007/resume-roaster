@@ -8,7 +8,7 @@ import { AnnotationLabel } from "../ui/AnnotationLabel";
 
 interface ResumeLineCardProps {
   /** Drives the visual treatment + icon. */
-  severity: Severity;
+  severity: Severity | "actually_good";
   /** 1-based index — used both for the stagger and the L01/W01 stamp. */
   index: number;
   /** Prefix on the doc stamp — "L" for roasts, "W" for wins. */

@@ -8,6 +8,7 @@ import { SectionKicker } from "../ui/SectionKicker";
 
 interface ScoresProps {
   scores: RoastResult["scores"];
+  section_scores: RoastResult["section_scores"];
 }
 
 function CountUp({ to, duration = 1.1, delay = 0 }: { to: number; duration?: number; delay?: number }) {
@@ -56,6 +57,29 @@ function Ring({ score, label, delay }: { score: number; label: string; delay: nu
   );
 }
 
+function SectionProgress({ score, label }: { score: number; label: string }) {
+  const pct = (score / 10) * 100;
+  const color =
+    score >= 8
+      ? "bg-[#c8ff3e]"
+      : score >= 6
+        ? "bg-[var(--accent)]"
+        : score >= 4
+          ? "bg-[#ff7a2f]"
+          : "bg-[#ff4d8d]";
+  return (
+    <div className="rounded-xl border border-[var(--line)] bg-white/[0.01] p-4">
+      <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--ink-mute)]">{label}</p>
+      <div className="mt-1 flex items-baseline justify-between gap-2">
+        <span className="font-display text-2xl font-bold text-[var(--ink)]">{score}/10</span>
+      </div>
+      <div className="mt-3 h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
+        <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
+      </div>
+    </div>
+  );
+}
+
 function StatChip({
   icon: Icon,
   delay,
@@ -79,7 +103,7 @@ function StatChip({
   );
 }
 
-export function ScoresDisplay({ scores }: ScoresProps) {
+export function ScoresDisplay({ scores, section_scores }: ScoresProps) {
   const gap = scores.experience_strength - scores.resume_quality;
   const gapLine =
     gap >= 2
@@ -111,12 +135,24 @@ export function ScoresDisplay({ scores }: ScoresProps) {
           <span className="text-[var(--ink-mute)]">buzzwords detected</span>
         </StatChip>
         <StatChip icon={Clock} delay={0.55}>
-          <span className="text-[var(--ink-mute)]">recruiter scrolls past in</span>{" "}
+          <span className="text-[var(--ink-mute)]">attention retention score</span>{" "}
           <span className="font-display text-base font-bold text-[var(--ink)]">
-            <CountUp to={scores.recruiter_scroll_seconds} delay={0.65} />s
+            <CountUp to={scores.attention_score} delay={0.65} />/10
           </span>
         </StatChip>
       </div>
+
+      {section_scores && (
+        <div className="mt-10 border-t border-[var(--line)] pt-8">
+          <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--ink-mute)]">Section Breakdown</h3>
+          <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <SectionProgress score={section_scores.summary} label="Summary" />
+            <SectionProgress score={section_scores.experience} label="Experience" />
+            <SectionProgress score={section_scores.skills} label="Skills" />
+            <SectionProgress score={section_scores.projects} label="Projects" />
+          </div>
+        </div>
+      )}
     </motion.section>
   );
 }

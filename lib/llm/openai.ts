@@ -25,7 +25,7 @@ export class OpenAIProvider implements LLMProvider {
       recordInputs: true,
       recordOutputs: true,
     });
-    this.model = config.model ?? "gpt-5.4-mini";
+    this.model = config.model ?? "gpt-4o-mini";
   }
 
   async generateRoast(resumeText: string): Promise<RoastResult> {

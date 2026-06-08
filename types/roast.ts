@@ -1,4 +1,4 @@
-export type Severity = "mild" | "medium" | "savage" | "actually_good";
+export type Severity = "mild" | "medium" | "savage";
 
 export interface RoastResult {
   /** Persona / diagnosis — sets the tone of the whole report. */
@@ -18,14 +18,14 @@ export interface RoastResult {
     domain_focus: string[];
   };
 
-  /** Headline numbers. The two extras are cheap (single ints) and screenshot-worthy. */
   scores: {
     overall: number;                // 0-10, LLM-judged (not averaged)
     resume_quality: number;         // 0-10
     experience_strength: number;    // 0-10
     buzzword_count: number;         // concrete count, viral stat
-    recruiter_scroll_seconds: number; // "would scroll past in N seconds"
+    attention_score: number;        // attention retention score 0-10
   };
+  section_scores: SectionScores;
 
   /** The roast feed — the bulk of the experience. Free tier: cap at 4. */
   roasts: Roast[];
@@ -47,12 +47,39 @@ export interface RoastResult {
   };
 }
 
+export type Confidence = "high" | "medium" | "low";
+
+export interface SectionScores {
+  summary: number;     // 0-10
+  experience: number;  // 0-10
+  skills: number;      // 0-10
+  projects: number;    // 0-10
+}
+
+export type IssueType =
+  | "missing_metric"
+  | "vague_verb"
+  | "skill_not_used"
+  | "weak_summary"
+  | "grammar"
+  | "keyword_gap"
+  | "project_quality"
+  | "responsibility_not_achievement"
+  | "domain_confusion"
+  | "missing_dates"
+  | "weak_project"
+  | "overstuffed_skills";
+
 export interface Roast {
   resume_line: string;     // the exact line from the resume
   reaction: string;        // "BRO 😭" / "WAIT 😭" — short emote
   roast: string;           // the joke / critique
   severity: Severity;      // drives visual treatment
   fix: string;             // short rewrite hint — the return-value
+  issue_type: IssueType;   // stable category for analytics
+  confidence: Confidence;  // model confidence
+  rewrite_candidate: boolean; // whether this is a good candidate for premium bullet rewrites
+  missing_fields: string[]; // fields that are missing (e.g. ["impact", "metric"])
 }
 
 export interface Win {
