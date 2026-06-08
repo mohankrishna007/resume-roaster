@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import * as Sentry from "@sentry/nextjs";
 import type { RoastResult } from "@/types/roast";
 import type { LLMConfig, LLMProvider } from "./types";
 import { SYSTEM_PROMPT, buildUserPrompt } from "./prompt";
@@ -16,9 +17,13 @@ export class OpenAIProvider implements LLMProvider {
     if (!config.apiKey) {
       throw new Error(`${this.constructor.name}: apiKey is required`);
     }
-    this.client = new OpenAI({
+    const rawClient = new OpenAI({
       apiKey: config.apiKey,
       baseURL: config.baseURL,
+    });
+    this.client = Sentry.instrumentOpenAiClient(rawClient, {
+      recordInputs: true,
+      recordOutputs: true,
     });
     this.model = config.model ?? "gpt-5.4-mini";
   }

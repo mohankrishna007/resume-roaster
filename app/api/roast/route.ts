@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import { extractPdfText } from "@/lib/roast/pdf-parser";
 import { getProvider } from "@/lib/llm";
 import { saveRoast } from "@/lib/roast/store";
@@ -110,6 +111,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ...result, shareId });
   } catch (err) {
+    Sentry.captureException(err, {
+      tags: {
+        stage,
+      },
+    });
+
     if (stage === "parse") {
       return NextResponse.json(
         { error: "We couldn't open this PDF. Make sure it's not password-protected and try again." },
