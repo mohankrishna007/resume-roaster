@@ -137,13 +137,25 @@ button { cursor: pointer; }
 }
 
 .kicker {
-  display: inline-flex; align-items: center; gap: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: var(--font-mono);
-  font-size: 0.7rem; font-weight: 600;
-  letter-spacing: 0.18em; text-transform: uppercase;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--accent-lime);
   max-width: 100%;
 }
+
+@media (min-width: 640px) {
+  .kicker {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+  }
+}
+
 .kicker::before {
   content: ""; width: 22px; height: 2px; background: var(--accent-lime); border-radius: 2px;
   flex-shrink: 0;

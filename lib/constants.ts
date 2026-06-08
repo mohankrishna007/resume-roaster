@@ -25,14 +25,14 @@ export const TESTIMONIALS = [
   },
   {
     seed: "Eswar",
-    name: "Eswar, Principle Engineer",
+    name: "Eswar, Full Stack Developer",
     handle: "Hyderabad",
     quote:
       "expected a meme, got an actual diagnosis. the line it flagged was the exact one my manager kept squinting at in 1:1s.",
   },
   {
     seed: "Nandhini",
-    name: "Nandhini, Frontend",
+    name: "Nandhini, Frontend Developer",
     handle: "Bengaluru",
     quote:
       "i laughed, then i screenshotted, then i actually fixed the lines.",

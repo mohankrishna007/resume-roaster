@@ -4,14 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // the steps the roaster pretends to be doing — each with its own vibe
 const STEPS: { line: string; emoji: string; aside?: string }[] = [
-  { line: "unrolling the pdf", emoji: "📄", aside: "alright, what are we working with here" },
-  { line: "scanning for buzzwords", emoji: "🔎", aside: "'synergy' spotted. and again. and again." },
-  { line: "fact-checking your metrics", emoji: "📊", aside: "increased what by 80%? say the words." },
-  { line: "hunting for 'passionate'", emoji: "🫠", aside: "found it. of course." },
-  { line: "reading between the bullets", emoji: "👀", aside: "the gaps are telling a story too" },
-  { line: "weighing the skills section", emoji: "⚖️", aside: "12 frameworks. let me guess — 3 you've actually used." },
-  { line: "channeling a tired recruiter", emoji: "🥱", aside: "she's on resume #47 today. be honest." },
-  { line: "writing the roast", emoji: "🔥", aside: "putting it nicely. then putting it real." },
+  { line: "parsing your career story", emoji: "📄", aside: "alright. let's see what we're working with" },
+  { line: "detecting corporate speak", emoji: "🔎", aside: "synergy detected. synergy everywhere." },
+  { line: "auditing your claims", emoji: "📊", aside: "does that number add up? we'll see." },
+  { line: "evaluating the vibes", emoji: "💫", aside: "reading between the bullet points" },
+  { line: "fact-checking your achievements", emoji: "🧐", aside: "okay okay. let's be real for a sec." },
+  { line: "analyzing your brand", emoji: "✨", aside: "here's what the world's actually seeing" },
+  { line: "channeling our roasting energy", emoji: "🔥", aside: "getting sharp. getting real. getting honest." },
+  { line: "forging your truth", emoji: "⚡", aside: "spicy takes incoming" },
 ];
 
 export function ProcessingScreen({ filename }: { filename?: string }) {
