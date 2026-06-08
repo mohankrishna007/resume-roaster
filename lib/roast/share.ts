@@ -29,7 +29,7 @@ export function buildShareContent(
   // Two short lines + the quote + a pitch. Keep it tight — long share text
   // gets truncated by most apps.
   const text =
-    `${firstName}'s resume scored ${score}/10 on Resume Roaster 🔥\n\n` +
+    `${firstName}'s resume scored ${score}/10 on Roastume 🔥\n\n` +
     `"${quote}"\n\n` +
     `Brutally honest AI resume review — drop your PDF, get the truth in 30 seconds.` +
     `\n\n Check it out: ${shareUrl}`;
@@ -45,5 +45,5 @@ export function buildShareContent(
 /** Just the quote, for the "copy quote" affordance. */
 export function buildQuoteOnly(result: RoastResult): string {
   const quote = result.verdict.share_quote.trim().replace(/^["“”]|["“”]$/g, "");
-  return `"${quote}"\n— Resume Roaster`;
+  return `"${quote}"\n— Roastume`;
 }

@@ -71,10 +71,10 @@ export default async function SharedRoastPage({ params }: PageProps) {
     mainEntityOfPage: pageUrl,
     datePublished: new Date(stored.meta.created_at_ms).toISOString(),
     image: `${pageUrl}/opengraph-image`,
-    author: { "@type": "Organization", name: "Resume Roaster" },
+    author: { "@type": "Organization", name: "Roastume" },
     publisher: {
       "@type": "Organization",
-      name: "Resume Roaster",
+      name: "Roastume",
       logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.png` },
     },
   };

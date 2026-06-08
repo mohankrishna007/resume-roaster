@@ -65,16 +65,16 @@ export default function Home() {
                                sm:gap-3 sm:px-8 sm:pt-7
                                lg:max-w-7xl lg:px-12">
               <div className="flex items-center gap-2">
-                <Image
+                  <Image
                   src="/icon.png"
-                  alt="Resume Roaster"
+                  alt="Roastume"
                   width={32}
                   height={32}
                   priority
                   className="h-8 w-8 sm:h-9 sm:w-9"
                 />
                 <p className="font-display text-base font-bold tracking-tight sm:text-lg">
-                  Resume Roaster
+                  Roastume
                 </p>
               </div>
               <div className="flex items-center gap-2 sm:gap-3">
@@ -341,7 +341,7 @@ export default function Home() {
 
                     <div className="annotation sev-savage">
                       <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[var(--ink-mute)]">
-                        what the roaster said
+                        what Roastume said
                       </p>
                       <p className="font-display mt-2 text-lg font-semibold leading-[1.3] sm:text-xl sm:text-[1.4rem]">
                         Pick a lane, bhai.
@@ -493,7 +493,7 @@ export default function Home() {
               >
                 <div className="mx-auto max-w-3xl flex items-center justify-center gap-4">
                   <div>
-                    Resume Roaster · AI resume review · made for people who
+                    Roastume · AI resume review · made for people who
                     already kinda know · &copy; {new Date().getFullYear()}
                   </div>
                 </div>

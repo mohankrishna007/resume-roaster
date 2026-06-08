@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Flame, Wrench } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Down for a tune-up · Resume Roaster",
-  description: "We're polishing the roaster. Back in a bit.",
+  title: "Down for a tune-up · Roastume",
+  description: "We're polishing Roastume. Back in a bit.",
   robots: { index: false, follow: false },
 };
 
@@ -27,12 +27,12 @@ export default function MaintenancePage() {
           quick tune-up
         </div>
 
-        <h1 className="font-display mt-7 text-[2rem] font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
-          The roaster is{" "}
+          <h1 className="font-display mt-7 text-[2rem] font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
+          Roastume is{" "}
           <span className="marker-pink marker">cooling down</span>.
         </h1>
 
-        <p className="mt-6 text-base leading-7 text-[var(--ink-soft)] sm:text-lg">
+          <p className="mt-6 text-base leading-7 text-[var(--ink-soft)] sm:text-lg">
           We&apos;re tightening a few bolts so the next roast lands harder.
           Back in a few minutes — your resume can wait one more day.
         </p>

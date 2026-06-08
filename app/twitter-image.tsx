@@ -4,7 +4,7 @@
 // field" warning).
 export const runtime = "edge";
 export const alt =
-  "Resume Roaster — the brutally honest AI resume review your friend won't give you";
+  "Roastume — the brutally honest AI resume review your friend won't give you";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

@@ -24,10 +24,10 @@ const monoFont = JetBrains_Mono({
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://roastume.app";
-const SITE_NAME = "Resume Roaster";
-const TITLE = "Resume Roaster — The brutally honest AI resume review your friend won't give you";
+const SITE_NAME = "Roastume";
+const TITLE = "Roastume — The brutally honest AI resume review your friend won't give you";
 const DESCRIPTION =
-  "Free AI resume roaster. Drop your PDF, get a savage-but-useful line-by-line review — buzzword count, recruiter-scroll time, and the exact fixes. No signup. No fluff. No LinkedIn energy.";
+  "Free AI resume roast. Drop your PDF, get a savage-but-useful line-by-line review — buzzword count, recruiter-scroll time, and the exact fixes. No signup. No fluff. No LinkedIn energy.";
 
 export const viewport: Viewport = {
   themeColor: "#0b0810",
@@ -36,15 +36,15 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: {
+    title: {
     default: TITLE,
-    template: "%s · Resume Roaster",
+    template: "%s · Roastume",
   },
   description: DESCRIPTION,
   applicationName: SITE_NAME,
   generator: "Next.js",
   keywords: [
-    "resume roaster",
+    "roastume",
     "AI resume review",
     "resume critique",
     "resume feedback",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     "AI CV feedback",
     "honest resume feedback",
   ],
-  authors: [{ name: "Resume Roaster" }],
+  authors: [{ name: "Roastume" }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
   category: "productivity",
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    creator: "@resumeroaster",
+    creator: "@roastume",
   },
   robots: {
     index: true,
@@ -179,7 +179,7 @@ const jsonLd = {
       mainEntity: [
         {
           "@type": "Question",
-          name: "Is the resume roaster really free?",
+          name: "Is Roastume really free?",
           acceptedAnswer: {
             "@type": "Answer",
             text: "Yep — completely free. No signup, no credit card, no inbox spam. Drop your PDF, get roasted.",

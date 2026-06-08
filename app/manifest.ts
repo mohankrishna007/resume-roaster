@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Resume Roaster",
-    short_name: "Roaster",
+    name: "Roastume",
+    short_name: "Roastume",
     description:
-      "Free AI resume roaster — drop a PDF, get a savage line-by-line review with concrete fixes.",
+      "Free AI resume roast — drop a PDF, get a savage line-by-line review with concrete fixes.",
     start_url: "/",
     scope: "/",
     display: "standalone",

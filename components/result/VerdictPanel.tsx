@@ -72,7 +72,7 @@ export function VerdictPanel({ result, shareId, onReset }: VerdictPanelProps) {
             {typingDone ? "”" : ""}
           </p>
           <p className="mt-6 text-sm text-[var(--ink-mute)]">
-            — resume roaster, on {candidateName.split(" ")[0]}&apos;s resume
+            — Roastume, on {candidateName.split(" ")[0]}&apos;s resume
           </p>
 
           <button

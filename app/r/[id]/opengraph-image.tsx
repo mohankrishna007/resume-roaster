@@ -4,7 +4,7 @@ import { getRoast } from "@/lib/roast/store";
 // Node runtime so we can reuse the firebase-admin SDK from getRoast.
 // Edge runtime can't load firebase-admin (Node-only dependencies).
 export const runtime = "nodejs";
-export const alt = "A Resume Roaster verdict";
+export const alt = "A Roastume verdict";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -90,7 +90,7 @@ export default async function OgImage({ params }: Params) {
             >
               🔥
             </div>
-            <span>Resume Roaster</span>
+            <span>Roastume</span>
           </div>
           {typeof score === "number" && (
             <div
